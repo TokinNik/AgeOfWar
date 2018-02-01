@@ -14,6 +14,7 @@ public class AgeOfWar extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("android\\assets\\badlogic.jpg");
+		//Git test 12345qwerty =-=-=-=--=-=-=-=-=-=-=
 	}
 
 	@Override
