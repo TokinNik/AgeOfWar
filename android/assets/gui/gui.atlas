@@ -5,42 +5,77 @@ filter: Nearest,Nearest
 repeat: none
 choise_window_bg
   rotate: false
-  xy: 1, 155
+  xy: 1, 403
   size: 600, 100
   orig: 600, 100
   offset: 0, 0
   index: -1
+menu_bg
+  rotate: false
+  xy: 1, 1
+  size: 300, 400
+  orig: 300, 400
+  offset: 0, 0
+  index: 1
 exit_window_bg
   rotate: false
-  xy: 1, 53
+  xy: 603, 403
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
+text_button_m1
+  rotate: false
+  xy: 303, 351
+  size: 250, 50
+  orig: 250, 50
+  offset: 0, 0
+  index: -1
+text_button_m2
+  rotate: false
+  xy: 303, 299
+  size: 250, 50
+  orig: 250, 50
+  offset: 0, 0
+  index: -1
+unit_cell_s1
+  rotate: false
+  xy: 905, 403
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+unit_cell_s2
+  rotate: false
+  xy: 555, 301
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 text_button_s1
   rotate: false
-  xy: 1, 1
+  xy: 303, 247
   size: 100, 50
   orig: 100, 50
   offset: 0, 0
   index: -1
 text_button_s2
   rotate: false
-  xy: 103, 1
+  xy: 657, 351
   size: 100, 50
   orig: 100, 50
   offset: 0, 0
   index: -1
 exitButton2
   rotate: false
-  xy: 603, 210
+  xy: 303, 200
   size: 45, 45
   orig: 45, 45
   offset: 0, 0
   index: -1
 exitButton3
   rotate: false
-  xy: 303, 108
+  xy: 405, 252
   size: 45, 45
   orig: 45, 45
   offset: 0, 0

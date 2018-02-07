@@ -10,6 +10,8 @@ public class DesktopLauncher {
 
 		config.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
 		config.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
+		//config.width = 800;
+		//config.height = 600;
 		// fullscreen
 		config.fullscreen = true;
 		// vSync
