@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.exception.NotEnoughMonyException;
+import com.model.CharacterType;
 
 
 public class GameGUI extends Stage
@@ -60,7 +62,11 @@ public class GameGUI extends Stage
             public void clicked(InputEvent event, float x, float y)
             {
                 if (Resourses.state == State.GAME)
-                    GS.setUnit(1,1);
+                    try {
+                        GS.setUnit(CharacterType.ARCHER);
+                    } catch (NotEnoughMonyException e) {
+                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    }
             }
         });
         addActor(setUnit_1B);
@@ -75,8 +81,8 @@ public class GameGUI extends Stage
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (Resourses.state == State.GAME)
-                    GS.setUnit(2,1);
+               // if (Resourses.state == State.GAME)
+                    //GS.setUnit(CharacterType);
             }
         });
         addActor(setUnit_2B);
@@ -91,8 +97,8 @@ public class GameGUI extends Stage
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (Resourses.state == State.GAME)
-                    GS.setUnit(3,1);
+                //if (Resourses.state == State.GAME)
+                    //GS.setUnit(CharacterType);
             }
         });
         addActor(setUnit_3B);
@@ -107,8 +113,8 @@ public class GameGUI extends Stage
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (Resourses.state == State.GAME)
-                    GS.setUnit(4,1);
+                //if (Resourses.state == State.GAME)
+                    //GS.setUnit(CharacterType);
             }
         });
         addActor(setUnit_4B);

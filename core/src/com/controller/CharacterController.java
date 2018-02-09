@@ -11,15 +11,15 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CharacterController implements Runnable{
-    private static Map<Character, CharacterType> userArmy = new HashMap<>();
-    private static Map<Character, CharacterType> gameArmy = new HashMap<>();
+    private static Map<Character, CharacterType> userArmy = new HashMap<Character, CharacterType>();
+    private static Map<Character, CharacterType> gameArmy = new HashMap<Character, CharacterType>();
     public static StageOfEvolution userEvolveStage = StageOfEvolution.FIRST;
     public static StageOfEvolution NPCEvolveState = StageOfEvolution.FIRST;
     private static boolean userWin = false;
     private static boolean gameWin = false;
     private static boolean pause = false;
     private static int totalScore = 0;
-    private static int  totalMoney = 0;
+    private static int  totalMoney = 100;
     public static float clothestUserObjectPosition = -21;
     public static GameObject clothestUserObject = UserForpost.getInstance();
     public static float clothestGameObjectPosition = 21;
@@ -27,7 +27,7 @@ public class CharacterController implements Runnable{
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 
-    public Character createNewCharacter(CharacterType type) throws NotEnoughMonyException {
+    public static Character createNewCharacter(CharacterType type) throws NotEnoughMonyException {
         Character character = CharacterFactory.createCharacter(type, true, userEvolveStage);
 
         if (totalMoney < character.getPrice()) {
@@ -101,9 +101,10 @@ public class CharacterController implements Runnable{
 
     @Override
     public void run() {
-        new Thread(new UserArmyChecker()).start();
-        new Thread(new NPCArmyChecker()).start();
-        new Thread(new WinnerChecker()).start();
+       //new Thread(new UserArmyChecker()).start();
+       // new Thread(new NPCArmyChecker()).start();
+       // new Thread(new WinnerChecker()).start();
+        new Thread(new NPCController()).start();
     }
 
     public static boolean isUserWin() {

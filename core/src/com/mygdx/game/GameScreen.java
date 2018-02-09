@@ -10,6 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.controller.CharacterController;
+import com.exception.NotEnoughMonyException;
+import com.model.Character;
+import com.model.CharacterType;
 
 
 public class GameScreen implements Screen
@@ -32,6 +36,7 @@ public class GameScreen implements Screen
         gui = new GameGUI(game, this);
         Resourses.state = State.GAME;
         units = new Array<Unit>();
+        new Thread(new CharacterController()).start();
     }
 
     @Override
@@ -41,9 +46,6 @@ public class GameScreen implements Screen
         skin = new Skin();
         skin.addRegions(atlas);
 
-        Unit unit = new Unit(1,1);
-        units.add(unit);
-        stage.addActor(unit);
 
         Gdx.input.setInputProcessor(gui);
     }
@@ -92,11 +94,20 @@ public class GameScreen implements Screen
         skin.dispose();
     }
 
-    void setUnit(int type, int dir)
+    static void setUnit(CharacterType type) throws NotEnoughMonyException
     {
-        System.out.println("Set Unit type " + type + " direction " + dir);
+        System.out.println("Set Unit type " + type);
 
-        Unit unit = new Unit(type, dir);
+        Unit unit = new Unit(type);
+        units.add(unit);
+        stage.addActor(unit);
+    }
+
+    public static void setCompUnit(CharacterType type, Character character) throws NotEnoughMonyException
+    {
+        System.out.println("Set Unit type " + type);
+
+        Unit unit = new Unit(type, character);
         units.add(unit);
         stage.addActor(unit);
     }
@@ -106,6 +117,7 @@ public class GameScreen implements Screen
         units.get(num).addAction(Actions.removeActor());
         System.out.println("Delete Unit type " + units.get(num).getType() + " direction " + units.get(num).getDirection());
         units.removeIndex(num);
+
     }
 
 
