@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -73,7 +73,7 @@ public class MainMenu implements Screen
         if (false)//заменить на нормальную проверку
         {
             final TextButton bContinue = new TextButton("Continue", Resourses.tbs_s);
-            bContinue.setPosition((Resourses.width / 2) - 75, (Resourses.height / 2));
+            bContinue.setPosition((Resourses.width2) - 75, (Resourses.height2));
             bContinue.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -85,7 +85,7 @@ public class MainMenu implements Screen
         else
         {
             final TextButton bNewGame = new TextButton("New Game", Resourses.tbs_s);
-            bNewGame.setPosition((Resourses.width/2) - 75, (Resourses.height/2));
+            bNewGame.setPosition((Resourses.width2) - 75, (Resourses.height/2));
             bNewGame.addListener(new ClickListener()
             {
                 @Override
@@ -98,7 +98,7 @@ public class MainMenu implements Screen
             stage.addActor(bNewGame);
         }
         final TextButton bOptions = new TextButton("Options", Resourses.tbs_s);
-        bOptions.setPosition((Resourses.width/2) - 75, (Resourses.height/2) - 100);
+        bOptions.setPosition((Resourses.width2) - 75, (Resourses.height2) - 100);
         bOptions.addListener(new ClickListener()
         {
             @Override
@@ -108,7 +108,7 @@ public class MainMenu implements Screen
             }
         });
         final TextButton bAboutUs = new TextButton("About Us", Resourses.tbs_s);
-        bAboutUs.setPosition((Resourses.width/2) - 75, (Resourses.height/2) - 200);
+        bAboutUs.setPosition((Resourses.width2) - 75, (Resourses.height2) - 200);
         bAboutUs.addListener(new ClickListener()
         {
             @Override
@@ -168,13 +168,13 @@ public class MainMenu implements Screen
         state = false;
 
         final Image bg = new Image(skin.getDrawable("exit_window_bg"));
-        bg.setPosition((Resourses.width/2)-150, (Resourses.height/2)-15);
+        bg.setPosition((Resourses.width2)-150, (Resourses.height2)-15);
 
         final Label l = new Label("Are you sure you want to exit?", new Label.LabelStyle(game.font, Color.WHITE));
-        l.setPosition((Resourses.width/2)-l.getPrefWidth()/2, (Resourses.height/2)+55);
+        l.setPosition((Resourses.width2)-l.getPrefWidth()/2, (Resourses.height2)+55);
 
         final TextButton bYes = new TextButton("Yes", Resourses.tbs_s);
-        bYes.setPosition((Resourses.width/2)-125, (Resourses.height/2));
+        bYes.setPosition((Resourses.width2)-125, (Resourses.height2));
         bYes.addListener(new ClickListener()
         {
             @Override
@@ -184,7 +184,7 @@ public class MainMenu implements Screen
             }
         });
         final TextButton bNo = new TextButton("No", Resourses.tbs_s);
-        bNo.setPosition((Resourses.width/2)+25, (Resourses.height/2));
+        bNo.setPosition((Resourses.width2)+25, (Resourses.height2));
         bNo.addListener(new ClickListener()
         {
             @Override

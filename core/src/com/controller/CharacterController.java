@@ -19,7 +19,7 @@ public class CharacterController implements Runnable{
     private static boolean gameWin = false;
     private static boolean pause = false;
     private static int totalScore = 0;
-    private static int  totalMoney = 100;
+    private static int  totalMoney = 10000;
     public static float clothestUserObjectPosition = -21;
     public static GameObject clothestUserObject = UserForpost.getInstance();
     public static float clothestGameObjectPosition = 21;

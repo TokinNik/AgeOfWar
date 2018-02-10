@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,34 +31,33 @@ public class Unit extends Actor
     {
         character = CharacterController.createNewCharacter(CharacterType.ARCHER);
 
-
-
         sprite = new Sprite(new Texture("android/assets/units/example/arrow1.jpg"));
         sprite.setBounds(getX(), getY(), getWidth(), getHeight());
-        setBounds(100, 50, 100, 100);
+        setBounds(100, 50, 240, 288);
 
-        animation = Resourses.testAnimation;
+        animation = Resourses.testAnimationR;
 
         this.type = type;
         this.direction = 1;
 
-        addAction(Actions.moveTo(Resourses.width - 100, 50, 3));
+        addAction(Actions.moveTo( 2268, 50, 6));
     }
 
-    public Unit(CharacterType type, Character character)
+    public Unit(CharacterType type, Character character) throws  NotEnoughMonyException
     {
         this.type = type;
         this.character = character;
+
         sprite = new Sprite(new Texture("android/assets/units/example/arrow1.jpg"));
         sprite.setBounds(getX(), getY(), getWidth(), getHeight());
-        setBounds(Resourses.width - 100, 50, 100, 100);
+        setBounds(2168, 50, 240, 288);
 
-        animation = Resourses.testAnimation;
+        animation = Resourses.testAnimationL;
 
         this.type = type;
         this.direction = -1;
 
-        addAction(Actions.moveTo( 100, 50, 3));
+        addAction(Actions.moveTo( 50, 50, 6));
     }
 
     @Override
