@@ -23,8 +23,6 @@ public class GameScreen implements Screen, InputProcessor
 {
     private static Start game;
     private static OrthographicCamera camera;
-    private static TextureAtlas atlas;
-    private static Skin skin;
     private static Stage stage;
     private static GameGUI gui;
     private static Array<Unit> units;
@@ -34,11 +32,11 @@ public class GameScreen implements Screen, InputProcessor
     {
         game = gam;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Resourses.width, Resourses.height);
+        camera.setToOrtho(false, Resources.width, Resources.height);
         stage = new Stage(new ScreenViewport(camera));
         stage.setDebugAll(true);
         gui = new GameGUI(game, this);
-        Resourses.state = State.GAME;
+        Resources.state = State.GAME;
         units = new Array<Unit>();
         prefX = -1;
         //new Thread(new CharacterController()).start();
@@ -47,11 +45,7 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public void show()
     {
-        atlas = new TextureAtlas("android/assets/gui/gui.atlas");
-        skin = new Skin();
-        skin.addRegions(atlas);
-
-        final Image bg = new Image(new Texture("android/assets/gui/forest_bg.jpg"));
+        final Image bg = Resources.bgForest;
         bg.setPosition(0, 0);
         stage.addActor(bg);
 
@@ -62,7 +56,7 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public void render(float delta)
     {
-        if (Resourses.state == State.GAME)
+        if (Resources.state == State.GAME)
         {
             Gdx.gl.glClearColor(0, 0.2f, 0.5f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -105,8 +99,7 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public void dispose()
     {
-        atlas.dispose();
-        skin.dispose();
+
     }
 
     static void setUnit(CharacterType type) throws NotEnoughMonyException
@@ -163,14 +156,14 @@ public class GameScreen implements Screen, InputProcessor
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
         //System.out.println("Dragged " + screenX + " " + screenY + " " + pointer);
-        if (prefX != -1 && (camera.position.x >= Resourses.width2 || prefX - screenX > 0)
-                && (camera.position.x <= 2268-Resourses.width2 || prefX - screenX < 0))
+        if (prefX != -1 && (camera.position.x >= Resources.width2 || prefX - screenX > 0)
+                && (camera.position.x <= 2268- Resources.width2 || prefX - screenX < 0))
         {
             camera.translate(prefX - screenX, 0);
-            if (camera.position.x < Resourses.width2)
-                camera.position.x = Resourses.width2;
-            if (camera.position.x > 2268-Resourses.width2)
-                camera.position.x = 2268-Resourses.width2;
+            if (camera.position.x < Resources.width2)
+                camera.position.x = Resources.width2;
+            if (camera.position.x > 2268- Resources.width2)
+                camera.position.x = 2268- Resources.width2;
         }
         prefX = screenX;
 

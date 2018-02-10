@@ -21,7 +21,6 @@ public class MainMenu implements Screen
 {
     private Start game;
     private OrthographicCamera camera;
-    private static TextureAtlas atlas;
     private static Skin skin;
     private Stage stage;
     boolean state;
@@ -30,7 +29,7 @@ public class MainMenu implements Screen
     {
         game = gam;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Resourses.width, Resourses.height);
+        camera.setToOrtho(false, Resources.width, Resources.height);
         stage = new Stage(new ScreenViewport(camera));
         state = true;
 
@@ -40,9 +39,8 @@ public class MainMenu implements Screen
     @Override
     public void show()
     {
-        atlas = new TextureAtlas("android/assets/gui/gui.atlas");
         skin = new Skin();
-        skin.addRegions(atlas);
+        skin.addRegions(Resources.guiAtlas);
 
         Button b = new Button(new Button.ButtonStyle(
                 skin.getDrawable("exitButton2"),
@@ -63,17 +61,17 @@ public class MainMenu implements Screen
         tbs.up = skin.getDrawable("text_button_s1");
         tbs.down = skin.getDrawable("text_button_s2");
         tbs.font = game.font;
-        Resourses.tbs_s = tbs;
+        Resources.tbs_s = tbs;
         TextButton.TextButtonStyle tbs1 = new TextButton.TextButtonStyle();
         tbs1.up = skin.getDrawable("text_button_m1");
         tbs1.down = skin.getDrawable("text_button_m2");
         tbs1.font = game.font;
-        Resourses.tbs_m = tbs1;
+        Resources.tbs_m = tbs1;
 
         if (false)//заменить на нормальную проверку
         {
-            final TextButton bContinue = new TextButton("Continue", Resourses.tbs_s);
-            bContinue.setPosition((Resourses.width2) - 75, (Resourses.height2));
+            final TextButton bContinue = new TextButton("Continue", Resources.tbs_s);
+            bContinue.setPosition((Resources.width2) - 75, (Resources.height2));
             bContinue.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -84,8 +82,8 @@ public class MainMenu implements Screen
         }
         else
         {
-            final TextButton bNewGame = new TextButton("New Game", Resourses.tbs_s);
-            bNewGame.setPosition((Resourses.width2) - 75, (Resourses.height/2));
+            final TextButton bNewGame = new TextButton("New Game", Resources.tbs_s);
+            bNewGame.setPosition((Resources.width2) - 75, (Resources.height/2));
             bNewGame.addListener(new ClickListener()
             {
                 @Override
@@ -97,8 +95,8 @@ public class MainMenu implements Screen
             });
             stage.addActor(bNewGame);
         }
-        final TextButton bOptions = new TextButton("Options", Resourses.tbs_s);
-        bOptions.setPosition((Resourses.width2) - 75, (Resourses.height2) - 100);
+        final TextButton bOptions = new TextButton("Options", Resources.tbs_s);
+        bOptions.setPosition((Resources.width2) - 75, (Resources.height2) - 100);
         bOptions.addListener(new ClickListener()
         {
             @Override
@@ -107,8 +105,8 @@ public class MainMenu implements Screen
                 System.out.println("Options");
             }
         });
-        final TextButton bAboutUs = new TextButton("About Us", Resourses.tbs_s);
-        bAboutUs.setPosition((Resourses.width2) - 75, (Resourses.height2) - 200);
+        final TextButton bAboutUs = new TextButton("About Us", Resources.tbs_s);
+        bAboutUs.setPosition((Resources.width2) - 75, (Resources.height2) - 200);
         bAboutUs.addListener(new ClickListener()
         {
             @Override
@@ -159,7 +157,6 @@ public class MainMenu implements Screen
     @Override
     public void dispose()
     {
-        atlas.dispose();
         skin.dispose();
     }
 
@@ -168,13 +165,13 @@ public class MainMenu implements Screen
         state = false;
 
         final Image bg = new Image(skin.getDrawable("exit_window_bg"));
-        bg.setPosition((Resourses.width2)-150, (Resourses.height2)-15);
+        bg.setPosition((Resources.width2)-150, (Resources.height2)-15);
 
         final Label l = new Label("Are you sure you want to exit?", new Label.LabelStyle(game.font, Color.WHITE));
-        l.setPosition((Resourses.width2)-l.getPrefWidth()/2, (Resourses.height2)+55);
+        l.setPosition((Resources.width2)-l.getPrefWidth()/2, (Resources.height2)+55);
 
-        final TextButton bYes = new TextButton("Yes", Resourses.tbs_s);
-        bYes.setPosition((Resourses.width2)-125, (Resourses.height2));
+        final TextButton bYes = new TextButton("Yes", Resources.tbs_s);
+        bYes.setPosition((Resources.width2)-125, (Resources.height2));
         bYes.addListener(new ClickListener()
         {
             @Override
@@ -183,8 +180,8 @@ public class MainMenu implements Screen
                 Gdx.app.exit();
             }
         });
-        final TextButton bNo = new TextButton("No", Resourses.tbs_s);
-        bNo.setPosition((Resourses.width2)+25, (Resourses.height2));
+        final TextButton bNo = new TextButton("No", Resources.tbs_s);
+        bNo.setPosition((Resources.width2)+25, (Resources.height2));
         bNo.addListener(new ClickListener()
         {
             @Override

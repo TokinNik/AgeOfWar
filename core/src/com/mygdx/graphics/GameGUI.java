@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -21,20 +22,17 @@ import com.model.CharacterType;
 
 public class GameGUI extends Stage implements InputProcessor
 {
-    private static TextureAtlas atlas;
     private static Skin skin;
     private static Start game;
 
     GameGUI (final Start game, final GameScreen gs)
     {
-        super(new FitViewport(Resourses.width, Resourses.height));
+        super(new FitViewport(Resources.width, Resources.height));
 
         GameGUI.game = game;
 
-        atlas = new TextureAtlas("android/assets/gui/gui.atlas");
-
         skin = new Skin();
-        skin.addRegions(atlas);
+        skin.addRegions(Resources.guiAtlas);
 
         Button.ButtonStyle bs = new Button.ButtonStyle(
                 skin.getDrawable("unit_cell_s1"),
@@ -52,20 +50,23 @@ public class GameGUI extends Stage implements InputProcessor
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (Resourses.state == State.GAME)
+                if (Resources.state == State.GAME)
                     setWindowMenu();
             }
         });
         addActor(exitB);
 
+        Group unitsG = new Group();
+
         Button setUnit_1B = new Button(bs);
-        setUnit_1B.setPosition(0, Resourses.height - 100);
+        setUnit_1B.setPosition(0, Resources.height - 100);
+        setUnit_1B.setSize(100, 100);
         setUnit_1B.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (Resourses.state == State.GAME)
+                if (Resources.state == State.GAME)
                     try
                     {
                         GameScreen.setUnit(CharacterType.ARCHER);
@@ -76,16 +77,17 @@ public class GameGUI extends Stage implements InputProcessor
                     }
             }
         });
-        addActor(setUnit_1B);
+        unitsG.addActor(setUnit_1B);
 
         Button setUnit_2B = new Button(bs);
-        setUnit_2B.setPosition(110, Resourses.height - 100);
+        setUnit_2B.setPosition(110, Resources.height - 100);
+        setUnit_2B.setSize(100, 100);
         setUnit_2B.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (Resourses.state == State.GAME)
+                if (Resources.state == State.GAME)
                     try
                     {
                         GameScreen.setCompUnit(CharacterType.ARCHER, CharacterController.createNewCharacter(CharacterType.ARCHER));
@@ -95,42 +97,44 @@ public class GameGUI extends Stage implements InputProcessor
                     }
             }
         });
-        addActor(setUnit_2B);
+        unitsG.addActor(setUnit_2B);
 
         Button setUnit_3B = new Button(bs);
-        setUnit_3B.setPosition(220, Resourses.height - 100);
+        setUnit_3B.setPosition(220, Resources.height - 100);
+        setUnit_3B.setSize(100, 100);
         setUnit_3B.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (Resourses.state == State.GAME)
+                if (Resources.state == State.GAME)
                     System.out.println("UNIT 3");
                     //GameScreen.setUnit(CharacterType);
             }
         });
-        addActor(setUnit_3B);
+        unitsG.addActor(setUnit_3B);
 
         Button setUnit_4B = new Button(bs);
-        setUnit_4B.setPosition(330, Resourses.height - 100);
+        setUnit_4B.setPosition(330, Resources.height - 100);
+        setUnit_4B.setSize(100, 100);
         setUnit_4B.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (Resourses.state == State.GAME)
+                if (Resources.state == State.GAME)
                     System.out.println("UNIT 4");
                     //GameScreen.setUnit(CharacterType);
             }
         });
-        addActor(setUnit_4B);
+        unitsG.addActor(setUnit_4B);
 
-
+        addActor(unitsG);
     }
 
     private void setWindowMenu()
     {
-        Resourses.state = State.PAUSE;
+        Resources.state = State.PAUSE;
 
         final Image bg = new Image(skin.getDrawable("menu_bg_1"));
         bg.setPosition((Gdx.graphics.getWidth()/2)-150, (Gdx.graphics.getHeight()/2)-215);
@@ -138,7 +142,7 @@ public class GameGUI extends Stage implements InputProcessor
         final Label l = new Label("Menu", new Label.LabelStyle(game.font, Color.WHITE));
         l.setPosition((Gdx.graphics.getWidth()/2)-l.getPrefWidth()/2, (Gdx.graphics.getHeight()/2)+155);
 
-        final TextButton toMenuB = new TextButton("Exit to Menu", Resourses.tbs_m);
+        final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_m);
         toMenuB.setPosition((Gdx.graphics.getWidth()/2)-125, (Gdx.graphics.getHeight()/2)-100);
         toMenuB.addListener(new ClickListener()
         {
@@ -148,7 +152,7 @@ public class GameGUI extends Stage implements InputProcessor
                 game.setScreen(new MainMenu(game));
             }
         });
-        final TextButton settingsB = new TextButton("Settings", Resourses.tbs_m);
+        final TextButton settingsB = new TextButton("Settings", Resources.tbs_m);
         settingsB.setPosition((Gdx.graphics.getWidth()/2)-125, (Gdx.graphics.getHeight()/2));
         settingsB.addListener(new ClickListener()
         {
@@ -158,7 +162,7 @@ public class GameGUI extends Stage implements InputProcessor
 
             }
         });
-        final TextButton continueB = new TextButton("Continue", Resourses.tbs_m);
+        final TextButton continueB = new TextButton("Continue", Resources.tbs_m);
         continueB.setPosition((Gdx.graphics.getWidth()/2)-125, (Gdx.graphics.getHeight()/2)+100);
         continueB.addListener(new ClickListener()
         {
@@ -170,7 +174,7 @@ public class GameGUI extends Stage implements InputProcessor
                 toMenuB.setVisible(false);
                 l.setVisible(false);
                 bg.setVisible(false);
-                Resourses.state = State.GAME;
+                Resources.state = State.GAME;
             }
         });
 
@@ -187,7 +191,7 @@ public class GameGUI extends Stage implements InputProcessor
         switch (keyCode)
         {
             case Input.Keys.ESCAPE:
-                if (Resourses.state == State.GAME)
+                if (Resources.state == State.GAME)
                     setWindowMenu();
                 return super.keyDown(keyCode);
 
