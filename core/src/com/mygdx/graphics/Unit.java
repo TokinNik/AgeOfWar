@@ -73,4 +73,6 @@ public class Unit extends Actor
     public CharacterType getType() {return type;}
 
     public int getDirection() {return direction;}
+
+    public Character getCharacter(){return character;}
 }

@@ -18,10 +18,10 @@ public class Resources
     public static TextButton.TextButtonStyle tbs_s;
     public static TextButton.TextButtonStyle tbs_m;
     public static State state = State.GAME;
-    public static Animation<TextureRegion> testAnimationR = setAnim("units/example/runner_testR.png", 6, 5);
-    public static Animation<TextureRegion> testAnimationL = setAnim("units/example/runner_testL.png", 6, 5);
-    public static final TextureAtlas guiAtlas = new TextureAtlas("gui/gui.atlas");
-    public static final Image bgForest = new Image(new Texture("gui/forest_bg.jpg"));
+    public static Animation<TextureRegion> testAnimationR = setAnim("android/assets/units/example/runner_testR.png", 6, 5);
+    public static Animation<TextureRegion> testAnimationL = setAnim("android/assets/units/example/runner_testL.png", 6, 5);
+    public static final TextureAtlas guiAtlas = new TextureAtlas("android/assets/gui/gui.atlas");
+    public static final Image bgForest = new Image(new Texture("android/assets/gui/forest_bg.jpg"));//android/assets/
 
 
 

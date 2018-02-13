@@ -122,9 +122,11 @@ public class GameScreen implements Screen, InputProcessor
 
     void delUnit(int num)
     {
-        units.get(num).addAction(Actions.removeActor());
+        units.get(num).getCharacter().setAlive(false);
+        units.get(num).remove();
         System.out.println("Delete Unit type " + units.get(num).getType() + " direction " + units.get(num).getDirection());
         units.removeIndex(num);
+        gui.updateLabels();
     }
 
     @Override

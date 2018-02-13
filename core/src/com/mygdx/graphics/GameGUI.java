@@ -24,6 +24,9 @@ public class GameGUI extends Stage implements InputProcessor
 {
     private static Skin skin;
     private static Start game;
+    private Label moneyL;
+    private Label unitsL;
+    private Label enemyL;
 
     GameGUI (final Start game, final GameScreen gs)
     {
@@ -38,23 +41,22 @@ public class GameGUI extends Stage implements InputProcessor
                 skin.getDrawable("unit_cell_s1"),
                 skin.getDrawable("unit_cell_s2"),
                 skin.getDrawable("unit_cell_s1"));
-        
 
-        Button exitB = new Button(new Button.ButtonStyle(
-                skin.getDrawable("exitButton2"),
-                skin.getDrawable("exitButton3"),
-                skin.getDrawable("exitButton2")));
-        exitB.setPosition(0,0);
-        exitB.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                if (Resources.state == State.GAME)
-                    setWindowMenu();
-            }
-        });
-        addActor(exitB);
+        Image bgBot = new Image(skin.getDrawable("bg_gui_bot"));
+        bgBot.setBounds(0,0, Resources.width, 50);
+        addActor(bgBot);
+
+        moneyL = new Label("| Money: " + CharacterController.getTotalMoney() + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        moneyL.setPosition(25, 15);
+        addActor(moneyL);
+
+        unitsL = new Label("| Units: " + CharacterController.getUserArmyCount() + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        unitsL.setPosition(moneyL.getWidth() + 50, 15);
+        addActor(unitsL);
+
+        enemyL = new Label("| Enemy: " + CharacterController.getGameArmyCount() + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        enemyL.setPosition(moneyL.getWidth() + unitsL.getWidth() + 100, 15);
+        addActor(enemyL);
 
         Group unitsG = new Group();
 
@@ -70,6 +72,7 @@ public class GameGUI extends Stage implements InputProcessor
                     try
                     {
                         GameScreen.setUnit(CharacterType.ARCHER);
+                        updateLabels();
                         System.out.println("UNIT 1");
                     } catch (NotEnoughMonyException e)
                     {
@@ -91,6 +94,7 @@ public class GameGUI extends Stage implements InputProcessor
                     try
                     {
                         GameScreen.setCompUnit(CharacterType.ARCHER, CharacterController.createNewCharacter(CharacterType.ARCHER));
+                        updateLabels();
                         System.out.println("UNIT 2");
                     } catch (NotEnoughMonyException e) {
                         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -108,8 +112,15 @@ public class GameGUI extends Stage implements InputProcessor
             public void clicked(InputEvent event, float x, float y)
             {
                 if (Resources.state == State.GAME)
-                    System.out.println("UNIT 3");
-                    //GameScreen.setUnit(CharacterType);
+                    try
+                    {
+                        GameScreen.setUnit(CharacterType.ARCHER);
+                        updateLabels();
+                        System.out.println("UNIT 3");
+                    } catch (NotEnoughMonyException e)
+                    {
+                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    }
             }
         });
         unitsG.addActor(setUnit_3B);
@@ -123,13 +134,42 @@ public class GameGUI extends Stage implements InputProcessor
             public void clicked(InputEvent event, float x, float y)
             {
                 if (Resources.state == State.GAME)
-                    System.out.println("UNIT 4");
-                    //GameScreen.setUnit(CharacterType);
+                    try
+                    {
+                        GameScreen.setUnit(CharacterType.ARCHER);
+                        updateLabels();
+                        System.out.println("UNIT 4");
+                    } catch (NotEnoughMonyException e)
+                    {
+                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    }
             }
         });
         unitsG.addActor(setUnit_4B);
-
         addActor(unitsG);
+
+        Button exitB = new Button(new Button.ButtonStyle(
+                skin.getDrawable("exitButton2"),
+                skin.getDrawable("exitButton3"),
+                skin.getDrawable("exitButton2")));
+        exitB.setPosition(Resources.width - 47,2);
+        exitB.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (Resources.state == State.GAME)
+                    setWindowMenu();
+            }
+        });
+        addActor(exitB);
+    }
+
+    public void updateLabels()
+    {
+        moneyL.setText("| Money: " + CharacterController.getTotalMoney() + " |");
+        unitsL.setText("| Units: " + CharacterController.getUserArmyCount() + " |");
+        enemyL.setText("| Enemy: " + CharacterController.getGameArmyCount() + " |");
     }
 
     private void setWindowMenu()

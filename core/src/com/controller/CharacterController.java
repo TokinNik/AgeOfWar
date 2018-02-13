@@ -75,17 +75,15 @@ public class CharacterController implements Runnable{
         CharacterController.pause = pause;
     }
 
-    public static Map<Character, CharacterType> getUserArmy() {
-        return userArmy;
-    }
+    public static Map<Character, CharacterType> getUserArmy() {return userArmy;}
+    public static int getUserArmyCount(){return userArmy.size();}
 
-    public static void setUserArmy(Map<Character, CharacterType> userArmy) {
-        CharacterController.userArmy = userArmy;
-    }
+    public static void setUserArmy(Map<Character, CharacterType> userArmy) {CharacterController.userArmy = userArmy;}
 
     public static Map<Character, CharacterType> getGameArmy() {
         return gameArmy;
     }
+    public static int getGameArmyCount() {return gameArmy.size();}
 
     public static void addCharacterToGameArmy(Character character, CharacterType type) {
         CharacterController.gameArmy.put(character, type);
