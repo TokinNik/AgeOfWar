@@ -19,35 +19,37 @@ public class Infatryman extends Character{
 
     @Override
     public void run() {
-        while (isAlive()) {
-            if (health <= 0) {
-                setAlive(false);
-                if (!isUsers()) {
-                    CharacterController.setTotalMoney(CharacterController.getTotalMoney() + (int)(getPrice() * 1.5f));
+        while (isAlive() && !CharacterController.isGameFinished()) {
+            while (!CharacterController.isPause()) {
+                if (health <= 0) {
+                    setAlive(false);
+                    if (!isUsers()) {
+                        CharacterController.setTotalMoney(CharacterController.getTotalMoney() + (int)(getPrice() * 1.5f));
+                    }
+                    continue;
                 }
-                continue;
-            }
 
-            if (isUsers()) {
-                if ((CharacterController.clothestGameObjectPosition - getPosition()) <= AFFECTED_AREA) {
-                    setState(CharacterState.REDYTOFIGHT);
-                    fight(CharacterController.clothestGameObject);
+                if (isUsers()) {
+                    if ((CharacterController.clothestGameObjectPosition - getPosition()) <= AFFECTED_AREA) {
+                        setState(CharacterState.REDYTOFIGHT);
+                        fight(CharacterController.clothestGameObject);
+                    } else {
+                        move();
+                    }
                 } else {
-                    move();
+                    if ((getPosition() - CharacterController.clothestUserObjectPosition) <= AFFECTED_AREA) {
+                        setState(CharacterState.REDYTOFIGHT);
+                        fight(CharacterController.clothestUserObject);
+                    } else {
+                        move();
+                    }
                 }
-            } else {
-                if ((getPosition() - CharacterController.clothestUserObjectPosition) <= AFFECTED_AREA) {
-                    setState(CharacterState.REDYTOFIGHT);
-                    fight(CharacterController.clothestUserObject);
-                } else {
-                    move();
-                }
-            }
 
-            try {
-                TimeUnit.MILLISECONDS.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                try {
+                    TimeUnit.MILLISECONDS.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

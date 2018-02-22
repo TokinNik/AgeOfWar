@@ -12,17 +12,19 @@ public class NPCController implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            createNewCharacter(CharacterType.INFATRYMAN);
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-            }
-            createNewCharacter(CharacterType.ARCHER);
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        while (!CharacterController.isGameFinished()) {
+            while (!CharacterController.isPause()) {
+                createNewCharacter(CharacterType.INFATRYMAN);
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException e) {
+                }
+                createNewCharacter(CharacterType.ARCHER);
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -33,7 +35,7 @@ public class NPCController implements Runnable {
         try {
             GameScreen.setCompUnit(type, character);
         } catch (NotEnoughMonyException e) {
-            System.out.println("xuy");
+            System.out.println("");
         }
 
         CharacterController.addCharacterToGameArmy(character, type);
