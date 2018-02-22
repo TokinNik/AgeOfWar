@@ -8,16 +8,18 @@ import com.model.Character;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class CharacterController implements Runnable{
-    private static Map<Character, CharacterType> userArmy = new HashMap<Character, CharacterType>();
-    private static Map<Character, CharacterType> gameArmy = new HashMap<Character, CharacterType>();
+public class CharacterController {
+    private static Map<Character, CharacterType> userArmy = new ConcurrentHashMap<Character, CharacterType>();
+    private static Map<Character, CharacterType> gameArmy = new ConcurrentHashMap<Character, CharacterType>();
     public static StageOfEvolution userEvolveStage = StageOfEvolution.FIRST;
     public static StageOfEvolution NPCEvolveState = StageOfEvolution.FIRST;
     private static boolean userWin = false;
     private static boolean gameWin = false;
     private static boolean pause = false;
+    private static boolean gameFinished = false;
     private static int totalScore = 0;
     private static int  totalMoney = 10000;
     public static float clothestUserObjectPosition = -21;
@@ -97,10 +99,9 @@ public class CharacterController implements Runnable{
         CharacterController.totalMoney = totalMoney;
     }
 
-    @Override
-    public void run() {
-       //new Thread(new UserArmyChecker()).start();
-       // new Thread(new NPCArmyChecker()).start();
+    public static void start() {
+        new Thread(new UserArmyChecker()).start();
+        new Thread(new NPCArmyChecker()).start();
        // new Thread(new WinnerChecker()).start();
         new Thread(new NPCController()).start();
     }
@@ -119,5 +120,13 @@ public class CharacterController implements Runnable{
 
     public static void setGameWin(boolean gameWin) {
         CharacterController.gameWin = gameWin;
+    }
+
+    public static boolean isGameFinished() {
+        return gameFinished;
+    }
+
+    public static void setGameFinished(boolean gameFinished) {
+        CharacterController.gameFinished = gameFinished;
     }
 }

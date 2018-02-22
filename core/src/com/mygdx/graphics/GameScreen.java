@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.controller.CharacterController;
 import com.exception.NotEnoughMonyException;
 import com.model.Character;
 import com.model.CharacterType;
@@ -40,6 +41,7 @@ public class GameScreen implements Screen, InputProcessor
         units = new Array<Unit>();
         prefX = -1;
         //new Thread(new CharacterController()).start();
+        CharacterController.start();
     }
 
     @Override

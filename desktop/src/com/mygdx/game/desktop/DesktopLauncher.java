@@ -2,6 +2,7 @@ package com.mygdx.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.controller.CharacterController;
 import com.mygdx.graphics.Start;
 
 public class DesktopLauncher {
