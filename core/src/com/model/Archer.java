@@ -8,7 +8,7 @@ public class Archer extends Character {
     private static final float AFFECTED_AREA = 5;
 
     public Archer(boolean users, StageOfEvolution stage) {
-        super(50, 0.2f, 0.5f, 0.5f, 30, users, stage);
+        super(50, 4f, 0.5f, 0.5f, 30, users, stage);
     }
 
     @Override

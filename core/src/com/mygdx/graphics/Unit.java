@@ -34,6 +34,7 @@ public class Unit extends Actor
     public Unit (CharacterType type) throws NotEnoughMonyException
     {
         character = CharacterController.createNewCharacter(CharacterType.ARCHER);
+        character.setPosition(100);
 
         setBounds(100, 50, 240, 288);
 
@@ -45,13 +46,14 @@ public class Unit extends Actor
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
 
-        addAction(Actions.moveTo( 2268, 50, 6));
+        //addAction(Actions.moveTo( 2268, 50, 6));
     }
 
-    public Unit(CharacterType type, Character character) throws  NotEnoughMonyException
+    public Unit(CharacterType type, Character c) throws  NotEnoughMonyException
     {
         this.type = type;
-        this.character = character;
+        this.character = c;
+        character.setPosition(2168);
 
         setBounds(2168, 50, 240, 288);
 
@@ -63,7 +65,7 @@ public class Unit extends Actor
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
 
-        addAction(Actions.moveTo( 50, 50, 6));
+        //addAction(Actions.moveTo( 50, 50, 6));
     }
 
     @Override
@@ -72,6 +74,8 @@ public class Unit extends Actor
 
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
+
+        setX(character.getPosition());
 
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
         if (hBar.getWidth() <= character.getMaxHealth() * 0.6f)

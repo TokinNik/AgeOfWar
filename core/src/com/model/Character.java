@@ -24,9 +24,7 @@ public abstract class Character extends GameObject implements Runnable {
         this.direction = users ? 1 : -1;
     }
 
-    public void move() {
-        position += direction * speed;
-    }
+    public void move() { position += direction * speed; }
 
     public abstract void fight(GameObject gameObject);
 
