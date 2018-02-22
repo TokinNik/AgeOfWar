@@ -150,14 +150,15 @@ public class GameScreen implements Screen, InputProcessor
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    public boolean touchUp(int screenX, int screenY, int pointer, int button)
+    {
+        prefX = -1;
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
-        //System.out.println("Dragged " + screenX + " " + screenY + " " + pointer);
         if (prefX != -1 && (camera.position.x >= Resources.width2 || prefX - screenX > 0)
                 && (camera.position.x <= 2268- Resources.width2 || prefX - screenX < 0))
         {
@@ -175,7 +176,6 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public boolean mouseMoved(int screenX, int screenY)
     {
-        //System.out.println("Moved " + screenX + " " + screenY );
         prefX = screenX;
         return false;
     }

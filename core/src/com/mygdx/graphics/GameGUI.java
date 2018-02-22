@@ -1,17 +1,14 @@
 package com.mygdx.graphics;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,7 +19,6 @@ import com.model.CharacterType;
 
 public class GameGUI extends Stage implements InputProcessor
 {
-    private static Skin skin;
     private static Start game;
     private Label moneyL;
     private Label unitsL;
@@ -34,15 +30,12 @@ public class GameGUI extends Stage implements InputProcessor
 
         GameGUI.game = game;
 
-        skin = new Skin();
-        skin.addRegions(Resources.guiAtlas);
-
         Button.ButtonStyle bs = new Button.ButtonStyle(
-                skin.getDrawable("unit_cell_s1"),
-                skin.getDrawable("unit_cell_s2"),
-                skin.getDrawable("unit_cell_s1"));
+                Resources.guiSkin.getDrawable("unit_cell_s1"),
+                Resources.guiSkin.getDrawable("unit_cell_s2"),
+                Resources.guiSkin.getDrawable("unit_cell_s1"));
 
-        Image bgBot = new Image(skin.getDrawable("bg_gui_bot"));
+        Image bgBot = new Image(Resources.guiSkin.getDrawable("bg_gui_bot"));
         bgBot.setBounds(0,0, Resources.width, 50);
         addActor(bgBot);
 
@@ -55,7 +48,7 @@ public class GameGUI extends Stage implements InputProcessor
         addActor(unitsL);
 
         enemyL = new Label("| Enemy: " + CharacterController.getGameArmyCount() + " |", new Label.LabelStyle(game.font, Color.WHITE));
-        enemyL.setPosition(moneyL.getWidth() + unitsL.getWidth() + 100, 15);
+        enemyL.setPosition(moneyL.getWidth() + unitsL.getWidth() + 75, 15);
         addActor(enemyL);
 
         Group unitsG = new Group();
@@ -148,12 +141,12 @@ public class GameGUI extends Stage implements InputProcessor
         unitsG.addActor(setUnit_4B);
         addActor(unitsG);
 
-        Button exitB = new Button(new Button.ButtonStyle(
-                skin.getDrawable("exitButton2"),
-                skin.getDrawable("exitButton3"),
-                skin.getDrawable("exitButton2")));
-        exitB.setPosition(Resources.width - 47,2);
-        exitB.addListener(new ClickListener()
+        Button menuB = new Button(new Button.ButtonStyle(
+                Resources.guiSkin.getDrawable("menu_b1"),
+                Resources.guiSkin.getDrawable("menu_b2"),
+                Resources.guiSkin.getDrawable("menu_b1")));
+        menuB.setPosition(Resources.width - 200,0);
+        menuB.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -162,7 +155,7 @@ public class GameGUI extends Stage implements InputProcessor
                     setWindowMenu();
             }
         });
-        addActor(exitB);
+        addActor(menuB);
     }
 
     public void updateLabels()
@@ -176,14 +169,14 @@ public class GameGUI extends Stage implements InputProcessor
     {
         Resources.state = State.PAUSE;
 
-        final Image bg = new Image(skin.getDrawable("menu_bg_1"));
-        bg.setPosition((Gdx.graphics.getWidth()/2)-150, (Gdx.graphics.getHeight()/2)-215);
+        final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
+        bg.setPosition(Resources.width2-150, Resources.height2-215);
 
         final Label l = new Label("Menu", new Label.LabelStyle(game.font, Color.WHITE));
-        l.setPosition((Gdx.graphics.getWidth()/2)-l.getPrefWidth()/2, (Gdx.graphics.getHeight()/2)+155);
+        l.setPosition(Resources.width2-l.getPrefWidth()/2, Resources.height2+155);
 
         final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_m);
-        toMenuB.setPosition((Gdx.graphics.getWidth()/2)-125, (Gdx.graphics.getHeight()/2)-100);
+        toMenuB.setPosition(Resources.width2-125, Resources.height2-100);
         toMenuB.addListener(new ClickListener()
         {
             @Override
@@ -193,7 +186,7 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
         final TextButton settingsB = new TextButton("Settings", Resources.tbs_m);
-        settingsB.setPosition((Gdx.graphics.getWidth()/2)-125, (Gdx.graphics.getHeight()/2));
+        settingsB.setPosition(Resources.width2-125, Resources.height2);
         settingsB.addListener(new ClickListener()
         {
             @Override
@@ -203,7 +196,7 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
         final TextButton continueB = new TextButton("Continue", Resources.tbs_m);
-        continueB.setPosition((Gdx.graphics.getWidth()/2)-125, (Gdx.graphics.getHeight()/2)+100);
+        continueB.setPosition(Resources.width2-125, Resources.height2+100);
         continueB.addListener(new ClickListener()
         {
             @Override

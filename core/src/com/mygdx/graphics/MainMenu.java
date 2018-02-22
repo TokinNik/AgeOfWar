@@ -29,7 +29,7 @@ public class MainMenu implements Screen
     {
         game = gam;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Resources.width, Resources.height);
+        camera.setToOrtho(false, Resources.gameW, Resources.gameH);
         stage = new Stage(new ScreenViewport(camera));
         state = true;
 
