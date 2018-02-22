@@ -43,7 +43,7 @@ public class Unit extends Actor
         this.direction = 1;
 
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
-        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth(), 10);
+        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
 
         addAction(Actions.moveTo( 2268, 50, 6));
     }
@@ -61,7 +61,7 @@ public class Unit extends Actor
         this.direction = -1;
 
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
-        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth(), 10);
+        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
 
         addAction(Actions.moveTo( 50, 50, 6));
     }
@@ -72,7 +72,13 @@ public class Unit extends Actor
 
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
-        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth(), 10);
+
+        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
+        if (hBar.getWidth() <= character.getMaxHealth() * 0.6f)
+            hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
+        if (hBar.getWidth() <= character.getMaxHealth() * 0.3f)
+            hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
+
         batch.draw(currentFrame, getX(), getY());
         hBar.draw(batch,parentAlpha);
     }
