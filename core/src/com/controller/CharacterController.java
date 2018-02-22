@@ -22,9 +22,9 @@ public class CharacterController {
     private static boolean gameFinished = false;
     private static int totalScore = 0;
     private static int  totalMoney = 10000;
-    public static float clothestUserObjectPosition = -21;
+    public static float clothestUserObjectPosition = 100;
     public static GameObject clothestUserObject = UserForpost.getInstance();
-    public static float clothestGameObjectPosition = 21;
+    public static float clothestGameObjectPosition = 2168;
     public static GameObject clothestGameObject = GameForpost.getInstance();
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 

@@ -24,7 +24,6 @@ public class Archer extends Character {
                     setAlive(false);
                     if (!isUsers()) {
                         CharacterController.setTotalMoney(CharacterController.getTotalMoney() + (int)(getPrice() * 1.5f));
-
                     }
                     continue;
                 }
@@ -34,6 +33,7 @@ public class Archer extends Character {
                         setState(CharacterState.REDYTOFIGHT);
                         fight(CharacterController.clothestGameObject);
                     } else {
+                        setState(CharacterState.REDYTOGO);
                         move();
                     }
                 } else {

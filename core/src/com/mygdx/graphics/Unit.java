@@ -34,7 +34,6 @@ public class Unit extends Actor
     public Unit (CharacterType type) throws NotEnoughMonyException
     {
         character = CharacterController.createNewCharacter(CharacterType.ARCHER);
-        character.setPosition(100);
 
         setBounds(100, 50, 240, 288);
 
@@ -53,8 +52,6 @@ public class Unit extends Actor
     {
         this.type = type;
         this.character = c;
-        character.setPosition(2168);
-
         setBounds(2168, 50, 240, 288);
 
         animation = Resources.testAnimationL;

@@ -4,7 +4,7 @@ public class GameForpost extends GameObject {
     private static GameForpost instance;
 
     private GameForpost() {
-        super(1000, false, 21, StageOfEvolution.FIRST);
+        super(1000, false, 2168, StageOfEvolution.FIRST);
     }
 
     public static synchronized GameForpost getInstance() {

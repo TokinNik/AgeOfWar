@@ -16,7 +16,7 @@ public class UserArmyChecker implements Runnable {
     @Override
     public void run() {
         while (true) {
-            float tempFirstUserPosition = -21;
+            float tempFirstUserPosition = 100;
             GameObject tempObject = UserForpost.getInstance();
 
             Iterator<Map.Entry<Character, CharacterType>> iterator = CharacterController.getUserArmy().entrySet().iterator();

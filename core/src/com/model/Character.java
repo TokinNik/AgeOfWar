@@ -5,7 +5,6 @@ public abstract class Character extends GameObject implements Runnable {
     private float speed;
     private float armor;
     private float strength;
-    private float health;
     private float maxHealth;
     private int direction;
     private int price;
@@ -14,7 +13,7 @@ public abstract class Character extends GameObject implements Runnable {
     private CharacterState state;
 
     public Character(float health, float speed, float armor, float strength, int price, boolean users, StageOfEvolution stage) {
-        super(health * stage.getCoefficient(), users, users ? -20 : 20, stage);
+        super(health * stage.getCoefficient(), users, users ? 100 : 2168, stage);
         this.speed = speed;
         this.armor = armor;
         this.strength = strength * stage.getCoefficient();
@@ -22,6 +21,7 @@ public abstract class Character extends GameObject implements Runnable {
         this.maxHealth = health;
         this.price = (int) (price * stage.getCoefficient()) / 10 * 10;
         this.direction = users ? 1 : -1;
+        state = CharacterState.REDYTOGO;
     }
 
     public void move() { position += direction * speed; }
@@ -76,11 +76,7 @@ public abstract class Character extends GameObject implements Runnable {
         this.strength = strength;
     }
 
-    public float getHealth() { return health; }
-
     public float getMaxHealth() { return maxHealth; }
-
-    public void setHealth(float health) { this.health = health; }
 
     public void setMaxHealth(float maxHealth) { this.maxHealth = maxHealth; }
 }

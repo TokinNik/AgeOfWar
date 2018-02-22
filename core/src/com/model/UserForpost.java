@@ -4,7 +4,7 @@ public class UserForpost extends GameObject {
     private static UserForpost instance;
 
     private UserForpost() {
-        super(1000, true, -21, StageOfEvolution.FIRST);
+        super(1000, true, 100, StageOfEvolution.FIRST);
     }
 
     public static synchronized UserForpost getInstance() {

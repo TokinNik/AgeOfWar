@@ -41,6 +41,7 @@ public class Infatryman extends Character{
                         setState(CharacterState.REDYTOFIGHT);
                         fight(CharacterController.clothestUserObject);
                     } else {
+                        setState(CharacterState.REDYTOGO);
                         move();
                     }
                 }
