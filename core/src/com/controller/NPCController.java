@@ -16,12 +16,12 @@ public class NPCController implements Runnable {
             while (!CharacterController.isPause()) {
                 createNewCharacter(CharacterType.INFATRYMAN);
                 try {
-                    TimeUnit.SECONDS.sleep(2);
+                    TimeUnit.SECONDS.sleep(10);
                 } catch (InterruptedException e) {
                 }
                 createNewCharacter(CharacterType.ARCHER);
                 try {
-                    TimeUnit.SECONDS.sleep(2);
+                    TimeUnit.SECONDS.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

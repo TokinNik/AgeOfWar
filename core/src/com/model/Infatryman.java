@@ -1,15 +1,16 @@
 package com.model;
 
+import com.badlogic.gdx.Gdx;
 import com.controller.CharacterController;
 
 import java.util.concurrent.TimeUnit;
 
 public class Infatryman extends Character{
 
-    private static final float AFFECTED_AREA = 1.5f;
+    private static final float AFFECTED_AREA = 20f;
 
     public Infatryman(boolean users, StageOfEvolution stage) {
-        super(100, 70f, 0.3f, 1, 20, users, stage);
+        super(100, 7f, 0.3f, 1, 20, users, stage);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class Infatryman extends Character{
                 }
 
                 try {
-                    TimeUnit.MILLISECONDS.sleep(250);
+                    TimeUnit.MILLISECONDS.sleep(1000/ Gdx.graphics.getFramesPerSecond());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

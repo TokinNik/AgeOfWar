@@ -21,7 +21,6 @@ public class Resources
     public static final float gameH = gameW/aspectRatio;
     public static final float gameW2 = gameW/2;
     public static final float gameH2 = gameH/2;
-    public static final float baseU = width/10;
     public static TextButton.TextButtonStyle tbs_s;
     public static TextButton.TextButtonStyle tbs_m;
     public static State state = State.GAME;

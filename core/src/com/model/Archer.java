@@ -1,11 +1,12 @@
 package com.model;
 
+import com.badlogic.gdx.Gdx;
 import com.controller.CharacterController;
 
 import java.util.concurrent.TimeUnit;
 
 public class Archer extends Character {
-    private static final float AFFECTED_AREA = 5;
+    private static final float AFFECTED_AREA = 200;
 
     public Archer(boolean users, StageOfEvolution stage) {
         super(50, 4f, 0.5f, 0.5f, 30, users, stage);
@@ -46,7 +47,7 @@ public class Archer extends Character {
                 }
 
                 try {
-                    TimeUnit.MILLISECONDS.sleep(250);
+                    TimeUnit.MILLISECONDS.sleep(1000/Gdx.graphics.getFramesPerSecond());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

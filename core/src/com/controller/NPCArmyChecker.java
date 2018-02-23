@@ -13,7 +13,7 @@ public class NPCArmyChecker implements Runnable {
     @Override
     public void run() {
         while (true) {
-            float tempFirstGemeUnitPosition = 2168;
+            float tempFirstGemeUnitPosition = GameForpost.CLOSEST_NPC_OBJECT;
             GameObject tempObject = GameForpost.getInstance();
 
             Iterator<Map.Entry<Character, CharacterType>> iterator = CharacterController.getGameArmy().entrySet().iterator();

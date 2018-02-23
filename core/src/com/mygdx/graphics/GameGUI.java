@@ -69,7 +69,7 @@ public class GameGUI extends Stage implements InputProcessor
                         System.out.println("UNIT 1");
                     } catch (NotEnoughMonyException e)
                     {
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        System.out.println("!!!!!!!!!!!!!Money!!!!!!!!!!!!!!");
                     }
             }
         });
@@ -86,7 +86,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setCompUnit(CharacterType.ARCHER, CharacterController.createNewCharacter(CharacterType.ARCHER));
+                        GameScreen.setUnit(CharacterType.INFATRYMAN);
                         updateLabels();
                         System.out.println("UNIT 2");
                     } catch (NotEnoughMonyException e) {

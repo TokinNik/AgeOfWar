@@ -22,9 +22,9 @@ public class CharacterController {
     private static boolean gameFinished = false;
     private static int totalScore = 0;
     private static int  totalMoney = 10000;
-    public static float clothestUserObjectPosition = 100;
+    public static float clothestUserObjectPosition = UserForpost.CLOSEST_USER_OBJECT;
     public static GameObject clothestUserObject = UserForpost.getInstance();
-    public static float clothestGameObjectPosition = 2168;
+    public static float clothestGameObjectPosition = GameForpost.CLOSEST_NPC_OBJECT;
     public static GameObject clothestGameObject = GameForpost.getInstance();
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -102,7 +102,7 @@ public class CharacterController {
     public static void start() {
         new Thread(new UserArmyChecker()).start();
         new Thread(new NPCArmyChecker()).start();
-       // new Thread(new WinnerChecker()).start();
+        new Thread(new WinnerChecker()).start();
         new Thread(new NPCController()).start();
     }
 

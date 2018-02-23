@@ -45,7 +45,7 @@ public class Unit extends Actor
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
 
-        //addAction(Actions.moveTo( 2268, 50, 6));
+        //addAction(Actions.moveTo( character.getPosition(), 50, 1/Gdx.graphics.getFramesPerSecond()));
     }
 
     public Unit(CharacterType type, Character c) throws  NotEnoughMonyException
@@ -62,26 +62,31 @@ public class Unit extends Actor
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
 
-        //addAction(Actions.moveTo( 50, 50, 6));
+       //addAction(Actions.moveTo( character.getPosition(), 50, 6));
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
 
-        stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
+        if (Resources.state == State.GAME)
+        {
+            stateTime += Gdx.graphics.getDeltaTime();
+            currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
 
-        setX(character.getPosition());
+            //setX(character.getPosition());
+            addAction(Actions.moveTo( character.getPosition()*2.2f, 50, 1/Gdx.graphics.getFramesPerSecond()));
 
-        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
-        if (hBar.getWidth() <= character.getMaxHealth() * 0.6f)
-            hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
-        if (hBar.getWidth() <= character.getMaxHealth() * 0.3f)
-            hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
+            hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
+            if (hBar.getWidth() <= character.getMaxHealth() * 0.6f)
+                hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
+            if (hBar.getWidth() <= character.getMaxHealth() * 0.3f)
+                hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
 
-        batch.draw(currentFrame, getX(), getY());
-        hBar.draw(batch,parentAlpha);
+            batch.draw(currentFrame, getX(), getY());
+            hBar.draw(batch,parentAlpha);
+
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.model;
 
 public abstract class GameObject {
     protected float health;
+    protected float maxHealth;
     protected float position;
     protected boolean alive;
     protected boolean users;
@@ -9,15 +10,16 @@ public abstract class GameObject {
 
     public GameObject(float health, boolean users, float position, StageOfEvolution stage) {
         this.health = health;
+        this.maxHealth = health;
         this.users = users;
         this.stage = stage;
         this.position = position;
         alive = true;
     }
 
-    public float getHealth() {
-        return health;
-    }
+    public float getHealth() { return health; }
+
+    public float getMaxHealth() { return maxHealth; }
 
     public void setHealth(float health) {
         this.health = health;
