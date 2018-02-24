@@ -99,6 +99,11 @@ public class CharacterController {
         CharacterController.totalMoney = totalMoney;
     }
 
+    public static void addMoney(int delta) {
+        totalMoney += delta;
+        System.out.println(totalMoney);
+    }
+
     public static void start() {
         new Thread(new UserArmyChecker()).start();
         new Thread(new NPCArmyChecker()).start();

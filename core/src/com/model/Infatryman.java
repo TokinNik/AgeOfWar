@@ -20,12 +20,12 @@ public class Infatryman extends Character{
 
     @Override
     public void run() {
-        while (isAlive() && !CharacterController.isGameFinished()) {
-            while (!CharacterController.isPause()) {
+        while (!CharacterController.isGameFinished()) {
+            while (isAlive() && !CharacterController.isPause()) {
                 if (super.getHealth() <= 0) {
                     setAlive(false);
                     if (!isUsers()) {
-                        CharacterController.setTotalMoney(CharacterController.getTotalMoney() + (int)(getPrice() * 1.5f));
+                        CharacterController.addMoney(Math.round(getPrice() * 1.5f));
                     }
                     continue;
                 }
