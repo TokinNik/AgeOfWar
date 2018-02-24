@@ -22,7 +22,7 @@ import javax.swing.Box;
 
 public class Unit extends Actor
 {
-    private final Animation animation;
+    private Animation animation;
     private CharacterType type;
     private int direction;
     private float stateTime;
@@ -68,24 +68,23 @@ public class Unit extends Actor
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
-
         if (Resources.state == State.GAME)
         {
             stateTime += Gdx.graphics.getDeltaTime();
             currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
 
             //setX(character.getPosition());
+
             addAction(Actions.moveTo( character.getPosition()*2.2f, 50, 1/Gdx.graphics.getFramesPerSecond()));
 
             hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
-            if (hBar.getWidth() <= character.getMaxHealth() * 0.6f)
+            if (character.getHealth() <= character.getMaxHealth() * 0.6f)
                 hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
-            if (hBar.getWidth() <= character.getMaxHealth() * 0.3f)
+            if (character.getHealth() <= character.getMaxHealth() * 0.3f)
                 hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
 
             batch.draw(currentFrame, getX(), getY());
             hBar.draw(batch,parentAlpha);
-
         }
     }
 

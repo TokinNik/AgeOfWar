@@ -6,12 +6,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.controller.CharacterController;
@@ -30,10 +26,10 @@ public class GameScreen implements Screen, InputProcessor
     private static GameGUI gui;
     private static Array<Unit> units;
     private static float prefX;
-    private static Image hBarU;
-    private static Image hBarG;//healse bar game
-    private UserForpost userForpost;
-    private GameForpost gameForpost;
+    private static UserForpost userForpost;
+    private static GameForpost gameForpost;
+    private static Forpost userF;
+    private static Forpost gameF;
 
     GameScreen (final Start gam)
     {
@@ -42,13 +38,14 @@ public class GameScreen implements Screen, InputProcessor
         camera.setToOrtho(false, Resources.width, Resources.height);
         stage = new Stage(new ScreenViewport(camera));
         stage.setDebugAll(true);
-        gui = new GameGUI(game, this);
+        userForpost = UserForpost.getInstance();
+        gameForpost = GameForpost.getInstance();
+        gui = new GameGUI(game);
         Resources.state = State.GAME;
         units = new Array<Unit>();
         prefX = -1;
 
-        userForpost = UserForpost.getInstance();
-        gameForpost = GameForpost.getInstance();
+
 
         CharacterController.start();
     }
@@ -60,12 +57,14 @@ public class GameScreen implements Screen, InputProcessor
         bg.setPosition(0, 0);
         stage.addActor(bg);
 
-        hBarU = new Image(Resources.guiSkin.getDrawable("hBar_green"));
-        hBarU.setBounds(10, 400 , 300 * userForpost.getHealth()/userForpost.getMaxHealth(), 10);
-        stage.addActor(hBarU);
-        hBarG = new Image(Resources.guiSkin.getDrawable("hBar_green"));
-        hBarG.setBounds(1900, 400 , 300 * userForpost.getHealth()/userForpost.getMaxHealth(), 10);
-        stage.addActor(hBarG);
+
+        gameF = new Forpost(-1);
+        userF = new Forpost(1);
+
+        stage.addActor(userF);
+        stage.addActor(gameF);
+
+
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer(this, gui);
         Gdx.input.setInputProcessor(inputMultiplexer);
@@ -78,9 +77,14 @@ public class GameScreen implements Screen, InputProcessor
         {
             Gdx.gl.glClearColor(0, 0.2f, 0.5f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            if (CharacterController.isGameWin() || CharacterController.isUserWin())
-                Resources.state = State.PAUSE;
+            if (CharacterController.isGameWin())
+                gui.setGameEndMenu(true);
+            if (CharacterController.isUserWin())
+                gui.setGameEndMenu(false);
 
+
+            gui.updateBaseHealth();
+            gui.updateLabels();
 
             int i = 0;
             for (Unit u: units)
@@ -88,17 +92,6 @@ public class GameScreen implements Screen, InputProcessor
 
                 if (!u.getCharacter().isAlive())
                     delUnit(i);
-
-                hBarG.setSize( 300 * gameForpost.getHealth() / gameForpost.getMaxHealth(), 10);
-                if (hBarG.getWidth() <= gameForpost.getMaxHealth() * 0.6f)
-                    hBarG.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
-                if (hBarG.getWidth() <= gameForpost.getMaxHealth() * 0.3f)
-                    hBarG.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
-                hBarU.setSize( 300 * userForpost.getHealth() / userForpost.getMaxHealth(), 10);
-                if (hBarU.getWidth() <= userForpost.getMaxHealth() * 0.6f)
-                    hBarU.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
-                if (hBarU.getWidth() <= userForpost.getMaxHealth() * 0.3f)
-                    hBarU.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
 
                 i++;
             }
@@ -160,7 +153,14 @@ public class GameScreen implements Screen, InputProcessor
         units.get(num).remove();
         System.out.println("Delete Unit type " + units.get(num).getType() + " direction " + units.get(num).getDirection());
         units.removeIndex(num);
-        gui.updateLabels();
+    }
+
+    public static UserForpost getUserForpost() {
+        return userForpost;
+    }
+
+    public static GameForpost getGameForpost() {
+        return gameForpost;
     }
 
     @Override
