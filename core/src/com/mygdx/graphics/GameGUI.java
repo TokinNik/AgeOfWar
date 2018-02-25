@@ -215,6 +215,7 @@ public class GameGUI extends Stage implements InputProcessor
     private void setWindowMenu()
     {
         Resources.state = State.PAUSE;
+        CharacterController.setPause(true);
 
         final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.width2-150, Resources.height2-215);
@@ -255,6 +256,8 @@ public class GameGUI extends Stage implements InputProcessor
                 l.setVisible(false);
                 bg.setVisible(false);
                 Resources.state = State.GAME;
+                CharacterController.setPause(false);
+                CharacterController.resume();
             }
         });
 
@@ -268,6 +271,7 @@ public class GameGUI extends Stage implements InputProcessor
     void setGameEndMenu(boolean win)
     {
         Resources.state = State.PAUSE;
+        CharacterController.setPause(true);
 
         final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.width2-150, Resources.height2-215);
