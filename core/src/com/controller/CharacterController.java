@@ -26,7 +26,7 @@ public class CharacterController {
     public static GameObject clothestUserObject = UserForpost.getInstance();
     public static float clothestGameObjectPosition = GameForpost.CLOSEST_NPC_OBJECT;
     public static GameObject clothestGameObject = GameForpost.getInstance();
-    private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    public static Object lock = new Object();
 
 
     public static Character createNewCharacter(CharacterType type) throws NotEnoughMonyException {
@@ -73,6 +73,10 @@ public class CharacterController {
         return pause;
     }
 
+    public static void resume() {
+        lock.notifyAll();
+    }
+
     public static void setPause(boolean pause) {
         CharacterController.pause = pause;
     }
@@ -101,7 +105,6 @@ public class CharacterController {
 
     public static void addMoney(int delta) {
         totalMoney += delta;
-        System.out.println(totalMoney);
     }
 
     public static void start() {
@@ -133,5 +136,18 @@ public class CharacterController {
 
     public static void setGameFinished(boolean gameFinished) {
         CharacterController.gameFinished = gameFinished;
+    }
+
+    public static void reset() {
+        userArmy.clear();
+        gameArmy.clear();
+        userEvolveStage = StageOfEvolution.FIRST;
+        NPCEvolveState = StageOfEvolution.FIRST;
+        userWin = false;
+        gameWin = false;
+        pause = false;
+        gameFinished = false;
+        totalScore = 0;
+        totalMoney = 1000;
     }
 }

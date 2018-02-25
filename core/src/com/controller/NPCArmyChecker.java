@@ -12,7 +12,18 @@ public class NPCArmyChecker implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!CharacterController.isGameFinished()) {
+
+            if (CharacterController.isPause()) {
+                synchronized (CharacterController.lock) {
+                    try {
+                        CharacterController.lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             float tempFirstGemeUnitPosition = GameForpost.CLOSEST_NPC_OBJECT;
             GameObject tempObject = GameForpost.getInstance();
 

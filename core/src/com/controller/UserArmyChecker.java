@@ -15,7 +15,18 @@ public class UserArmyChecker implements Runnable {
     /*Check first unit of user army + remove dead unit*/
     @Override
     public void run() {
-        while (true) {
+        while (!CharacterController.isGameFinished()) {
+
+            if (CharacterController.isPause()) {
+                synchronized (CharacterController.lock) {
+                    try {
+                        CharacterController.lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             float tempFirstUserPosition = UserForpost.CLOSEST_USER_OBJECT;
             GameObject tempObject = UserForpost.getInstance();
 

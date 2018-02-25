@@ -19,8 +19,22 @@ public class Archer extends Character {
 
     @Override
     public void run() {
-        while (!CharacterController.isGameFinished()) {
-            while (isAlive() && !CharacterController.isPause()) {
+            while (isAlive() ) {
+
+                if (CharacterController.isGameFinished()) {
+                    break;
+                }
+
+                if (CharacterController.isPause()) {
+                    synchronized (CharacterController.lock) {
+                        try {
+                            CharacterController.lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 if (super.getHealth() <= 0) {
                     setAlive(false);
                     if (!isUsers()) {
@@ -52,6 +66,5 @@ public class Archer extends Character {
                     e.printStackTrace();
                 }
             }
-        }
     }
 }

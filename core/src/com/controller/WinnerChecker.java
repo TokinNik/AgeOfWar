@@ -10,7 +10,18 @@ public class WinnerChecker implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!CharacterController.isGameFinished()) {
+
+            if (CharacterController.isPause()) {
+                synchronized (CharacterController.lock) {
+                    try {
+                        CharacterController.lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             try {
                 TimeUnit.MILLISECONDS.sleep(300);
                 if (UserForpost.getInstance().getHealth() <= 0) {
