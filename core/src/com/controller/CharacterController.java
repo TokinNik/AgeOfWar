@@ -74,7 +74,9 @@ public class CharacterController {
     }
 
     public static void resume() {
-        lock.notifyAll();
+        synchronized (lock) {
+            lock.notifyAll();
+        }
     }
 
     public static void setPause(boolean pause) {
