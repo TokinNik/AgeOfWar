@@ -5,6 +5,7 @@ import com.exception.NotEnoughMonyException;
 import com.model.*;
 import com.model.Character;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,7 +32,7 @@ public class CharacterController {
     public static GameObject clothestGameObject = GameForpost.getInstance();
     public static Object lock = new Object();
 
-    private static Set<Thread> allCurrentThreads = new HashSet<Thread>();
+    private static Set<Thread> allCurrentThreads = Collections.newSetFromMap(new ConcurrentHashMap<Thread, Boolean>());
 
 
     public static Character createNewCharacter(CharacterType type) throws NotEnoughMonyException {
@@ -114,6 +115,14 @@ public class CharacterController {
         CharacterController.totalMoney = totalMoney;
     }
 
+    public static int getTotalScore() {
+        return totalScore;
+    }
+
+    public static void setTotalScore(int totalScore) {
+        CharacterController.totalScore = totalScore;
+    }
+
     public static void addMoney(int delta) {
         totalMoney += delta;
     }
@@ -189,6 +198,6 @@ public class CharacterController {
         UserForpost.getInstance().setHealth(1000);
         GameForpost.getInstance().setHealth(1000);
 
-        start();
+        //start();
     }
 }

@@ -90,10 +90,6 @@ public class MainMenu implements Screen
                 {
                     System.out.println("New Game");
                     Resources.game.setScreen(new GameScreen());
-                    if (CharacterController.isPause())
-                    {
-                        CharacterController.setPause(false);
-                    }
                 }
             });
             stage.addActor(bNewGame);

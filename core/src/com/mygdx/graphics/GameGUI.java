@@ -54,7 +54,7 @@ public class GameGUI extends Stage implements InputProcessor
         enemyL.setPosition(moneyL.getWidth() + unitsL.getWidth() + 75, 15);
         addActor(enemyL);
 
-        expL = new Label("| Experience: " + 0 + " |", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        expL = new Label("| Experience: " + CharacterController.getTotalScore() + " |", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         expL.setPosition(enemyL.getX() + enemyL.getWidth() + 50, 15);
         addActor(expL);
 
@@ -189,7 +189,7 @@ public class GameGUI extends Stage implements InputProcessor
         moneyL.setText("| Money: " + CharacterController.getTotalMoney() + " |");
         unitsL.setText("| Units: " + CharacterController.getUserArmyCount() + " |");
         enemyL.setText("| Enemy: " + CharacterController.getGameArmyCount() + " |");
-        expL.setText("| Experience: " + 0 + " |");
+        expL.setText("| Experience: " + CharacterController.getTotalScore() + " |");
         if (GameScreen.getUserForpost().getHealth() > 0)
             yourBaseL.setText("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         else
@@ -244,7 +244,6 @@ public class GameGUI extends Stage implements InputProcessor
             {
                 GameScreen.clear();
                 CharacterController.reset();
-                CharacterController.setPause(true);
                 Resources.game.setScreen(new MainMenu());
                 dispose();
             }
@@ -315,7 +314,6 @@ public class GameGUI extends Stage implements InputProcessor
             {
                 GameScreen.clear();
                 CharacterController.reset();
-                CharacterController.setPause(true);
                 Resources.game.setScreen(new MainMenu());
                 dispose();
             }
@@ -345,6 +343,7 @@ public class GameGUI extends Stage implements InputProcessor
 
                 GameScreen.clear();
                 CharacterController.reset();
+                CharacterController.start();
                 Resources.state = State.GAME;
             }
         });

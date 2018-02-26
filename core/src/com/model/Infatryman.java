@@ -61,7 +61,7 @@ public class Infatryman extends Character{
                 }
 
                 try {
-                    TimeUnit.MILLISECONDS.sleep(1000/ Gdx.graphics.getFramesPerSecond());
+                    TimeUnit.MILLISECONDS.sleep(1000 / (Gdx.graphics.getFramesPerSecond() + 1));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

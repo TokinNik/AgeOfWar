@@ -75,9 +75,9 @@ public class Unit extends Actor
 
             //setX(character.getPosition());
 
-            addAction(Actions.moveTo( character.getPosition()*2.2f, 50, 1/Gdx.graphics.getFramesPerSecond()));
+            addAction(Actions.moveTo( character.getPosition()*2.2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
 
-            hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
+            hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth() / character.getMaxHealth(), 10);
             if (character.getHealth() <= character.getMaxHealth() * 0.6f)
                 hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
             if (character.getHealth() <= character.getMaxHealth() * 0.3f)
