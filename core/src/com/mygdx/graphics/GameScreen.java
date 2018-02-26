@@ -51,14 +51,11 @@ public class GameScreen implements Screen, InputProcessor
         bg.setPosition(0, 0);
         stage.addActor(bg);
 
-
         Forpost gameF = new Forpost(-1);
         Forpost userF = new Forpost(1);
 
         stage.addActor(userF);
         stage.addActor(gameF);
-
-
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer(this, gui);
         Gdx.input.setInputProcessor(inputMultiplexer);
@@ -164,6 +161,17 @@ public class GameScreen implements Screen, InputProcessor
         prefX = -1;
         gui.updateLabels();
         gui.updateBaseHealth();
+    }
+
+    static void exit()
+    {
+        for (Unit u: units)
+        {
+            u.remove();
+            System.out.println("Delete Unit type " + u.getType() + " direction " + u.getDirection());
+        }
+        units.clear();
+        stage.clear();
     }
 
     static UserForpost getUserForpost() {

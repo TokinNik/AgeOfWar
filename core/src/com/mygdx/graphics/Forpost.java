@@ -58,8 +58,8 @@ public class Forpost extends Actor
             else
                 forpostImage.draw(batch,parentAlpha);
         }
-//        else
-//            forpostImage.draw(batch,parentAlpha);
+        else
+            forpostImage.draw(batch,parentAlpha);
     }
 
     @Override
@@ -70,11 +70,15 @@ public class Forpost extends Actor
             currentHP = GameScreen.getUserForpost().getHealth();
             takeDamage();
         }
+        if (direction == 1 && currentHP < GameScreen.getUserForpost().getHealth())
+            currentHP = GameScreen.getUserForpost().getMaxHealth();
         if (direction == -1 && currentHP > GameScreen.getGameForpost().getHealth())
         {
             currentHP = GameScreen.getGameForpost().getHealth();
             takeDamage();
         }
+        if (direction == -1 && currentHP < GameScreen.getGameForpost().getHealth())
+            currentHP = GameScreen.getGameForpost().getMaxHealth();
         super.act(delta);
     }
 

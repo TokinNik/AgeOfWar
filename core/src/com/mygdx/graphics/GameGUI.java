@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -230,26 +231,26 @@ public class GameGUI extends Stage implements InputProcessor
         CharacterController.setPause(true);
 
         final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
-        bg.setPosition(Resources.width2-150, Resources.height2-215);
+        bg.setPosition(Resources.width2 - 150, Resources.height2-215);
 
         final Label l = new Label("Menu", new Label.LabelStyle(Resources.game.font, Color.WHITE));
-        l.setPosition(Resources.width2-l.getPrefWidth()/2, Resources.height2+155);
+        l.setPosition(Resources.width2 - l.getPrefWidth()/2, Resources.height2 + 155);
 
         final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_m);
-        toMenuB.setPosition(Resources.width2-125, Resources.height2-100);
+        toMenuB.setPosition(Resources.width2 - 125, Resources.height2 - 200);
         toMenuB.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                GameScreen.clear();
+                GameScreen.exit();
                 CharacterController.reset();
                 Resources.game.setScreen(new MainMenu());
                 dispose();
             }
         });
         final TextButton settingsB = new TextButton("Settings", Resources.tbs_m);
-        settingsB.setPosition(Resources.width2-125, Resources.height2);
+        settingsB.setPosition(Resources.width2 - 125, Resources.height2 - 100);
         settingsB.addListener(new ClickListener()
         {
             @Override
@@ -258,21 +259,45 @@ public class GameGUI extends Stage implements InputProcessor
 
             }
         });
+
+        final TextButton resetB = new TextButton("Reset Level", Resources.tbs_m);
+
         final TextButton continueB = new TextButton("Continue", Resources.tbs_m);
-        continueB.setPosition(Resources.width2-125, Resources.height2+100);
+        continueB.setPosition(Resources.width2 - 125, Resources.height2 + 100);
         continueB.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                continueB.setVisible(false);
-                settingsB.setVisible(false);
-                toMenuB.setVisible(false);
-                l.setVisible(false);
-                bg.setVisible(false);
+                continueB.addAction(Actions.removeActor());
+                settingsB.addAction(Actions.removeActor());
+                toMenuB.addAction(Actions.removeActor());
+                resetB.addAction(Actions.removeActor());
+                l.addAction(Actions.removeActor());
+                bg.addAction(Actions.removeActor());
+
                 Resources.state = State.GAME;
                 CharacterController.setPause(false);
                 CharacterController.resume();
+            }
+        });
+        resetB.setPosition(Resources.width2 - 125, Resources.height2);
+        resetB.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                continueB.addAction(Actions.removeActor());
+                settingsB.addAction(Actions.removeActor());
+                toMenuB.addAction(Actions.removeActor());
+                resetB.addAction(Actions.removeActor());
+                l.addAction(Actions.removeActor());
+                bg.addAction(Actions.removeActor());
+
+                GameScreen.clear();
+                CharacterController.reset();
+                CharacterController.start();
+                Resources.state = State.GAME;
             }
         });
 
@@ -281,6 +306,7 @@ public class GameGUI extends Stage implements InputProcessor
         addActor(continueB);
         addActor(toMenuB);
         addActor(settingsB);
+        addActor(resetB);
     }
 
     void setGameEndMenu(boolean win)
@@ -289,37 +315,37 @@ public class GameGUI extends Stage implements InputProcessor
         CharacterController.setPause(true);
 
         final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
-        bg.setPosition(Resources.width2-150, Resources.height2-215);
+        bg.setPosition(Resources.width2 - 150, Resources.height2 - 215);
 
         final Label l;
         if (win)
         {
             l = new Label("Congratulation!!!", new Label.LabelStyle(Resources.game.font, Color.WHITE));
-            l.setPosition(Resources.width2-l.getPrefWidth()/2, Resources.height2+155);
+            l.setPosition(Resources.width2 - l.getPrefWidth()/2, Resources.height2 + 155);
             enemyBaseL.setText("| Enemy Base Health: " + 0 + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
         }
         else
         {
             l = new Label("You Lose(((", new Label.LabelStyle(Resources.game.font, Color.WHITE));
-            l.setPosition(Resources.width2-l.getPrefWidth()/2, Resources.height2+155);
+            l.setPosition(Resources.width2 - l.getPrefWidth()/2, Resources.height2 + 155);
             yourBaseL.setText("| Your Base Health: " + 0 + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         }
 
         final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_m);
-        toMenuB.setPosition(Resources.width2-125, Resources.height2-100);
+        toMenuB.setPosition(Resources.width2 - 125, Resources.height2 - 100);
         toMenuB.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                GameScreen.clear();
+                GameScreen.exit();
                 CharacterController.reset();
                 Resources.game.setScreen(new MainMenu());
                 dispose();
             }
         });
         final TextButton continueB = new TextButton("Continue", Resources.tbs_m);
-        continueB.setPosition(Resources.width2-125, Resources.height2+100);
+        continueB.setPosition(Resources.width2 - 125, Resources.height2 + 100);
         continueB.addListener(new ClickListener()
         {
             @Override
@@ -329,17 +355,17 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
         final TextButton resetB = new TextButton("Reset Level", Resources.tbs_m);
-        resetB.setPosition(Resources.width2-125, Resources.height2);
+        resetB.setPosition(Resources.width2 - 125, Resources.height2);
         resetB.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                toMenuB.setVisible(false);
-                resetB.setVisible(false);
-                continueB.setVisible(false);
-                l.setVisible(false);
-                bg.setVisible(false);
+                toMenuB.addAction(Actions.removeActor());
+                resetB.addAction(Actions.removeActor());
+                continueB.addAction(Actions.removeActor());
+                l.addAction(Actions.removeActor());
+                bg.addAction(Actions.removeActor());
 
                 GameScreen.clear();
                 CharacterController.reset();

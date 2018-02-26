@@ -112,6 +112,7 @@ public class MainMenu implements Screen
             public void clicked(InputEvent event, float x, float y)
             {
                 System.out.println("About Us");
+                Resources.game.setScreen(new LoadScreen());
             }
         });
 
