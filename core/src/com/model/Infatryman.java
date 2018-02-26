@@ -39,6 +39,7 @@ public class Infatryman extends Character{
                     setAlive(false);
                     if (!isUsers()) {
                         CharacterController.addMoney(Math.round(getPrice() * 1.5f));
+                        CharacterController.addTotalScore(50);
                     }
                     continue;
                 }

@@ -120,8 +120,8 @@ public class CharacterController {
         return totalScore;
     }
 
-    public static void setTotalScore(int totalScore) {
-        CharacterController.totalScore = totalScore;
+    public static void addTotalScore(int totalScore) {
+        CharacterController.totalScore += totalScore;
     }
 
     public static void addMoney(int delta) {
@@ -184,7 +184,6 @@ public class CharacterController {
 
         for (Thread thread: allCurrentThreads) {
             try {
-                //System.out.println(thread.getName() + " ====== " + new Date());
                 if (thread.getName().equals("NPC_CONTROLLER")) {
                     thread.interrupt();
                 }
