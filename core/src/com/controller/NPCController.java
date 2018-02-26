@@ -47,6 +47,9 @@ public class NPCController implements Runnable {
         }
 
         CharacterController.addCharacterToGameArmy(character, type);
-        new Thread(character).start();
+
+        Thread characterThread = new Thread(character);
+        CharacterController.addNewThread(characterThread);
+        characterThread.start();
     }
 }

@@ -6,9 +6,12 @@ import com.model.*;
 import com.model.Character;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CharacterController {
@@ -28,6 +31,8 @@ public class CharacterController {
     public static GameObject clothestGameObject = GameForpost.getInstance();
     public static Object lock = new Object();
 
+    private static Set<Thread> allCurrentThreads = new HashSet<Thread>();
+
 
     public static Character createNewCharacter(CharacterType type) throws NotEnoughMonyException {
         Character character = CharacterFactory.createCharacter(type, true, userEvolveStage);
@@ -38,7 +43,9 @@ public class CharacterController {
 
         totalMoney -= character.getPrice();
         userArmy.put(character, type);
-        new Thread(character).start();
+        Thread characterThread = new Thread(character);
+        allCurrentThreads.add(characterThread);
+        characterThread.start();
 
         return character;
     }
@@ -74,6 +81,8 @@ public class CharacterController {
     }
 
     public static void resume() {
+        pause = false;
+
         synchronized (lock) {
             lock.notifyAll();
         }
@@ -110,10 +119,20 @@ public class CharacterController {
     }
 
     public static void start() {
-        new Thread(new UserArmyChecker()).start();
-        new Thread(new NPCArmyChecker()).start();
-        new Thread(new WinnerChecker()).start();
-        new Thread(new NPCController()).start();
+        Thread userThread = new Thread(new UserArmyChecker());
+        Thread NPCCheckerThread = new Thread(new NPCArmyChecker());
+        Thread winnerThread = new Thread(new WinnerChecker());
+        Thread NPCControllerThread = new Thread(new NPCController());
+
+        allCurrentThreads.add(userThread);
+        allCurrentThreads.add(NPCCheckerThread);
+        allCurrentThreads.add(winnerThread);
+        allCurrentThreads.add(NPCControllerThread);
+
+        userThread.start();
+        NPCCheckerThread.start();
+        winnerThread.start();
+        NPCControllerThread.start();
     }
 
     public static boolean isUserWin() {
@@ -140,9 +159,25 @@ public class CharacterController {
         CharacterController.gameFinished = gameFinished;
     }
 
+    public static void addNewThread(Thread thread) {
+        allCurrentThreads.add(thread);
+    }
+
     public static void reset() {
+        gameFinished = true;
+        resume();
+
+        for (Thread thread: allCurrentThreads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         userArmy.clear();
         gameArmy.clear();
+        allCurrentThreads.clear();
         userEvolveStage = StageOfEvolution.FIRST;
         NPCEvolveState = StageOfEvolution.FIRST;
         userWin = false;
@@ -151,5 +186,9 @@ public class CharacterController {
         gameFinished = false;
         totalScore = 0;
         totalMoney = 1000;
+        UserForpost.getInstance().setHealth(1000);
+        GameForpost.getInstance().setHealth(1000);
+
+        start();
     }
 }
