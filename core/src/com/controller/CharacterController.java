@@ -6,6 +6,7 @@ import com.model.*;
 import com.model.Character;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -133,6 +134,11 @@ public class CharacterController {
         Thread winnerThread = new Thread(new WinnerChecker());
         Thread NPCControllerThread = new Thread(new NPCController());
 
+        userThread.setName("USER_THREAD");
+        NPCCheckerThread.setName("NPC_CHECKER");
+        winnerThread.setName("WINNER");
+        NPCControllerThread.setName("NPC_CONTROLLER");
+
         allCurrentThreads.add(userThread);
         allCurrentThreads.add(NPCCheckerThread);
         allCurrentThreads.add(winnerThread);
@@ -178,8 +184,13 @@ public class CharacterController {
 
         for (Thread thread: allCurrentThreads) {
             try {
+                //System.out.println(thread.getName() + " ====== " + new Date());
+                if (thread.getName().equals("NPC_CONTROLLER")) {
+                    thread.interrupt();
+                }
+
                 thread.join();
-            } catch (InterruptedException e) {
+            }  catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
