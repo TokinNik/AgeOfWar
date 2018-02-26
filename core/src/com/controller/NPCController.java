@@ -12,7 +12,7 @@ public class NPCController implements Runnable {
 
     @Override
     public void run() {
-        while (!CharacterController.isGameFinished()) {
+        while (true) {
 
             if (CharacterController.isPause()) {
                 synchronized (CharacterController.lock) {
@@ -23,6 +23,11 @@ public class NPCController implements Runnable {
                     }
                 }
             }
+
+            if (CharacterController.isGameFinished()) {
+                break;
+            }
+
                 createNewCharacter(CharacterType.INFATRYMAN);
                 try {
                     TimeUnit.SECONDS.sleep(10);

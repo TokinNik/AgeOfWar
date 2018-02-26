@@ -10,7 +10,7 @@ public class WinnerChecker implements Runnable {
 
     @Override
     public void run() {
-        while (!CharacterController.isGameFinished()) {
+        while (true) {
 
             if (CharacterController.isPause()) {
                 synchronized (CharacterController.lock) {
@@ -20,6 +20,10 @@ public class WinnerChecker implements Runnable {
                         e.printStackTrace();
                     }
                 }
+            }
+
+            if (CharacterController.isGameFinished()) {
+                break;
             }
 
             try {

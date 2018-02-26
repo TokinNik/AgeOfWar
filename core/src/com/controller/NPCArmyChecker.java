@@ -12,7 +12,7 @@ public class NPCArmyChecker implements Runnable {
 
     @Override
     public void run() {
-        while (!CharacterController.isGameFinished()) {
+        while (true) {
 
             if (CharacterController.isPause()) {
                 synchronized (CharacterController.lock) {
@@ -22,6 +22,10 @@ public class NPCArmyChecker implements Runnable {
                         e.printStackTrace();
                     }
                 }
+            }
+
+            if (CharacterController.isGameFinished()) {
+                break;
             }
 
             float tempFirstGemeUnitPosition = GameForpost.CLOSEST_NPC_OBJECT;

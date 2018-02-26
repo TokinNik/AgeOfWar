@@ -197,7 +197,5 @@ public class CharacterController {
         totalMoney = 1000;
         UserForpost.getInstance().setHealth(1000);
         GameForpost.getInstance().setHealth(1000);
-
-        //start();
     }
 }
