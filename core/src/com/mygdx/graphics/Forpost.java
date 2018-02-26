@@ -58,6 +58,8 @@ public class Forpost extends Actor
             else
                 forpostImage.draw(batch,parentAlpha);
         }
+//        else
+//            forpostImage.draw(batch,parentAlpha);
     }
 
     @Override

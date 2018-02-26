@@ -15,19 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.controller.CharacterController;
 
 
 public class MainMenu implements Screen
 {
-    private Start game;
     private OrthographicCamera camera;
     private static Skin skin;
     private Stage stage;
     boolean state;
 
-    MainMenu(final Start gam)
+    MainMenu()
     {
-        game = gam;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Resources.gameW, Resources.gameH);
         stage = new Stage(new ScreenViewport(camera));
@@ -60,12 +59,12 @@ public class MainMenu implements Screen
         TextButton.TextButtonStyle tbs = new TextButton.TextButtonStyle();
         tbs.up = skin.getDrawable("text_button_s1");
         tbs.down = skin.getDrawable("text_button_s2");
-        tbs.font = game.font;
+        tbs.font = Resources.game.font;
         Resources.tbs_s = tbs;
         TextButton.TextButtonStyle tbs1 = new TextButton.TextButtonStyle();
         tbs1.up = skin.getDrawable("text_button_m1");
         tbs1.down = skin.getDrawable("text_button_m2");
-        tbs1.font = game.font;
+        tbs1.font = Resources.game.font;
         Resources.tbs_m = tbs1;
 
         if (false)//заменить на нормальную проверку
@@ -90,7 +89,11 @@ public class MainMenu implements Screen
                 public void clicked(InputEvent event, float x, float y)
                 {
                     System.out.println("New Game");
-                    game.setScreen(new GameScreen(game));
+                    Resources.game.setScreen(new GameScreen());
+                    if (CharacterController.isPause())
+                    {
+                        CharacterController.setPause(false);
+                    }
                 }
             });
             stage.addActor(bNewGame);
@@ -166,7 +169,7 @@ public class MainMenu implements Screen
         final Image bg = new Image(skin.getDrawable("exit_window_bg"));
         bg.setPosition((Resources.width2)-150, (Resources.height2)-15);
 
-        final Label l = new Label("Are you sure you want to exit?", new Label.LabelStyle(game.font, Color.WHITE));
+        final Label l = new Label("Are you sure you want to exit?", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         l.setPosition((Resources.width2)-l.getPrefWidth()/2, (Resources.height2)+55);
 
         final TextButton bYes = new TextButton("Yes", Resources.tbs_s);

@@ -20,7 +20,6 @@ import com.model.UserForpost;
 
 public class GameScreen implements Screen, InputProcessor
 {
-    private static Start game;
     private static OrthographicCamera camera;
     private static Stage stage;
     private static GameGUI gui;
@@ -28,24 +27,19 @@ public class GameScreen implements Screen, InputProcessor
     private static float prefX;
     private static UserForpost userForpost;
     private static GameForpost gameForpost;
-    private static Forpost userF;
-    private static Forpost gameF;
 
-    GameScreen (final Start gam)
+    GameScreen ()
     {
-        game = gam;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Resources.width, Resources.height);
         stage = new Stage(new ScreenViewport(camera));
         stage.setDebugAll(true);
         userForpost = UserForpost.getInstance();
         gameForpost = GameForpost.getInstance();
-        gui = new GameGUI(game);
+        gui = new GameGUI();
         Resources.state = State.GAME;
         units = new Array<Unit>();
         prefX = -1;
-
-
 
         CharacterController.start();
     }
@@ -58,8 +52,8 @@ public class GameScreen implements Screen, InputProcessor
         stage.addActor(bg);
 
 
-        gameF = new Forpost(-1);
-        userF = new Forpost(1);
+        Forpost gameF = new Forpost(-1);
+        Forpost userF = new Forpost(1);
 
         stage.addActor(userF);
         stage.addActor(gameF);
@@ -110,12 +104,14 @@ public class GameScreen implements Screen, InputProcessor
     }
 
     @Override
-    public void pause() {
+    public void pause()
+    {
 
     }
 
     @Override
-    public void resume() {
+    public void resume()
+    {
 
     }
 
@@ -127,7 +123,9 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public void dispose()
     {
-
+        stage.dispose();
+        gui.dispose();
+        gui.dispose();
     }
 
     static void setUnit(CharacterType type) throws NotEnoughMonyException
@@ -148,18 +146,31 @@ public class GameScreen implements Screen, InputProcessor
         stage.addActor(unit);
     }
 
-    void delUnit(int num)
+    private void delUnit(int num)
     {
         units.get(num).remove();
         System.out.println("Delete Unit type " + units.get(num).getType() + " direction " + units.get(num).getDirection());
         units.removeIndex(num);
     }
 
-    public static UserForpost getUserForpost() {
+    static void clear()
+    {
+        for (Unit u: units)
+        {
+            u.remove();
+            System.out.println("Delete Unit type " + u.getType() + " direction " + u.getDirection());
+        }
+        units.clear();
+        prefX = -1;
+        gui.updateLabels();
+        gui.updateBaseHealth();
+    }
+
+    static UserForpost getUserForpost() {
         return userForpost;
     }
 
-    public static GameForpost getGameForpost() {
+    static GameForpost getGameForpost() {
         return gameForpost;
     }
 

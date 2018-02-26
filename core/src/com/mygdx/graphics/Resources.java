@@ -24,6 +24,7 @@ public class Resources
     public static TextButton.TextButtonStyle tbs_s;
     public static TextButton.TextButtonStyle tbs_m;
     public static State state = State.GAME;
+    public static Start game;
     public static Animation<TextureRegion> testAnimationR = setAnim("android/assets/units/example/runner_testR.png", 6, 5, 0.025f);
     public static Animation<TextureRegion> testAnimationL = setAnim("android/assets/units/example/runner_testL.png", 6, 5, 0.025f);
     public static Animation<TextureRegion> fortDamageAnimationL = setAnim("android/assets/units/caveL_damage_anim.png", 2, 1, 0.1f);

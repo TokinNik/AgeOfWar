@@ -14,7 +14,8 @@ public class Start extends Game
 	{
 		batch = new SpriteBatch();
 		font = new BitmapFont();
-		this.setScreen(new MainMenu(this));
+		Resources.game = this;
+		this.setScreen(new MainMenu());
 	}
 
 	@Override

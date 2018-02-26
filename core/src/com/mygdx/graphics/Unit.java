@@ -86,6 +86,8 @@ public class Unit extends Actor
             batch.draw(currentFrame, getX(), getY());
             hBar.draw(batch,parentAlpha);
         }
+//        else
+//            batch.draw(currentFrame, getX(), getY());
     }
 
     @Override

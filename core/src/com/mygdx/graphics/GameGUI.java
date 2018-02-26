@@ -19,7 +19,6 @@ import com.model.CharacterType;
 
 public class GameGUI extends Stage implements InputProcessor
 {
-    private static Start game;
     private final Image hBarU;
     private final Image hBarG;
     private Label moneyL;
@@ -30,11 +29,9 @@ public class GameGUI extends Stage implements InputProcessor
     private Label enemyBaseL;
     private Button menuB;
 
-    GameGUI (final Start game)
+    GameGUI ()
     {
         super(new FitViewport(Resources.width, Resources.height));
-
-        GameGUI.game = game;
 
         Button.ButtonStyle bs = new Button.ButtonStyle(
                 Resources.guiSkin.getDrawable("unit_cell_s1"),
@@ -45,27 +42,27 @@ public class GameGUI extends Stage implements InputProcessor
         bgBot.setBounds(0,0, Resources.width, 50);
         addActor(bgBot);
 
-        moneyL = new Label("| Money: " + CharacterController.getTotalMoney() + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        moneyL = new Label("| Money: " + CharacterController.getTotalMoney() + " |", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         moneyL.setPosition(25, 15);
         addActor(moneyL);
 
-        unitsL = new Label("| Units: " + CharacterController.getUserArmyCount() + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        unitsL = new Label("| Units: " + CharacterController.getUserArmyCount() + " |", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         unitsL.setPosition(moneyL.getWidth() + 50, 15);
         addActor(unitsL);
 
-        enemyL = new Label("| Enemy: " + CharacterController.getGameArmyCount() + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        enemyL = new Label("| Enemy: " + CharacterController.getGameArmyCount() + " |", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         enemyL.setPosition(moneyL.getWidth() + unitsL.getWidth() + 75, 15);
         addActor(enemyL);
 
-        expL = new Label("| Experience: " + 0 + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        expL = new Label("| Experience: " + 0 + " |", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         expL.setPosition(enemyL.getX() + enemyL.getWidth() + 50, 15);
         addActor(expL);
 
-        yourBaseL = new Label("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        yourBaseL = new Label("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         yourBaseL.setPosition(expL.getX() + expL.getWidth() + 25, 28);
         addActor(yourBaseL);
 
-        enemyBaseL = new Label("| Enemy Base Health: " + GameScreen.getGameForpost().getHealth() + " / " + GameScreen.getGameForpost().getMaxHealth() + " |", new Label.LabelStyle(game.font, Color.WHITE));
+        enemyBaseL = new Label("| Enemy Base Health: " + GameScreen.getGameForpost().getHealth() + " / " + GameScreen.getGameForpost().getMaxHealth() + " |", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         enemyBaseL.setPosition(yourBaseL.getX(), 8);
         addActor(enemyBaseL);
 
@@ -193,23 +190,38 @@ public class GameGUI extends Stage implements InputProcessor
         unitsL.setText("| Units: " + CharacterController.getUserArmyCount() + " |");
         enemyL.setText("| Enemy: " + CharacterController.getGameArmyCount() + " |");
         expL.setText("| Experience: " + 0 + " |");
-        yourBaseL.setText("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
-        enemyBaseL.setText("| Enemy Base Health: " + GameScreen.getGameForpost().getHealth() + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
+        if (GameScreen.getUserForpost().getHealth() > 0)
+            yourBaseL.setText("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
+        else
+            yourBaseL.setText("| Your Base Health: 0 |");
+        if (GameScreen.getGameForpost().getHealth() > 0)
+            enemyBaseL.setText("| Enemy Base Health: " + GameScreen.getGameForpost().getHealth() + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
+        else
+            enemyBaseL.setText("| Enemy Base Health: 0 |");
     }
 
     void updateBaseHealth()
     {
-        hBarG.setSize( (menuB.getX() - hBarG.getX() - 20) * GameScreen.getGameForpost().getHealth() / GameScreen.getGameForpost().getMaxHealth(), 10);
-        if (GameScreen.getGameForpost().getHealth() <= GameScreen.getGameForpost().getMaxHealth() * 0.6f)
-            hBarG.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
-        if (GameScreen.getGameForpost().getHealth() <= GameScreen.getGameForpost().getMaxHealth() * 0.3f)
-            hBarG.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
-
-        hBarU.setSize( (menuB.getX() - hBarU.getX() - 20) * GameScreen.getUserForpost().getHealth() / GameScreen.getUserForpost().getMaxHealth(), 10);
-        if (GameScreen.getUserForpost().getHealth() <= GameScreen.getUserForpost().getMaxHealth() * 0.6f)
-            hBarU.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
-        if (GameScreen.getUserForpost().getHealth() <= GameScreen.getUserForpost().getMaxHealth() * 0.3f)
-            hBarU.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
+        if (GameScreen.getGameForpost().getHealth() > 0)
+        {
+            hBarG.setSize((menuB.getX() - hBarG.getX() - 20) * GameScreen.getGameForpost().getHealth() / GameScreen.getGameForpost().getMaxHealth(), 10);
+            if (GameScreen.getGameForpost().getHealth() <= GameScreen.getGameForpost().getMaxHealth() * 0.6f)
+                hBarG.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
+            if (GameScreen.getGameForpost().getHealth() <= GameScreen.getGameForpost().getMaxHealth() * 0.3f)
+                hBarG.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
+            if (GameScreen.getGameForpost().getHealth() > GameScreen.getGameForpost().getMaxHealth() * 0.6f)
+                hBarG.setDrawable(Resources.guiSkin.getDrawable("hBar_green"));
+        }
+        if (GameScreen.getUserForpost().getHealth() > 0)
+        {
+            hBarU.setSize((menuB.getX() - hBarU.getX() - 20) * GameScreen.getUserForpost().getHealth() / GameScreen.getUserForpost().getMaxHealth(), 10);
+            if (GameScreen.getUserForpost().getHealth() <= GameScreen.getUserForpost().getMaxHealth() * 0.6f)
+                hBarU.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
+            if (GameScreen.getUserForpost().getHealth() <= GameScreen.getUserForpost().getMaxHealth() * 0.3f)
+                hBarU.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
+            if (GameScreen.getUserForpost().getHealth() > GameScreen.getUserForpost().getMaxHealth() * 0.6f)
+                hBarU.setDrawable(Resources.guiSkin.getDrawable("hBar_green"));
+        }
     }
 
     private void setWindowMenu()
@@ -220,7 +232,7 @@ public class GameGUI extends Stage implements InputProcessor
         final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.width2-150, Resources.height2-215);
 
-        final Label l = new Label("Menu", new Label.LabelStyle(game.font, Color.WHITE));
+        final Label l = new Label("Menu", new Label.LabelStyle(Resources.game.font, Color.WHITE));
         l.setPosition(Resources.width2-l.getPrefWidth()/2, Resources.height2+155);
 
         final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_m);
@@ -230,7 +242,11 @@ public class GameGUI extends Stage implements InputProcessor
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new MainMenu(game));
+                GameScreen.clear();
+                CharacterController.reset();
+                CharacterController.setPause(true);
+                Resources.game.setScreen(new MainMenu());
+                dispose();
             }
         });
         final TextButton settingsB = new TextButton("Settings", Resources.tbs_m);
@@ -279,13 +295,13 @@ public class GameGUI extends Stage implements InputProcessor
         final Label l;
         if (win)
         {
-            l = new Label("Congratulation!!!", new Label.LabelStyle(game.font, Color.WHITE));
+            l = new Label("Congratulation!!!", new Label.LabelStyle(Resources.game.font, Color.WHITE));
             l.setPosition(Resources.width2-l.getPrefWidth()/2, Resources.height2+155);
             enemyBaseL.setText("| Enemy Base Health: " + 0 + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
         }
         else
         {
-            l = new Label("You Lose(((", new Label.LabelStyle(game.font, Color.WHITE));
+            l = new Label("You Lose(((", new Label.LabelStyle(Resources.game.font, Color.WHITE));
             l.setPosition(Resources.width2-l.getPrefWidth()/2, Resources.height2+155);
             yourBaseL.setText("| Your Base Health: " + 0 + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         }
@@ -297,17 +313,11 @@ public class GameGUI extends Stage implements InputProcessor
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new MainMenu(game));
-            }
-        });
-        final TextButton resetB = new TextButton("Reset Level", Resources.tbs_m);
-        resetB.setPosition(Resources.width2-125, Resources.height2);
-        resetB.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                //Начать уровень заново
+                GameScreen.clear();
+                CharacterController.reset();
+                CharacterController.setPause(true);
+                Resources.game.setScreen(new MainMenu());
+                dispose();
             }
         });
         final TextButton continueB = new TextButton("Continue", Resources.tbs_m);
@@ -318,6 +328,24 @@ public class GameGUI extends Stage implements InputProcessor
             public void clicked(InputEvent event, float x, float y)
             {
                 //Переход на следующий уровень
+            }
+        });
+        final TextButton resetB = new TextButton("Reset Level", Resources.tbs_m);
+        resetB.setPosition(Resources.width2-125, Resources.height2);
+        resetB.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                toMenuB.setVisible(false);
+                resetB.setVisible(false);
+                continueB.setVisible(false);
+                l.setVisible(false);
+                bg.setVisible(false);
+
+                GameScreen.clear();
+                CharacterController.reset();
+                Resources.state = State.GAME;
             }
         });
 
