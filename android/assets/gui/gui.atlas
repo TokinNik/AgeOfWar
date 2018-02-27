@@ -5,77 +5,84 @@ filter: Nearest,Nearest
 repeat: none
 bg_gui_bot
   rotate: false
-  xy: 1, 437
+  xy: 1, 449
   size: 1000, 50
   orig: 1000, 50
   offset: 0, 0
   index: -1
 choise_window_bg
   rotate: false
-  xy: 1, 335
+  xy: 1, 347
   size: 600, 100
   orig: 600, 100
   offset: 0, 0
   index: -1
 exit_window_bg
   rotate: false
-  xy: 1, 233
+  xy: 1, 245
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 menu_bg
   rotate: false
-  xy: 603, 35
+  xy: 603, 47
   size: 300, 400
   orig: 300, 400
   offset: 0, 0
   index: 1
 menu_b1
   rotate: false
-  xy: 1, 131
+  xy: 1, 143
   size: 200, 100
   orig: 200, 100
   offset: 0, 0
   index: -1
 menu_b2
   rotate: false
-  xy: 303, 233
+  xy: 303, 245
   size: 200, 100
   orig: 200, 100
   offset: 0, 0
   index: -1
 text_button_m1
   rotate: false
-  xy: 203, 181
+  xy: 203, 193
   size: 250, 50
   orig: 250, 50
   offset: 0, 0
   index: -1
 text_button_m2
   rotate: false
-  xy: 203, 129
+  xy: 203, 141
   size: 250, 50
   orig: 250, 50
   offset: 0, 0
   index: -1
 hBar_green
   rotate: false
-  xy: 1, 119
+  xy: 1, 131
   size: 200, 10
   orig: 200, 10
   offset: 0, 0
   index: -1
 hBar_red
   rotate: false
-  xy: 1, 107
+  xy: 1, 119
   size: 200, 10
   orig: 200, 10
   offset: 0, 0
   index: -1
 hBar_yellow
   rotate: false
-  xy: 203, 117
+  xy: 203, 129
+  size: 200, 10
+  orig: 200, 10
+  offset: 0, 0
+  index: -1
+slide_line
+  rotate: false
+  xy: 1, 107
   size: 200, 10
   orig: 200, 10
   offset: 0, 0
@@ -96,43 +103,50 @@ evolve_b2
   index: -1
 unit_cell_s1
   rotate: false
-  xy: 905, 335
+  xy: 905, 347
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 unit_cell_s2
   rotate: false
-  xy: 905, 233
+  xy: 905, 245
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 text_button_s1
   rotate: false
-  xy: 905, 181
+  xy: 905, 193
   size: 100, 50
   orig: 100, 50
   offset: 0, 0
   index: -1
 text_button_s2
   rotate: false
-  xy: 905, 129
+  xy: 905, 141
   size: 100, 50
   orig: 100, 50
   offset: 0, 0
   index: -1
 exitButton2
   rotate: false
-  xy: 505, 288
+  xy: 505, 300
   size: 45, 45
   orig: 45, 45
   offset: 0, 0
   index: -1
 exitButton3
   rotate: false
-  xy: 455, 186
+  xy: 455, 198
   size: 45, 45
   orig: 45, 45
+  offset: 0, 0
+  index: -1
+slide_point
+  rotate: false
+  xy: 203, 112
+  size: 15, 15
+  orig: 15, 15
   offset: 0, 0
   index: -1

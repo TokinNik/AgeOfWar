@@ -26,7 +26,7 @@ public class CharacterController {
     private static boolean pause = false;
     private static boolean gameFinished = false;
     private static int totalScore = 0;
-    private static int  totalMoney = 10000;
+    private static int  totalMoney = 100;
     public static float clothestUserObjectPosition = UserForpost.CLOSEST_USER_OBJECT;
     public static GameObject clothestUserObject = UserForpost.getInstance();
     public static float clothestGameObjectPosition = GameForpost.CLOSEST_NPC_OBJECT;

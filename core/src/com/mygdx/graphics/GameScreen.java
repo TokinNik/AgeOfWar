@@ -59,6 +59,7 @@ public class GameScreen implements Screen, InputProcessor
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer(this, gui);
         Gdx.input.setInputProcessor(inputMultiplexer);
+        Gdx.input.setCursorCatched(false);
     }
 
     @Override
@@ -218,15 +219,16 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
-        if (prefX != -1 && (camera.position.x >= Resources.width2 || prefX - screenX > 0)
-                && (camera.position.x <= 2268- Resources.width2 || prefX - screenX < 0))
-        {
-            camera.translate(prefX - screenX, 0);
-            if (camera.position.x < Resources.width2)
-                camera.position.x = Resources.width2;
-            if (camera.position.x > 2268- Resources.width2)
-                camera.position.x = 2268- Resources.width2;
-        }
+        if (Resources.state == State.GAME)
+            if (prefX != -1 && (camera.position.x >= Resources.width2 || prefX - screenX > 0)
+                    && (camera.position.x <= 2268- Resources.width2 || prefX - screenX < 0))
+            {
+                camera.translate(prefX - screenX, 0);
+                if (camera.position.x < Resources.width2)
+                    camera.position.x = Resources.width2;
+                if (camera.position.x > 2268- Resources.width2)
+                    camera.position.x = 2268- Resources.width2;
+            }
         prefX = screenX;
 
         return false;

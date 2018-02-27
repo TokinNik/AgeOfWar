@@ -29,13 +29,13 @@ public class NPCController implements Runnable {
 
                 createNewCharacter(CharacterType.INFATRYMAN);
                 try {
-                    TimeUnit.SECONDS.sleep(10);
+                    TimeUnit.SECONDS.sleep(2);
                 } catch (InterruptedException e) {
                     break;
                 }
                 createNewCharacter(CharacterType.ARCHER);
                 try {
-                    TimeUnit.SECONDS.sleep(10);
+                    TimeUnit.SECONDS.sleep(2);
                 } catch (InterruptedException e) {
                     break;
                 }

@@ -1,8 +1,11 @@
 package com.mygdx.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,7 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.controller.CharacterController;
@@ -31,10 +36,16 @@ public class GameGUI extends Stage implements InputProcessor
     private Label enemyBaseL;
     private Button menuB;
     private Button evolveB;
+    private Music bgMusic;
 
     GameGUI ()
     {
         super(new FitViewport(Resources.width, Resources.height));
+
+        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("android/assets/music/in_game_1.mp3"));
+        bgMusic.setLooping(true);
+        bgMusic.setVolume(Options.musicVolume);
+        bgMusic.play();
 
         Button.ButtonStyle bs = new Button.ButtonStyle(
                 Resources.guiSkin.getDrawable("unit_cell_s1"),
@@ -159,8 +170,6 @@ public class GameGUI extends Stage implements InputProcessor
         unitsG.addActor(setUnit_4B);
         addActor(unitsG);
 
-
-
         menuB = new Button(new Button.ButtonStyle(
                 Resources.guiSkin.getDrawable("menu_b1"),
                 Resources.guiSkin.getDrawable("menu_b2"),
@@ -217,8 +226,12 @@ public class GameGUI extends Stage implements InputProcessor
         unitsL.setText("| Units: " + CharacterController.getUserArmyCount() + " |");
         enemyL.setText("| Enemy: " + CharacterController.getGameArmyCount() + " |");
         expL.setText("| Experience: " + CharacterController.getTotalScore() + " |");
+
         if (CharacterController.getTotalScore() >= 200 && !evolveB.isVisible())
             evolveB.setVisible(true);
+        if (CharacterController.getTotalScore() < 200 && evolveB.isVisible())
+            evolveB.setVisible(false);
+
         if (GameScreen.getUserForpost().getHealth() > 0)
             yourBaseL.setText("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         else
@@ -258,6 +271,8 @@ public class GameGUI extends Stage implements InputProcessor
         Resources.state = State.PAUSE;
         CharacterController.setPause(true);
 
+        final Group window = new Group();
+
         final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.width2 - 150, Resources.height2-215);
 
@@ -271,20 +286,22 @@ public class GameGUI extends Stage implements InputProcessor
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                bgMusic.stop();
+                bgMusic.dispose();
                 GameScreen.exit();
                 CharacterController.reset();
-                Resources.game.setScreen(new MainMenu());
+                Resources.game.setScreen(new LoadScreen(ScreenType.MainMenu));
                 dispose();
             }
         });
-        final TextButton settingsB = new TextButton("Settings", Resources.tbs_m);
-        settingsB.setPosition(Resources.width2 - 125, Resources.height2 - 100);
-        settingsB.addListener(new ClickListener()
+        final TextButton optionsB = new TextButton("Options", Resources.tbs_m);
+        optionsB.setPosition(Resources.width2 - 125, Resources.height2 - 100);
+        optionsB.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-
+                setWindowOptions();
             }
         });
 
@@ -297,12 +314,7 @@ public class GameGUI extends Stage implements InputProcessor
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                continueB.addAction(Actions.removeActor());
-                settingsB.addAction(Actions.removeActor());
-                toMenuB.addAction(Actions.removeActor());
-                resetB.addAction(Actions.removeActor());
-                l.addAction(Actions.removeActor());
-                bg.addAction(Actions.removeActor());
+                window.addAction(Actions.removeActor());
 
                 Resources.state = State.GAME;
                 CharacterController.setPause(false);
@@ -315,12 +327,7 @@ public class GameGUI extends Stage implements InputProcessor
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                continueB.addAction(Actions.removeActor());
-                settingsB.addAction(Actions.removeActor());
-                toMenuB.addAction(Actions.removeActor());
-                resetB.addAction(Actions.removeActor());
-                l.addAction(Actions.removeActor());
-                bg.addAction(Actions.removeActor());
+                window.addAction(Actions.removeActor());
 
                 GameScreen.clear();
                 CharacterController.reset();
@@ -329,18 +336,21 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
 
-        addActor(bg);
-        addActor(l);
-        addActor(continueB);
-        addActor(toMenuB);
-        addActor(settingsB);
-        addActor(resetB);
+        window.addActor(bg);
+        window.addActor(l);
+        window.addActor(continueB);
+        window.addActor(toMenuB);
+        window.addActor(optionsB);
+        window.addActor(resetB);
+        addActor(window);
     }
 
     void setGameEndMenu(boolean win)
     {
         Resources.state = State.PAUSE;
         CharacterController.setPause(true);
+
+        final Group window = new Group();
 
         final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.width2 - 150, Resources.height2 - 215);
@@ -366,9 +376,11 @@ public class GameGUI extends Stage implements InputProcessor
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                bgMusic.stop();
+                bgMusic.dispose();
                 GameScreen.exit();
                 CharacterController.reset();
-                Resources.game.setScreen(new MainMenu());
+                Resources.game.setScreen(new LoadScreen(ScreenType.MainMenu));
                 dispose();
             }
         });
@@ -389,11 +401,7 @@ public class GameGUI extends Stage implements InputProcessor
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                toMenuB.addAction(Actions.removeActor());
-                resetB.addAction(Actions.removeActor());
-                continueB.addAction(Actions.removeActor());
-                l.addAction(Actions.removeActor());
-                bg.addAction(Actions.removeActor());
+                window.addAction(Actions.removeActor());
 
                 GameScreen.clear();
                 CharacterController.reset();
@@ -402,11 +410,75 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
 
-        addActor(bg);
-        addActor(l);
-        addActor(continueB);
-        addActor(resetB);
-        addActor(toMenuB);
+        window.addActor(bg);
+        window.addActor(l);
+        window.addActor(continueB);
+        window.addActor(resetB);
+        window.addActor(toMenuB);
+        addActor(window);
+    }
+
+    private void  setWindowOptions()
+    {
+        final Group window = new Group();
+
+        final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
+        bg.setPosition(Resources.width2 - 150, Resources.height2-215);
+
+        final Label optionsL = new Label("Options", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        optionsL.setPosition(Resources.width2 - optionsL.getPrefWidth()/2, Resources.height2 + 155);
+
+        final Label musicL = new Label("Music volume", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        musicL.setPosition(Resources.width2 - 125, Resources.height2 + 100);
+
+        Slider.SliderStyle slider = new Slider.SliderStyle(Resources.guiSkin.getDrawable("slide_line"),
+                Resources.guiSkin.getDrawable("slide_point"));
+        final Slider musicS = new Slider(0f, 1f, 0.1f  , false, slider);
+        musicS.setPosition(Resources.width2 - 125, Resources.height2 + 85);
+        musicS.setSize(250 , musicS.getHeight());
+        musicS.setValue(Options.musicVolume);
+        musicS.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Options.musicVolume = musicS.getValue();
+                bgMusic.setVolume(Options.musicVolume);
+            }
+        });
+
+        final Label effectL = new Label("Effects volume", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        effectL.setPosition(Resources.width2 - 125, Resources.height2 + 50);
+
+        final Slider effectS = new Slider(0f, 1f, 0.1f  , false, slider);
+        effectS.setPosition(Resources.width2 - 125, Resources.height2 + 35);
+        effectS.setSize(250 , effectS.getHeight());
+        effectS.setValue(Options.effectVolume);
+        effectS.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Options.musicVolume = effectS.getValue();
+            }
+        });
+
+        final TextButton returnB = new TextButton("Return", Resources.tbs_m);
+        returnB.setPosition(Resources.width2 - 125, Resources.height2 - 200);
+        returnB.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                window.addAction(Actions.removeActor());
+            }
+        });
+
+        window.addActor(bg);
+        window.addActor(optionsL);
+        window.addActor(musicL);
+        window.addActor(musicS);
+        window.addActor(effectL);
+        window.addActor(effectS);
+        window.addActor(returnB);
+
+        addActor(window);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class LoadScreen implements Screen, InputProcessor
@@ -17,12 +18,15 @@ public class LoadScreen implements Screen, InputProcessor
     private Stage stage;
     private AnimObject animObject;
     private Label l;
+    private long startTime = TimeUtils.millis();
+    private ScreenType screen;
 
-    LoadScreen ()
+    LoadScreen (ScreenType screen)
     {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Resources.width, Resources.height);
         stage = new Stage(new ScreenViewport(camera));
+        this.screen = screen;
         animObject = new AnimObject(Resources.loadAnimation);
         l = new Label("Loading...",new Label.LabelStyle(Resources.game.font, Color.WHITE));
     }
@@ -43,6 +47,16 @@ public class LoadScreen implements Screen, InputProcessor
     {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (TimeUtils.timeSinceMillis(startTime) > 2500)
+        {
+            pause();
+            dispose();
+            if (screen == ScreenType.MainMenu)
+                Resources.game.setScreen(new MainMenu());
+            if (screen == ScreenType.Game)
+                Resources.game.setScreen(new GameScreen());
+        }
 
         Gdx.input.setCursorPosition(0,0);
 
