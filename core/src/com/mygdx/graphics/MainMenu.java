@@ -31,8 +31,6 @@ public class MainMenu implements Screen
         camera.setToOrtho(false, Resources.gameW, Resources.gameH);
         stage = new Stage(new ScreenViewport(camera));
         state = true;
-
-
     }
 
     @Override
@@ -121,6 +119,7 @@ public class MainMenu implements Screen
         stage.addActor(b);
 
         Gdx.input.setInputProcessor(stage);
+        Gdx.input.setCursorCatched(false);
     }
 
     @Override

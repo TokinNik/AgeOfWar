@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.controller.CharacterController;
+import com.exception.LimitOfEvolutionException;
 import com.exception.NotEnoughMonyException;
 import com.model.CharacterType;
 
@@ -29,6 +30,7 @@ public class GameGUI extends Stage implements InputProcessor
     private Label yourBaseL;
     private Label enemyBaseL;
     private Button menuB;
+    private Button evolveB;
 
     GameGUI ()
     {
@@ -106,7 +108,7 @@ public class GameGUI extends Stage implements InputProcessor
                         updateLabels();
                         System.out.println("UNIT 2");
                     } catch (NotEnoughMonyException e) {
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        System.out.println("!!!!!!!!!!!!Money!!!!!!!!!!!!!!!");
                     }
             }
         });
@@ -128,7 +130,7 @@ public class GameGUI extends Stage implements InputProcessor
                         System.out.println("UNIT 3");
                     } catch (NotEnoughMonyException e)
                     {
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        System.out.println("!!!!!!!!!!!!Money!!!!!!!!!!!!!!!");
                     }
             }
         });
@@ -150,7 +152,7 @@ public class GameGUI extends Stage implements InputProcessor
                         System.out.println("UNIT 4");
                     } catch (NotEnoughMonyException e)
                     {
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        System.out.println("!!!!!!!!!!!!!Money!!!!!!!!!!!!!!");
                     }
             }
         });
@@ -175,6 +177,30 @@ public class GameGUI extends Stage implements InputProcessor
         });
         addActor(menuB);
 
+
+        evolveB = new Button(new Button.ButtonStyle(
+                Resources.guiSkin.getDrawable("evolve_b1"),
+                Resources.guiSkin.getDrawable("evolve_b2"),
+                Resources.guiSkin.getDrawable("evolve_b1")));
+        evolveB.setPosition(0,bgBot.getHeight());
+        evolveB.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (Resources.state == State.GAME)
+                    try {
+                        CharacterController.evolve();
+                        CharacterController.addTotalScore(-200);
+                        evolveB.setVisible(false);
+                    } catch (LimitOfEvolutionException e) {
+                        e.printStackTrace();
+                    }
+            }
+        });
+        evolveB.setVisible(false);
+        addActor(evolveB);
+
         hBarU = new Image(Resources.guiSkin.getDrawable("hBar_green"));
         hBarU.setPosition(enemyBaseL.getX() + enemyBaseL.getWidth() + 25, 30);
         hBarU.setSize((menuB.getX() - hBarU.getX() - 20) * GameScreen.getUserForpost().getHealth()/GameScreen.getUserForpost().getMaxHealth(), 10);
@@ -191,6 +217,8 @@ public class GameGUI extends Stage implements InputProcessor
         unitsL.setText("| Units: " + CharacterController.getUserArmyCount() + " |");
         enemyL.setText("| Enemy: " + CharacterController.getGameArmyCount() + " |");
         expL.setText("| Experience: " + CharacterController.getTotalScore() + " |");
+        if (CharacterController.getTotalScore() >= 200 && !evolveB.isVisible())
+            evolveB.setVisible(true);
         if (GameScreen.getUserForpost().getHealth() > 0)
             yourBaseL.setText("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         else

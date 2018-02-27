@@ -66,8 +66,9 @@ public class GameScreen implements Screen, InputProcessor
     {
         if (Resources.state == State.GAME)
         {
-            Gdx.gl.glClearColor(0, 0.2f, 0.5f, 1);
+            Gdx.gl.glClearColor(0, 0.2f, 0.1f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
             if (CharacterController.isGameWin())
                 gui.setGameEndMenu(true);
             if (CharacterController.isUserWin())
@@ -89,7 +90,12 @@ public class GameScreen implements Screen, InputProcessor
             stage.act(delta);
             stage.draw();
         }
-
+        else
+        {
+            Resources.game.batch.begin();
+            Resources.bgForestBlur.draw(Resources.game.batch, 1);
+            Resources.game.batch.end();
+        }
 
         gui.act(delta);
         gui.draw();

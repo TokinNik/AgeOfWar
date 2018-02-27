@@ -32,6 +32,7 @@ public class Resources
     public static final TextureAtlas guiAtlas = new TextureAtlas("android/assets/gui/gui.atlas");
     public static final Skin guiSkin = new Skin(guiAtlas);
     public static final Image bgForest = new Image(new Texture("android/assets/gui/forest_bg.jpg"));//android/assets/
+    public static final Image bgForestBlur = new Image(new Texture("android/assets/gui/forest_blur_bg.jpg"));
     public static final Image fortU = new Image(new Texture("android/assets/units/caveL.png"));
     public static final Image fortG = new Image(new Texture("android/assets/units/caveR.png"));
     public static final Image arrow = new Image(new Texture("android/assets/units/example/arrow1.jpg"));
