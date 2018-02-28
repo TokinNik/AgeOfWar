@@ -174,6 +174,22 @@ public class CharacterController {
         CharacterController.gameFinished = gameFinished;
     }
 
+    public static int getCurrentCharacterPrice(CharacterType type) {
+        switch (type) {
+            case ARCHER:{ return (int) (Archer.getBasePrice() * userEvolveStage.getCoefficient() ) / 10 * 10; }
+
+            case INFATRYMAN:{ return (int) (Infatryman.getBasePrice() * userEvolveStage.getCoefficient() ) / 10 * 10; }
+
+            case INCREDIBLE:{ return (int) (Incredible.getBasePrice() * userEvolveStage.getCoefficient() ) / 10 * 10; }
+
+            case RIDER:{ return (int) (Rider.getBasePrice() * userEvolveStage.getCoefficient() ) / 10 * 10; }
+
+            case FAT:{ return (int) (Fat.getBasePrice() * userEvolveStage.getCoefficient() ) / 10 * 10; }
+        }
+
+        return 0;
+    }
+
     public static void addNewThread(Thread thread) {
         allCurrentThreads.add(thread);
     }
