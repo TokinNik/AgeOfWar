@@ -8,7 +8,7 @@ public class Incredible extends Character {
     private static final float AFFECTED_AREA = 50;
 
     public Incredible(boolean users, StageOfEvolution stage) {
-        super(700, 7, 2, 0.5f, 1000, users, stage, CharacterType.FAT);
+        super(700, 7, 2, 2, 1000, users, stage, CharacterType.FAT);
     }
 
     @Override

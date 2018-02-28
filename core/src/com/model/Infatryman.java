@@ -10,7 +10,7 @@ public class Infatryman extends Character{
     private static final float AFFECTED_AREA = 20f;
 
     public Infatryman(boolean users, StageOfEvolution stage) {
-        super(100, 7f, 0.3f, 1, 20, users, stage, CharacterType.INFATRYMAN);
+        super(100, 7f, 0.3f, 0.3f, 20, users, stage, CharacterType.INFATRYMAN);
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.controller.CharacterController;
 import com.exception.LimitOfEvolutionException;
 import com.exception.NotEnoughMonyException;
+import com.model.Archer;
 import com.model.CharacterType;
 
 
@@ -82,6 +83,13 @@ public class GameGUI extends Stage implements InputProcessor
 
         Group unitsG = new Group();
 
+        Label unitName_1L = new Label("Archer", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitName_1L.setPosition( 0, Resources.height - 120);
+        unitsG.addActor(unitName_1L);
+        Label unitCost_1L = new Label("Cost: " + 30, new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitCost_1L.setPosition( 0, Resources.height - 135);
+        unitsG.addActor(unitCost_1L);
+
         Button setUnit_1B = new Button(bs);
         setUnit_1B.setPosition(0, Resources.height - 100);
         setUnit_1B.setSize(100, 100);
@@ -104,6 +112,13 @@ public class GameGUI extends Stage implements InputProcessor
         });
         unitsG.addActor(setUnit_1B);
 
+        Label unitName_2L = new Label("Infantryman", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitName_2L.setPosition( 110, Resources.height - 120);
+        unitsG.addActor(unitName_2L);
+        Label unitCost_2L = new Label("Cost: " + 20, new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitCost_2L.setPosition( 110, Resources.height - 135);
+        unitsG.addActor(unitCost_2L);
+
         Button setUnit_2B = new Button(bs);
         setUnit_2B.setPosition(110, Resources.height - 100);
         setUnit_2B.setSize(100, 100);
@@ -125,6 +140,13 @@ public class GameGUI extends Stage implements InputProcessor
         });
         unitsG.addActor(setUnit_2B);
 
+        Label unitName_3L = new Label("Fat", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitName_3L.setPosition( 220, Resources.height - 120);
+        unitsG.addActor(unitName_3L);
+        Label unitCost_3L = new Label("Cost: " + 60, new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitCost_3L.setPosition( 220, Resources.height - 135);
+        unitsG.addActor(unitCost_3L);
+
         Button setUnit_3B = new Button(bs);
         setUnit_3B.setPosition(220, Resources.height - 100);
         setUnit_3B.setSize(100, 100);
@@ -136,7 +158,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(CharacterType.ARCHER);
+                        GameScreen.setUnit(CharacterType.FAT);
                         updateLabels();
                         System.out.println("UNIT 3");
                     } catch (NotEnoughMonyException e)
@@ -146,6 +168,13 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
         unitsG.addActor(setUnit_3B);
+
+        Label unitName_4L = new Label("Rider", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitName_4L.setPosition( 330, Resources.height - 120);
+        unitsG.addActor(unitName_4L);
+        Label unitCost_4L = new Label("Cost: " + 150, new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitCost_4L.setPosition( 330, Resources.height - 135);
+        unitsG.addActor(unitCost_4L);
 
         Button setUnit_4B = new Button(bs);
         setUnit_4B.setPosition(330, Resources.height - 100);
@@ -158,7 +187,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(CharacterType.ARCHER);
+                        GameScreen.setUnit(CharacterType.RIDER);
                         updateLabels();
                         System.out.println("UNIT 4");
                     } catch (NotEnoughMonyException e)
@@ -168,6 +197,35 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
         unitsG.addActor(setUnit_4B);
+
+        Label unitName_5L = new Label("Incredible", new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitName_5L.setPosition( 440, Resources.height - 120);
+        unitsG.addActor(unitName_5L);
+        Label unitCost_5L = new Label("Cost: " + 1000, new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        unitCost_5L.setPosition( 440, Resources.height - 135);
+        unitsG.addActor(unitCost_5L);
+
+        Button setUnit_5B = new Button(bs);
+        setUnit_5B.setPosition(440, Resources.height - 100);
+        setUnit_5B.setSize(100, 100);
+        setUnit_5B.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (Resources.state == State.GAME)
+                    try
+                    {
+                        GameScreen.setUnit(CharacterType.INCREDIBLE);
+                        updateLabels();
+                        System.out.println("UNIT 4");
+                    } catch (NotEnoughMonyException e)
+                    {
+                        System.out.println("!!!!!!!!!!!!!Money!!!!!!!!!!!!!!");
+                    }
+            }
+        });
+        unitsG.addActor(setUnit_5B);
         addActor(unitsG);
 
         menuB = new Button(new Button.ButtonStyle(

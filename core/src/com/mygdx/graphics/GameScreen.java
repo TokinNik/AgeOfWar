@@ -33,7 +33,7 @@ public class GameScreen implements Screen, InputProcessor
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Resources.width, Resources.height);
         stage = new Stage(new ScreenViewport(camera));
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
         userForpost = UserForpost.getInstance();
         gameForpost = GameForpost.getInstance();
         gui = new GameGUI();
