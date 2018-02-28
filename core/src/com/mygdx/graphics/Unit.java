@@ -29,7 +29,7 @@ public class Unit extends Actor
 
     Unit (CharacterType type) throws NotEnoughMonyException
     {
-        character = CharacterController.createNewCharacter(CharacterType.ARCHER);
+        character = CharacterController.createNewCharacter(type);
 
         setBounds(100, 50, 240, 288);
 
