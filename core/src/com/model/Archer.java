@@ -1,10 +1,5 @@
 package com.model;
-
-import com.badlogic.gdx.Gdx;
-import com.controller.CharacterController;
-
-import java.util.concurrent.TimeUnit;
-
+//
 public class Archer extends Character {
     private static final float AFFECTED_AREA = 200;
 

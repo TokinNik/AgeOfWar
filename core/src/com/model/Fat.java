@@ -1,9 +1,5 @@
 package com.model;
-
-/**
- * Created by denis on 28.02.18.
- */
-
+//
 public class Fat extends Character {
     private static final float AFFECTED_AREA = 50;
 
