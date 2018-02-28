@@ -10,62 +10,20 @@ public class Infatryman extends Character{
     private static final float AFFECTED_AREA = 20f;
 
     public Infatryman(boolean users, StageOfEvolution stage) {
-        super(100, 7f, 0.3f, 1, 20, users, stage);
+        super(100, 7f, 0.3f, 1, 20, users, stage, CharacterType.INFATRYMAN);
     }
 
     @Override
-    public void fight(GameObject gemeObject) {
-        gemeObject.setHealth(gemeObject.getHealth() - getStrength());
+    public void fight(GameObject gameObject) {
+        if ((gameObject instanceof Character) && ( (Character) gameObject).getType() == CharacterType.RIDER) {
+            gameObject.setHealth(gameObject.getHealth() - ( getStrength() * 2));
+        } else {
+            gameObject.setHealth(gameObject.getHealth() - getStrength());
+        }
     }
 
     @Override
-    public void run() {
-            while (isAlive() ) {
-                if (CharacterController.isGameFinished()) {
-                    break;
-                }
-
-                if (CharacterController.isPause()) {
-                    synchronized (CharacterController.lock) {
-                        try {
-                            CharacterController.lock.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (super.getHealth() <= 0) {
-                    setAlive(false);
-                    if (!isUsers()) {
-                        CharacterController.addMoney(Math.round(getPrice() * 1.5f));
-                        CharacterController.addTotalScore(50);
-                    }
-                    continue;
-                }
-
-                if (isUsers()) {
-                    if ((CharacterController.clothestGameObjectPosition - getPosition()) <= AFFECTED_AREA) {
-                        setState(CharacterState.REDYTOFIGHT);
-                        fight(CharacterController.clothestGameObject);
-                    } else {
-                        move();
-                    }
-                } else {
-                    if ((getPosition() - CharacterController.clothestUserObjectPosition) <= AFFECTED_AREA) {
-                        setState(CharacterState.REDYTOFIGHT);
-                        fight(CharacterController.clothestUserObject);
-                    } else {
-                        setState(CharacterState.REDYTOGO);
-                        move();
-                    }
-                }
-
-                try {
-                    TimeUnit.MILLISECONDS.sleep(1000 / (Gdx.graphics.getFramesPerSecond() + 1));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+    public float getAffectedArea() {
+        return AFFECTED_AREA;
     }
 }

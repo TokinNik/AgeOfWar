@@ -2,5 +2,8 @@ package com.model;
 
 public enum CharacterType {
     ARCHER,
-    INFATRYMAN
+    INFATRYMAN,
+    FAT,
+    RIDER,
+    INCREDIBLE
 }
