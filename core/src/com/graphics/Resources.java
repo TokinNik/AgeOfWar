@@ -31,20 +31,20 @@ public class Resources
     public static Label.LabelStyle simpleLS;
     public static State state = State.GAME;
     public static Start game;
-    public static Animation<TextureRegion> testAnimationR = setAnim("units/example/runner_testR.png", 6, 5, 0.025f);
-    public static Animation<TextureRegion> testAnimationL = setAnim("units/example/runner_testL.png", 6, 5, 0.025f);
-    public static Animation<TextureRegion> fortDamageAnimationL = setAnim("units/caveL_damage_anim.png", 2, 1, 0.1f);
-    public static Animation<TextureRegion> fortDamageAnimationR = setAnim("units/caveR_damage_anim.png", 2, 1, 0.1f);
-    public static final TextureAtlas GUI_ATLAS = new TextureAtlas("gui/gui.atlas");
+    public static Animation<TextureRegion> testAnimationR = setAnim("android/assets/units/example/runner_testR.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> testAnimationL = setAnim("android/assets/units/example/runner_testL.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> fortDamageAnimationL = setAnim("android/assets/units/caveL_damage_anim.png", 2, 1, 0.1f);
+    public static Animation<TextureRegion> fortDamageAnimationR = setAnim("android/assets/units/caveR_damage_anim.png", 2, 1, 0.1f);
+    public static final TextureAtlas GUI_ATLAS = new TextureAtlas("android/assets/gui/gui.atlas");
     public static final Skin GUI_SKIN = new Skin(GUI_ATLAS);
-    public static final Image BG_FOREST = new Image(new Texture("gui/forest_bg.jpg"));//
-    public static final Image BG_FOREST_BLUR = new Image(new Texture("gui/forest_blur_bg.jpg"));
-    public static final Image FORT_U = new Image(new Texture("units/caveL.png"));
-    public static final Image FORT_G = new Image(new Texture("units/caveR.png"));
-    public static final Image ARROW = new Image(new Texture("units/example/arrow1.jpg"));
-    public static final Animation<TextureRegion> LOAD_ANIMATION = setAnim("gui/load_anim.png", 5, 1, 0.5f);
-    public static final String menuMusicPath = "music/main_menu.mp3";
-    public static final String game1MusicPath = "music/in_game_1.mp3";
+    public static final Image BG_FOREST = new Image(new Texture("android/assets/gui/forest_bg.jpg"));//android/assets
+    public static final Image BG_FOREST_BLUR = new Image(new Texture("android/assets/gui/forest_blur_bg.jpg"));
+    public static final Image FORT_U = new Image(new Texture("android/assets/units/caveL.png"));
+    public static final Image FORT_G = new Image(new Texture("android/assets/units/caveR.png"));
+    public static final Image ARROW = new Image(new Texture("android/assets/units/example/arrow1.jpg"));
+    public static final Animation<TextureRegion> LOAD_ANIMATION = setAnim("android/assets/gui/load_anim.png", 5, 1, 0.5f);
+    public static final String menuMusicPath = "android/assets/music/main_menu.mp3";
+    public static final String game1MusicPath = "android/assets/music/in_game_1.mp3";
 
 
     private static Animation<TextureRegion> setAnim(String path, int x, int y, float frameDuration)
