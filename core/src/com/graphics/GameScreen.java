@@ -1,6 +1,7 @@
-package com.mygdx.graphics;
+package com.graphics;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -25,13 +26,15 @@ public class GameScreen implements Screen, InputProcessor
     private static GameGUI gui;
     private static Array<Unit> units;
     private static float prefX;
+    private static float prefY;
     private static UserForpost userForpost;
     private static GameForpost gameForpost;
 
     GameScreen ()
     {
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Resources.width, Resources.height);
+        camera = new OrthographicCamera(Resources.WORLD_WIDTH, Resources.WORLD_HEIGHT);
+        camera.setToOrtho(false);
+
         stage = new Stage(new ScreenViewport(camera));
         //stage.setDebugAll(true);
         userForpost = UserForpost.getInstance();
@@ -40,6 +43,7 @@ public class GameScreen implements Screen, InputProcessor
         Resources.state = State.GAME;
         units = new Array<Unit>();
         prefX = -1;
+        prefY = -1;
 
         CharacterController.start();
     }
@@ -47,8 +51,8 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public void show()
     {
-        final Image bg = Resources.bgForest;
-        bg.setPosition(0, 0);
+        final Image bg = Resources.BG_FOREST;
+        bg.setBounds(0, 0, Resources.GAME_WIDTH, Resources.GAME_HEIGHT);
         stage.addActor(bg);
 
         Forpost gameF = new Forpost(-1);
@@ -94,7 +98,7 @@ public class GameScreen implements Screen, InputProcessor
         else
         {
             Resources.game.batch.begin();
-            Resources.bgForestBlur.draw(Resources.game.batch, 1);
+            Resources.BG_FOREST_BLUR.draw(Resources.game.batch, 1);
             Resources.game.batch.end();
         }
 
@@ -166,6 +170,7 @@ public class GameScreen implements Screen, InputProcessor
         }
         units.clear();
         prefX = -1;
+        prefY = -1;
         gui.updateLabels();
         gui.updateBaseHealth();
     }
@@ -190,7 +195,30 @@ public class GameScreen implements Screen, InputProcessor
     }
 
     @Override
-    public boolean keyDown(int keycode) {
+    public boolean keyDown(int keycode)
+    {
+        if (keycode == Input.Keys.A
+                && camera.viewportHeight * 1.1f < Resources.GAME_HEIGHT
+                && camera.viewportWidth * 1.1f < Resources.GAME_WIDTH )
+        {
+            camera.viewportWidth *= 1.1f;
+            camera.viewportHeight *= 1.1f;
+            if (camera.position.x - camera.viewportWidth/2 < 0)
+                camera.position.x = camera.viewportWidth/2;
+            if (camera.position.x + camera.viewportWidth/2 > Resources.GAME_WIDTH)
+                camera.position.x = Resources.GAME_WIDTH - camera.viewportWidth/2;
+            if (camera.position.y - camera.viewportHeight/2 < 0)
+                camera.position.y = camera.viewportHeight/2;
+            if (camera.position.y + camera.viewportHeight/2 > Resources.GAME_HEIGHT)
+                camera.position.y = Resources.GAME_HEIGHT - camera.viewportHeight/2;
+        }
+        if (keycode == Input.Keys.Q
+                && camera.viewportHeight * 0.9f > Resources.WORLD_HEIGHT
+                && camera.viewportWidth * 0.9f > Resources.WORLD_WIDTH)
+        {
+            camera.viewportWidth *= 0.9f;
+            camera.viewportHeight *= 0.9f;
+        }
         return false;
     }
 
@@ -213,6 +241,7 @@ public class GameScreen implements Screen, InputProcessor
     public boolean touchUp(int screenX, int screenY, int pointer, int button)
     {
         prefX = -1;
+        prefY = -1;
         return false;
     }
 
@@ -220,16 +249,21 @@ public class GameScreen implements Screen, InputProcessor
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
         if (Resources.state == State.GAME)
-            if (prefX != -1 && (camera.position.x >= Resources.width2 || prefX - screenX > 0)
-                    && (camera.position.x <= 2268- Resources.width2 || prefX - screenX < 0))
+            if (prefX != -1 && prefY != -1) //&& (camera.position.x >= Resources.WORLD_WIDTH_2 || prefX - screenX > 0)
+                    //&& (camera.position.x <= Resources.GAME_WIDTH - Resources.WORLD_WIDTH_2 || prefX - screenX < 0))
             {
-                camera.translate(prefX - screenX, 0);
-                if (camera.position.x < Resources.width2)
-                    camera.position.x = Resources.width2;
-                if (camera.position.x > 2268- Resources.width2)
-                    camera.position.x = 2268- Resources.width2;
+                camera.translate(prefX - screenX, -(prefY - screenY));
+                if (camera.position.x - camera.viewportWidth/2 < 0)
+                    camera.position.x = camera.viewportWidth/2;
+                if (camera.position.x + camera.viewportWidth/2 > Resources.GAME_WIDTH)
+                    camera.position.x = Resources.GAME_WIDTH - camera.viewportWidth/2;
+                if (camera.position.y - camera.viewportHeight/2 < 0)
+                    camera.position.y = camera.viewportHeight/2;
+                if (camera.position.y + camera.viewportHeight/2 > Resources.GAME_HEIGHT)
+                    camera.position.y = Resources.GAME_HEIGHT - camera.viewportHeight/2;
             }
         prefX = screenX;
+        prefY = screenY;
 
         return false;
     }
@@ -238,11 +272,35 @@ public class GameScreen implements Screen, InputProcessor
     public boolean mouseMoved(int screenX, int screenY)
     {
         prefX = screenX;
+        prefY = screenY;
         return false;
     }
 
     @Override
-    public boolean scrolled(int amount) {
+    public boolean scrolled(int amount)
+    {
+        if (amount > 0
+                && camera.viewportHeight * 1.1f < Resources.GAME_HEIGHT
+                && camera.viewportWidth * 1.1f < Resources.GAME_WIDTH )
+        {
+            camera.viewportWidth *= 1.1f;
+            camera.viewportHeight *= 1.1f;
+            if (camera.position.x - camera.viewportWidth/2 < 0)
+                camera.position.x = camera.viewportWidth/2;
+            if (camera.position.x + camera.viewportWidth/2 > Resources.GAME_WIDTH)
+                camera.position.x = Resources.GAME_WIDTH - camera.viewportWidth/2;
+            if (camera.position.y - camera.viewportHeight/2 < 0)
+                camera.position.y = camera.viewportHeight/2;
+            if (camera.position.y + camera.viewportHeight/2 > Resources.GAME_HEIGHT)
+                camera.position.y = Resources.GAME_HEIGHT - camera.viewportHeight/2;
+        }
+        if (amount < 0
+                && camera.viewportHeight * 0.9f >= Resources.WORLD_HEIGHT
+                && camera.viewportWidth * 0.9f >= Resources.WORLD_WIDTH)
+        {
+            camera.viewportWidth *= 0.9f;
+            camera.viewportHeight *= 0.9f;
+        }
         return false;
     }
 }

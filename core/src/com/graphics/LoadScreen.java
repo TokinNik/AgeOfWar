@@ -1,4 +1,4 @@
-package com.mygdx.graphics;
+package com.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,18 +24,18 @@ public class LoadScreen implements Screen, InputProcessor
     LoadScreen (ScreenType screen)
     {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Resources.width, Resources.height);
+        camera.setToOrtho(false, Resources.WIDTH, Resources.HEIGHT);
         stage = new Stage(new ScreenViewport(camera));
         this.screen = screen;
-        animObject = new AnimObject(Resources.loadAnimation);
+        animObject = new AnimObject(Resources.LOAD_ANIMATION);
         l = new Label("Loading...",new Label.LabelStyle(Resources.game.font, Color.WHITE));
     }
 
     @Override
     public void show()
     {
-        animObject.setPosition(Resources.width2 - animObject.getWidth()/2, Resources.height2 - animObject.getHeight()/2);
-        l.setPosition(Resources.width2 - l.getPrefWidth()/2, animObject.getY() - 20);
+        animObject.setPosition(Resources.WIDTH_2 - animObject.getWidth()/2, Resources.HEIGHT_2 - animObject.getHeight()/2);
+        l.setPosition(Resources.WIDTH_2 - l.getPrefWidth()/2, animObject.getY() - 20);
         stage.addActor(l);
         stage.addActor(animObject);
         Gdx.input.setCursorCatched(true);

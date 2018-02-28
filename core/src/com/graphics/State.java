@@ -1,4 +1,4 @@
-package com.mygdx.graphics;
+package com.graphics;
 
 
 public enum State

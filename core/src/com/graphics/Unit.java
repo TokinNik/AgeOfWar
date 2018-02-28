@@ -1,8 +1,7 @@
-package com.mygdx.graphics;
+package com.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -31,7 +30,7 @@ public class Unit extends Actor
     {
         character = CharacterController.createNewCharacter(type);
 
-        setBounds(100, 50, 240, 288);
+        setBounds(character.getPosition(), 50, 240, 288);
 
         animation = Resources.testAnimationR;
 
@@ -41,7 +40,7 @@ public class Unit extends Actor
         levelL = new Label( character.getStage().toString() + " " + type, new Label.LabelStyle(Resources.game.font, Color.WHITE));
         levelL.setPosition(getX() - 5, getY() + getHeight() + 20);
 
-        hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
+        hBar = new Image(Resources.GUI_SKIN.getDrawable("hBar_green"));
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
     }
 
@@ -49,7 +48,7 @@ public class Unit extends Actor
     {
         this.type = type;
         this.character = c;
-        setBounds(2168, 50, 240, 288);
+        setBounds(character.getPosition(), 50, 240, 288);
 
         animation = Resources.testAnimationL;
 
@@ -59,7 +58,7 @@ public class Unit extends Actor
         levelL = new Label( character.getStage() + " " + type, new Label.LabelStyle(Resources.game.font, Color.WHITE));
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 
-        hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
+        hBar = new Image(Resources.GUI_SKIN.getDrawable("hBar_green"));
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
     }
 
@@ -69,15 +68,15 @@ public class Unit extends Actor
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
 
-        addAction(Actions.moveTo( character.getPosition()*2.2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
+        addAction(Actions.moveTo( character.getPosition()*2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
 
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth() / character.getMaxHealth(), 10);
         if (character.getHealth() <= character.getMaxHealth() * 0.6f)
-            hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
+            hBar.setDrawable(Resources.GUI_SKIN.getDrawable("hBar_yellow"));
         if (character.getHealth() <= character.getMaxHealth() * 0.3f)
-            hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
+            hBar.setDrawable(Resources.GUI_SKIN.getDrawable("hBar_red"));
 
         batch.draw(currentFrame, getX(), getY());
         levelL.draw(batch, parentAlpha);

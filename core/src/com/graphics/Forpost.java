@@ -1,4 +1,4 @@
-package com.mygdx.graphics;
+package com.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -25,7 +25,7 @@ public class Forpost extends Actor
         if (dir == 1)
         {
             animation = Resources.fortDamageAnimationL;
-            forpostImage = Resources.fortU;
+            forpostImage = Resources.FORT_U;
             forpostImage.setBounds(0,0,600,400);
             setBounds(0,0,600,400);
             this.currentHP = GameScreen.getUserForpost().getMaxHealth();
@@ -33,9 +33,9 @@ public class Forpost extends Actor
         if (dir == -1)
         {
             animation = Resources.fortDamageAnimationR;
-            forpostImage = Resources.fortG;
-            forpostImage.setBounds(1668, 0, 600, 400);
-            setBounds(1668, 0, 600, 400);
+            forpostImage = Resources.FORT_G;
+            forpostImage.setBounds(Resources.GAME_WIDTH - 600, 0, 600, 400);
+            setBounds(Resources.GAME_WIDTH - 600, 0, 600, 400);
             this.currentHP = GameScreen.getGameForpost().getMaxHealth();
         }
 

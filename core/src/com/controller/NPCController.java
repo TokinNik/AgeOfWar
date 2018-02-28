@@ -4,7 +4,7 @@ import com.exception.NotEnoughMonyException;
 import com.model.Character;
 import com.model.CharacterFactory;
 import com.model.CharacterType;
-import com.mygdx.graphics.GameScreen;
+import com.graphics.GameScreen;
 import java.util.concurrent.TimeUnit;
 
 public class NPCController implements Runnable {
