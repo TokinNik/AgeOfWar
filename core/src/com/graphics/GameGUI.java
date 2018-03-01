@@ -34,6 +34,11 @@ public class GameGUI extends Stage implements InputProcessor
     private Label expL;
     private Label yourBaseL;
     private Label enemyBaseL;
+    private final Label unitCost_1L;
+    private final Label unitCost_2L;
+    private final Label unitCost_3L;
+    private final Label unitCost_4L;
+    private final Label unitCost_5L;
     private Button menuB;
     private Button evolveB;
     private Music bgMusic;
@@ -85,7 +90,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_1L = new Label("Archer", Resources.simpleLSBlack);
         unitName_1L.setPosition( 0, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_1L);
-        final Label unitCost_1L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.ARCHER), Resources.simpleLSBlack);
+        unitCost_1L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.ARCHER), Resources.simpleLSBlack);
         unitCost_1L.setPosition( 0, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_1L);
 
@@ -114,7 +119,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_2L = new Label("Warrior", Resources.simpleLSBlack);
         unitName_2L.setPosition( 110, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_2L);
-        final Label unitCost_2L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.INFATRYMAN), Resources.simpleLSBlack);
+        unitCost_2L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.INFATRYMAN), Resources.simpleLSBlack);
         unitCost_2L.setPosition( 110, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_2L);
 
@@ -142,7 +147,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_3L = new Label("Fat", Resources.simpleLSBlack);
         unitName_3L.setPosition( 220, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_3L);
-        final Label unitCost_3L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.FAT), Resources.simpleLSBlack);
+        unitCost_3L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.FAT), Resources.simpleLSBlack);
         unitCost_3L.setPosition( 220, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_3L);
 
@@ -171,7 +176,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_4L = new Label("Rider", Resources.simpleLSBlack);
         unitName_4L.setPosition( 330, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_4L);
-        final Label unitCost_4L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.RIDER), Resources.simpleLSBlack);
+        unitCost_4L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.RIDER), Resources.simpleLSBlack);
         unitCost_4L.setPosition( 330, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_4L);
 
@@ -200,7 +205,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_5L = new Label("Incredible", Resources.simpleLSBlack);
         unitName_5L.setPosition( 440, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_5L);
-        final Label unitCost_5L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.INCREDIBLE), Resources.simpleLSBlack);
+        unitCost_5L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.INCREDIBLE), Resources.simpleLSBlack);
         unitCost_5L.setPosition( 440, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_5L);
 
@@ -258,11 +263,7 @@ public class GameGUI extends Stage implements InputProcessor
                     try {
                         CharacterController.evolve();
                         CharacterController.addTotalScore(-200);
-                        unitCost_1L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.ARCHER));
-                        unitCost_2L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.INFATRYMAN));
-                        unitCost_3L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.FAT));
-                        unitCost_4L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.RIDER));
-                        unitCost_5L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.INCREDIBLE));
+                        updateCost();
                         evolveB.setVisible(false);
                     } catch (LimitOfEvolutionException e) {
                         e.printStackTrace();
@@ -280,6 +281,15 @@ public class GameGUI extends Stage implements InputProcessor
         hBarG.setPosition(enemyBaseL.getX() + enemyBaseL.getWidth() + 25, 10);
         hBarG.setSize((menuB.getX() - hBarG.getX() - 20) * GameScreen.getGameForpost().getHealth()/GameScreen.getGameForpost().getMaxHealth(), 10);
         addActor(hBarG);
+    }
+
+    private void updateCost()
+    {
+        unitCost_1L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.ARCHER));
+        unitCost_2L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.INFATRYMAN));
+        unitCost_3L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.FAT));
+        unitCost_4L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.RIDER));
+        unitCost_5L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.INCREDIBLE));
     }
 
     void updateLabels()
@@ -399,6 +409,7 @@ public class GameGUI extends Stage implements InputProcessor
                 CharacterController.reset();
                 CharacterController.start();
                 Resources.state = State.GAME;
+                updateCost();
             }
         });
 
@@ -473,6 +484,7 @@ public class GameGUI extends Stage implements InputProcessor
                 CharacterController.reset();
                 CharacterController.start();
                 Resources.state = State.GAME;
+                updateCost();
             }
         });
 

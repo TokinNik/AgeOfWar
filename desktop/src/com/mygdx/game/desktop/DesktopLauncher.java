@@ -8,8 +8,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
-		//config.width = LwjglApplicationConfiguration.getDesktopDisplayMode().WIDTH;
-		//config.height = LwjglApplicationConfiguration.getDesktopDisplayMode().HEIGHT;
+		//config.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
+		//config.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
 		config.width = 1280;
 		config.height = 720;
 		//config.width = 1024;
@@ -18,10 +18,10 @@ public class DesktopLauncher {
 		//config.height = 540;
 		//config.width = 480;
 		//config.height = 320;
-		// fullscreen
+
 		//config.fullscreen = true;
-		// vSync
-		config.vSyncEnabled = true;
+
+		config.resizable = false;
 		new LwjglApplication(new Start(), config);
 	}
 }
