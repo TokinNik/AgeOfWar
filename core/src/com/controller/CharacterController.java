@@ -174,7 +174,7 @@ public class CharacterController {
         CharacterController.gameFinished = gameFinished;
     }
 
-    public static int getCurrentCharacterPrice(CharacterType type) {
+    public static int getCharacterPrice(CharacterType type) {
         switch (type) {
             case ARCHER:{ return (int) (Archer.getBasePrice() * userEvolveStage.getCoefficient() ) / 10 * 10; }
 
