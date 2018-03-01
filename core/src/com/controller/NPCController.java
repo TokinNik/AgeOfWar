@@ -7,12 +7,22 @@ import com.model.CharacterType;
 import com.graphics.GameScreen;
 import com.model.UserForpost;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+
+import javax.xml.crypto.Data;
 
 public class NPCController implements Runnable {
     private static final Map<CharacterType, Map<Integer, CharacterType[]>> TAMPLATES_OF_RESPOND = new HashMap<CharacterType, Map<Integer, CharacterType[]>>();
+    private static final Map<CharacterType, Float[]> chanceOfCreate = new TreeMap<CharacterType, Float[]>();
+    private static Date timeOfAgeStart = new Date();
+    private static float friquency = 0.4f;
+    private static float tamplatesFriquent = 0;
     private static final Integer first = 1;
     private static final Integer second = 2;
     private static final Integer third = 3;
@@ -44,6 +54,12 @@ public class NPCController implements Runnable {
         archerChance.put(first, new CharacterType[] {CharacterType.ARCHER});
         archerChance.put(second, new CharacterType[] {CharacterType.INFATRYMAN});
         TAMPLATES_OF_RESPOND.put(CharacterType.ARCHER, archerChance);
+
+        chanceOfCreate.put(CharacterType.INFATRYMAN, new Float[] {0.8f, 0.6f,  0.4f, 0.35f, 0.4f, 0.35f,  0.3f, 0.25f});
+        chanceOfCreate.put(CharacterType.ARCHER, new Float[]     {  1f,   1f,  0.8f, 0.75f, 0.7f, 0.65f, 0.55f, 0.45f});
+        chanceOfCreate.put(CharacterType.FAT, new Float[]        {  0f,   0f,    1f,    1f, 0.9f, 0.85f,  0.7f, 0.65f});
+        chanceOfCreate.put(CharacterType.RIDER, new Float[]      {  0f,   0f,    0f,    0f,   1f,    1f,  0.9f, 0.85f});
+        chanceOfCreate.put(CharacterType.INCREDIBLE, new Float[] {  0f,   0f,    0f,    0f,   0f,    0f,    1f,    1f});
     }
 
 
@@ -65,11 +81,45 @@ public class NPCController implements Runnable {
                 break;
             }
 
-            respond();
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                break;
+            }
+
+            if (Math.random() < tamplatesFriquent) {
+                respondCharacter();
+                continue;
+            }
+
+            if (Math.random() < friquency) {
+                randomCharacter();
+            }
+
         }
     }
 
-    private void respond() {
+    private void randomCharacter() {
+        int num = (int)((new Date().getTime() - timeOfAgeStart.getTime()) / 36000 );
+        num = (num > 7) ? 7 : num;
+        float rand = (float) Math.random();
+
+        friquency = 0.4f + (num * 0.02f);
+
+        if (num == 3) {
+            tamplatesFriquent = 0.1f;
+        }
+
+        for (Map.Entry<CharacterType, Float[] > entry : chanceOfCreate.entrySet()) {
+            if (rand < entry.getValue()[num]) {
+                createNewCharacter(entry.getKey());
+                break;
+            }
+        }
+
+    }
+
+    private void respondCharacter() {
         if (CharacterController.clothestUserObjectPosition > 200 ) {
             CharacterType type = ( (Character) CharacterController.clothestUserObject).getType();
             Map<Integer, CharacterType[]> tamplate = TAMPLATES_OF_RESPOND.get(type);
@@ -135,7 +185,7 @@ public class NPCController implements Runnable {
             for (CharacterType characterType : finalySet) {
                 createNewCharacter(characterType);
                 try {
-                    TimeUnit.MILLISECONDS.sleep(3000);
+                    TimeUnit.MILLISECONDS.sleep(800);
                 } catch (InterruptedException e) {
                     break;
                 }

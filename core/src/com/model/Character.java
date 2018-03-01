@@ -19,7 +19,7 @@ public abstract class Character extends GameObject implements Runnable {
 
     public Character(float health, float speed, float armor, float strength, int price, boolean users, StageOfEvolution stage, CharacterType type) {
         super(health * stage.getCoefficient(), users, users ? 5 : 995, stage);
-        this.speed = speed;
+        this.speed = speed / 6;
         this.armor = armor;
         this.strength = strength * stage.getCoefficient();
         this.price = (int) (price * stage.getCoefficient()) / 10 * 10;
