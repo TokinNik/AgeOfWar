@@ -30,14 +30,11 @@ public class Unit extends Actor
     {
         character = CharacterController.createNewCharacter(type);
 
-        setBounds(character.getPosition(), 50, 240, 288);
+        setBounds(character.getPosition() * 2f, 50, 240, 288);
 
         animation = Resources.testAnimationR;
 
-        this.type = type;
-        this.direction = 1;
-
-        levelL = new Label( character.getStage().toString() + " " + type, new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        levelL = new Label( character.getStage().toString() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
         levelL.setPosition(getX() - 5, getY() + getHeight() + 20);
 
         hBar = new Image(Resources.GUI_SKIN.getDrawable("hBar_green"));
@@ -46,16 +43,12 @@ public class Unit extends Actor
 
     Unit(CharacterType type, Character c) throws  NotEnoughMonyException
     {
-        this.type = type;
         this.character = c;
-        setBounds(character.getPosition(), 50, 240, 288);
+        setBounds(character.getPosition() * 2f, 50, 240, 288);
 
         animation = Resources.testAnimationL;
 
-        this.type = type;
-        this.direction = -1;
-
-        levelL = new Label( character.getStage() + " " + type, new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        levelL = new Label( character.getStage() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 
         hBar = new Image(Resources.GUI_SKIN.getDrawable("hBar_green"));
@@ -68,7 +61,7 @@ public class Unit extends Actor
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
 
-        addAction(Actions.moveTo( character.getPosition()*2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
+        addAction(Actions.moveTo( character.getPosition() * 2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
 
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 

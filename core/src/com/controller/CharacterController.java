@@ -108,6 +108,10 @@ public class CharacterController {
         CharacterController.gameArmy.put(character, type);
     }
 
+    public static StageOfEvolution getUserEvolveStage() {
+        return userEvolveStage;
+    }
+
     public static int getTotalMoney() {
         return totalMoney;
     }

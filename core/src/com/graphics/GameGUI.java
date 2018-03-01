@@ -21,6 +21,7 @@ import com.controller.CharacterController;
 import com.exception.LimitOfEvolutionException;
 import com.exception.NotEnoughMonyException;
 import com.model.CharacterType;
+import com.model.StageOfEvolution;
 
 
 public class GameGUI extends Stage implements InputProcessor
@@ -55,36 +56,36 @@ public class GameGUI extends Stage implements InputProcessor
         bgBot.setBounds(0,0, Resources.WORLD_WIDTH, 50);
         addActor(bgBot);
 
-        moneyL = new Label("| Money: " + CharacterController.getTotalMoney() + " |", Resources.simpleLS);
-        moneyL.setPosition(25, 15);
+        moneyL = new Label("| Money: " + CharacterController.getTotalMoney() + " |", Resources.simpleLSWhite);
+        moneyL.setPosition(25, 28);
         addActor(moneyL);
 
-        unitsL = new Label("| Units: " + CharacterController.getUserArmyCount() + " |", Resources.simpleLS);
-        unitsL.setPosition(moneyL.getWidth() + 50, 15);
-        addActor(unitsL);
-
-        enemyL = new Label("| Enemy: " + CharacterController.getGameArmyCount() + " |", Resources.simpleLS);
-        enemyL.setPosition(moneyL.getWidth() + unitsL.getWidth() + 75, 15);
-        addActor(enemyL);
-
-        expL = new Label("| Experience: " + CharacterController.getTotalScore() + " |", Resources.simpleLS);
-        expL.setPosition(enemyL.getX() + enemyL.getWidth() + 50, 15);
+        expL = new Label("| Experience: " + CharacterController.getTotalScore() + " |", Resources.simpleLSWhite);
+        expL.setPosition(25, 8);
         addActor(expL);
 
-        yourBaseL = new Label("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |", Resources.simpleLS);
-        yourBaseL.setPosition(expL.getX() + expL.getWidth() + 25, 28);
+        unitsL = new Label("| Units: " + CharacterController.getUserArmyCount() + " |", Resources.simpleLSWhite);
+        unitsL.setPosition((moneyL.getWidth() > expL.getWidth()) ? moneyL.getX() + moneyL.getWidth() : expL.getX() + expL.getWidth() + 5, 28);
+        addActor(unitsL);
+
+        enemyL = new Label("| Enemy: " + CharacterController.getGameArmyCount() + " |", Resources.simpleLSWhite);
+        enemyL.setPosition(unitsL.getX(), 8);
+        addActor(enemyL);
+
+        yourBaseL = new Label("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |", Resources.simpleLSWhite);
+        yourBaseL.setPosition(unitsL.getX() + unitsL.getWidth() + 5, 28);
         addActor(yourBaseL);
 
-        enemyBaseL = new Label("| Enemy Base Health: " + GameScreen.getGameForpost().getHealth() + " / " + GameScreen.getGameForpost().getMaxHealth() + " |", Resources.simpleLS);
+        enemyBaseL = new Label("| Enemy Base Health: " + GameScreen.getGameForpost().getHealth() + " / " + GameScreen.getGameForpost().getMaxHealth() + " |", Resources.simpleLSWhite);
         enemyBaseL.setPosition(yourBaseL.getX(), 8);
         addActor(enemyBaseL);
 
         Group unitsG = new Group();
 
-        Label unitName_1L = new Label("Archer", Resources.simpleLS);
+        Label unitName_1L = new Label("Archer", Resources.simpleLSBlack);
         unitName_1L.setPosition( 0, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_1L);
-        Label unitCost_1L = new Label("Cost: " + 30, Resources.simpleLS);
+        final Label unitCost_1L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.ARCHER), Resources.simpleLSBlack);
         unitCost_1L.setPosition( 0, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_1L);
 
@@ -110,10 +111,10 @@ public class GameGUI extends Stage implements InputProcessor
         });
         unitsG.addActor(setUnit_1B);
 
-        Label unitName_2L = new Label("Infantryman", Resources.simpleLS);
+        Label unitName_2L = new Label("Warrior", Resources.simpleLSBlack);
         unitName_2L.setPosition( 110, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_2L);
-        Label unitCost_2L = new Label("Cost: " + 20, Resources.simpleLS);
+        final Label unitCost_2L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.INFATRYMAN), Resources.simpleLSBlack);
         unitCost_2L.setPosition( 110, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_2L);
 
@@ -138,10 +139,10 @@ public class GameGUI extends Stage implements InputProcessor
         });
         unitsG.addActor(setUnit_2B);
 
-        Label unitName_3L = new Label("Fat", Resources.simpleLS);
+        Label unitName_3L = new Label("Fat", Resources.simpleLSBlack);
         unitName_3L.setPosition( 220, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_3L);
-        Label unitCost_3L = new Label("Cost: " + 60, Resources.simpleLS);
+        final Label unitCost_3L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.FAT), Resources.simpleLSBlack);
         unitCost_3L.setPosition( 220, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_3L);
 
@@ -167,10 +168,10 @@ public class GameGUI extends Stage implements InputProcessor
         });
         unitsG.addActor(setUnit_3B);
 
-        Label unitName_4L = new Label("Rider", Resources.simpleLS);
+        Label unitName_4L = new Label("Rider", Resources.simpleLSBlack);
         unitName_4L.setPosition( 330, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_4L);
-        Label unitCost_4L = new Label("Cost: " + 150, Resources.simpleLS);
+        final Label unitCost_4L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.RIDER), Resources.simpleLSBlack);
         unitCost_4L.setPosition( 330, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_4L);
 
@@ -196,10 +197,10 @@ public class GameGUI extends Stage implements InputProcessor
         });
         unitsG.addActor(setUnit_4B);
 
-        Label unitName_5L = new Label("Incredible", Resources.simpleLS);
+        Label unitName_5L = new Label("Incredible", Resources.simpleLSBlack);
         unitName_5L.setPosition( 440, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_5L);
-        Label unitCost_5L = new Label("Cost: " + 1000, Resources.simpleLS);
+        final Label unitCost_5L = new Label("Cost: " + CharacterController.getCharacterPrice(CharacterType.INCREDIBLE), Resources.simpleLSBlack);
         unitCost_5L.setPosition( 440, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_5L);
 
@@ -257,6 +258,11 @@ public class GameGUI extends Stage implements InputProcessor
                     try {
                         CharacterController.evolve();
                         CharacterController.addTotalScore(-200);
+                        unitCost_1L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.ARCHER));
+                        unitCost_2L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.INFATRYMAN));
+                        unitCost_3L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.FAT));
+                        unitCost_4L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.RIDER));
+                        unitCost_5L.setText("Cost: " + CharacterController.getCharacterPrice(CharacterType.INCREDIBLE));
                         evolveB.setVisible(false);
                     } catch (LimitOfEvolutionException e) {
                         e.printStackTrace();
@@ -279,21 +285,25 @@ public class GameGUI extends Stage implements InputProcessor
     void updateLabels()
     {
         moneyL.setText("| Money: " + CharacterController.getTotalMoney() + " |");
-        unitsL.setText("| Units: " + CharacterController.getUserArmyCount() + " |");
-        enemyL.setText("| Enemy: " + CharacterController.getGameArmyCount() + " |");
         expL.setText("| Experience: " + CharacterController.getTotalScore() + " |");
+        unitsL.setPosition((moneyL.getPrefWidth() > expL.getPrefWidth()) ? moneyL.getX() + moneyL.getPrefWidth() : expL.getX() + expL.getPrefWidth() + 5, 28);
+        unitsL.setText("| Units: " + CharacterController.getUserArmyCount() + " |");
+        enemyL.setPosition(unitsL.getX(), 8);
+        enemyL.setText("| Enemy: " + CharacterController.getGameArmyCount() + " |");
 
-        if (CharacterController.getTotalScore() >= 200 && !evolveB.isVisible())
+        if (CharacterController.getTotalScore() >= 200 && !evolveB.isVisible() && CharacterController.getUserEvolveStage() != StageOfEvolution.FOURTH)
             evolveB.setVisible(true);
         if (CharacterController.getTotalScore() < 200 && evolveB.isVisible())
             evolveB.setVisible(false);
 
+        yourBaseL.setPosition(unitsL.getX() + unitsL.getPrefWidth() + 5, 28);
+        enemyBaseL.setPosition(yourBaseL.getX(), 8);
         if (GameScreen.getUserForpost().getHealth() > 0)
-            yourBaseL.setText("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
+            yourBaseL.setText("| Your Base Health: " + ((int) GameScreen.getUserForpost().getHealth()) + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         else
             yourBaseL.setText("| Your Base Health: 0 |");
         if (GameScreen.getGameForpost().getHealth() > 0)
-            enemyBaseL.setText("| Enemy Base Health: " + GameScreen.getGameForpost().getHealth() + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
+            enemyBaseL.setText("| Enemy Base Health: " + ((int) GameScreen.getGameForpost().getHealth()) + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
         else
             enemyBaseL.setText("| Enemy Base Health: 0 |");
     }
@@ -332,7 +342,7 @@ public class GameGUI extends Stage implements InputProcessor
         final Image bg = new Image(Resources.GUI_SKIN.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.WORLD_WIDTH_2 - 150, Resources.WORLD_HEIGHT_2 -215);
 
-        final Label l = new Label("Menu", Resources.simpleLS);
+        final Label l = new Label("Menu", Resources.simpleLSWhite);
         l.setPosition(Resources.WORLD_WIDTH_2 - l.getPrefWidth()/2, Resources.WORLD_HEIGHT_2 + 155);
 
         final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_m);
@@ -414,13 +424,13 @@ public class GameGUI extends Stage implements InputProcessor
         final Label l;
         if (win)
         {
-            l = new Label("Congratulation!!!", Resources.simpleLS);
+            l = new Label("Congratulation!!!", Resources.simpleLSWhite);
             l.setPosition(Resources.WORLD_WIDTH_2 - l.getPrefWidth()/2, Resources.WORLD_HEIGHT_2 + 155);
             enemyBaseL.setText("| Enemy Base Health: " + 0 + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
         }
         else
         {
-            l = new Label("You Lose(((", Resources.simpleLS);
+            l = new Label("You Lose(((", Resources.simpleLSWhite);
             l.setPosition(Resources.WORLD_WIDTH_2 - l.getPrefWidth()/2, Resources.WORLD_HEIGHT_2 + 155);
             yourBaseL.setText("| Your Base Health: " + 0 + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         }
@@ -481,10 +491,10 @@ public class GameGUI extends Stage implements InputProcessor
         final Image bg = new Image(Resources.GUI_SKIN.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.WORLD_WIDTH_2 - 150, Resources.WORLD_HEIGHT_2 -215);
 
-        final Label optionsL = new Label("Options", Resources.simpleLS);
+        final Label optionsL = new Label("Options", Resources.simpleLSWhite);
         optionsL.setPosition(Resources.WORLD_WIDTH_2 - optionsL.getPrefWidth()/2, Resources.WORLD_HEIGHT_2 + 155);
 
-        final Label musicL = new Label("Music volume", Resources.simpleLS);
+        final Label musicL = new Label("Music volume", Resources.simpleLSWhite);
         musicL.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 100);
 
         Slider.SliderStyle slider = new Slider.SliderStyle(Resources.GUI_SKIN.getDrawable("slide_line"),
@@ -501,7 +511,7 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
 
-        final Label effectL = new Label("Effects volume", Resources.simpleLS);
+        final Label effectL = new Label("Effects volume", Resources.simpleLSWhite);
         effectL.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 50);
 
         final Slider effectS = new Slider(0f, 1f, 0.1f  , false, slider);

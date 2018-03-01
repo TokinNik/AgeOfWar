@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenu implements Screen
 {
@@ -35,6 +34,7 @@ public class MainMenu implements Screen
         camera.setToOrtho(false, Resources.WORLD_WIDTH, Resources.WORLD_HEIGHT);
         stage = new Stage(new FitViewport(Resources.WORLD_WIDTH, Resources.WORLD_HEIGHT));
         state = true;
+        
     }
 
     @Override
@@ -46,15 +46,16 @@ public class MainMenu implements Screen
         TextButton.TextButtonStyle tbs = new TextButton.TextButtonStyle();
         tbs.up = skin.getDrawable("text_button_s1");
         tbs.down = skin.getDrawable("text_button_s2");
-        tbs.font = Resources.game.font;
+        tbs.font = Resources.game.standartFontWhite;
         Resources.tbs_s = tbs;
         TextButton.TextButtonStyle tbs1 = new TextButton.TextButtonStyle();
         tbs1.up = skin.getDrawable("text_button_m1");
         tbs1.down = skin.getDrawable("text_button_m2");
-        tbs1.font = Resources.game.font;
+        tbs1.font = Resources.game.standartFontWhite;
         Resources.tbs_m = tbs1;
 
-        Resources.simpleLS = new Label.LabelStyle(Resources.game.font, Color.WHITE);
+        Resources.simpleLSWhite = new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE);
+        Resources.simpleLSBlack = new Label.LabelStyle(Resources.game.standartFontWhite, Color.BLACK);
 
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal(Resources.menuMusicPath));
         bgMusic.setLooping(true);
@@ -171,7 +172,7 @@ public class MainMenu implements Screen
         final Image bg = new Image(skin.getDrawable("exit_window_bg"));
         bg.setPosition((Resources.WORLD_WIDTH_2)-150, (Resources.WORLD_HEIGHT_2)-15);
 
-        final Label l = new Label("Are you sure you want to exit?", Resources.simpleLS);
+        final Label l = new Label("Are you sure you want to exit?", Resources.simpleLSWhite);
         l.setPosition((Resources.WORLD_WIDTH_2)-l.getPrefWidth()/2, (Resources.WORLD_HEIGHT_2)+55);
 
         final TextButton bYes = new TextButton("Yes", Resources.tbs_s);
@@ -212,10 +213,10 @@ public class MainMenu implements Screen
         final Image bg = new Image(Resources.GUI_SKIN.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.WORLD_WIDTH_2 - 150, Resources.WORLD_HEIGHT_2 -215);
 
-        final Label optionsL = new Label("Options",Resources.simpleLS);
+        final Label optionsL = new Label("Options",Resources.simpleLSWhite);
         optionsL.setPosition(Resources.WORLD_WIDTH_2 - optionsL.getPrefWidth()/2, Resources.WORLD_HEIGHT_2 + 155);
 
-        final Label musicL = new Label("Music volume", Resources.simpleLS);
+        final Label musicL = new Label("Music volume", Resources.simpleLSWhite);
         musicL.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 100);
 
         Slider.SliderStyle slider = new Slider.SliderStyle(Resources.GUI_SKIN.getDrawable("slide_line"),
@@ -232,7 +233,7 @@ public class MainMenu implements Screen
             }
         });
 
-        final Label effectL = new Label("Effects volume",Resources.simpleLS);
+        final Label effectL = new Label("Effects volume",Resources.simpleLSWhite);
         effectL.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 50);
 
         final Slider effectS = new Slider(0f, 1f, 0.1f  , false, slider);

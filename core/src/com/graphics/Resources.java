@@ -28,7 +28,8 @@ public class Resources
     public static final float GAME_HEIGHT_2 = GAME_HEIGHT / 2;
     public static TextButton.TextButtonStyle tbs_s;
     public static TextButton.TextButtonStyle tbs_m;
-    public static Label.LabelStyle simpleLS;
+    public static Label.LabelStyle simpleLSWhite;
+    public static Label.LabelStyle simpleLSBlack;
     public static State state = State.GAME;
     public static Start game;
     public static Animation<TextureRegion> testAnimationR = setAnim("android/assets/units/example/runner_testR.png", 6, 5, 0.025f);

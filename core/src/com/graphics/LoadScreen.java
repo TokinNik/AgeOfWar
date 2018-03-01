@@ -28,7 +28,7 @@ public class LoadScreen implements Screen, InputProcessor
         stage = new Stage(new ScreenViewport(camera));
         this.screen = screen;
         animObject = new AnimObject(Resources.LOAD_ANIMATION);
-        l = new Label("Loading...",new Label.LabelStyle(Resources.game.font, Color.WHITE));
+        l = new Label("Loading...",new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
     }
 
     @Override
