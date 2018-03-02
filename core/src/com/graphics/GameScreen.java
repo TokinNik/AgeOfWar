@@ -1,5 +1,6 @@
 package com.graphics;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -7,6 +8,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
@@ -40,7 +43,6 @@ public class GameScreen implements Screen, InputProcessor
         userForpost = UserForpost.getInstance();
         gameForpost = GameForpost.getInstance();
         gui = new GameGUI();
-        Resources.state = State.GAME;
         units = new Array<Unit>();
         prefX = -1;
         //prefY = -1;
@@ -51,7 +53,9 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public void show()
     {
-        final Image bg = Resources.BG_FOREST;
+        Resources.state = State.GAME;
+        CharacterController.setPause(false);
+        final Image bg = Resources.bgForest;
         bg.setBounds(0, 0, Resources.GAME_WIDTH, Resources.GAME_HEIGHT);
         stage.addActor(bg);
 
@@ -61,9 +65,100 @@ public class GameScreen implements Screen, InputProcessor
         stage.addActor(userF);
         stage.addActor(gameF);
 
-        InputMultiplexer inputMultiplexer = new InputMultiplexer(this, gui);
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(new GestureDetector(new GestureDetector.GestureListener() {
+            @Override
+            public boolean touchDown(float x, float y, int pointer, int button) {
+                return false;
+            }
+
+            @Override
+            public boolean tap(float x, float y, int count, int button) {
+                return false;
+            }
+
+            @Override
+            public boolean longPress(float x, float y) {
+                return false;
+            }
+
+            @Override
+            public boolean fling(float velocityX, float velocityY, int button) {
+                return false;
+            }
+
+            @Override
+            public boolean pan(float x, float y, float deltaX, float deltaY)
+            {
+                if (Resources.state == State.GAME && Gdx.app.getType() == Application.ApplicationType.Android)
+                    if (prefX != -1)//&& prefY != -1) //&& (camera.position.x >= Resources.WORLD_WIDTH_2 || prefX - screenX > 0)
+                    //&& (camera.position.x <= Resources.GAME_WIDTH - Resources.WORLD_WIDTH_2 || prefX - screenX < 0))
+                    {
+                        camera.translate(-deltaX, 0);
+                        if (camera.position.x - camera.viewportWidth/2 < 0)
+                            camera.position.x = camera.viewportWidth/2;
+                        if (camera.position.x + camera.viewportWidth/2 > Resources.GAME_WIDTH)
+                            camera.position.x = Resources.GAME_WIDTH - camera.viewportWidth/2;
+                        if (camera.position.y - camera.viewportHeight/2 < 0)
+                            camera.position.y = camera.viewportHeight/2;
+                        if (camera.position.y + camera.viewportHeight/2 > Resources.GAME_HEIGHT)
+                            camera.position.y = Resources.GAME_HEIGHT - camera.viewportHeight/2;
+                    }
+                prefX = x;
+                //prefY = screenY;
+                return false;
+            }
+
+            @Override
+            public boolean panStop(float x, float y, int pointer, int button) {
+                return false;
+            }
+
+            @Override
+            public boolean zoom(float initialDistance, float distance)
+            {
+                float amount = distance - initialDistance;
+                System.out.println("qwerty   " + amount);
+                if (amount < 0
+                        && camera.viewportHeight * 1.01f < Resources.GAME_HEIGHT
+                        && camera.viewportWidth * 1.01f < Resources.GAME_WIDTH )
+                {
+                    camera.viewportWidth *= 1.01f;
+                    camera.viewportHeight *= 1.01f;
+                    if (camera.position.x - camera.viewportWidth/2 < 0)
+                        camera.position.x = camera.viewportWidth/2;
+                    if (camera.position.x + camera.viewportWidth/2 > Resources.GAME_WIDTH)
+                        camera.position.x = Resources.GAME_WIDTH - camera.viewportWidth/2;
+//            if (camera.position.y - camera.viewportHeight/2 < 0)
+//                camera.position.y = camera.viewportHeight/2;
+//            if (camera.position.y + camera.viewportHeight/2 > Resources.GAME_HEIGHT)
+//                camera.position.y = Resources.GAME_HEIGHT - camera.viewportHeight/2;
+                    camera.position.y = camera.viewportHeight/2;
+                }
+                if (amount > 0
+                        && camera.viewportHeight * 0.7f >= Resources.WORLD_HEIGHT
+                        && camera.viewportWidth * 0.7f >= Resources.WORLD_WIDTH)
+                {
+                    camera.viewportWidth *= 0.99f;
+                    camera.viewportHeight *= 0.99f;
+                    camera.position.y = camera.viewportHeight/2;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+                return false;
+            }
+
+            @Override
+            public void pinchStop() {
+
+            }
+        }),this, gui);
         Gdx.input.setInputProcessor(inputMultiplexer);
         Gdx.input.setCursorCatched(false);
+        Gdx.input.setCatchMenuKey(true);
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
@@ -98,8 +193,8 @@ public class GameScreen implements Screen, InputProcessor
         else
         {
             Resources.game.batch.begin();
-            Resources.BG_FOREST_BLUR.setBounds(0, 0, Resources.GAME_WIDTH, Resources.GAME_HEIGHT);
-            Resources.BG_FOREST_BLUR.draw(Resources.game.batch, 1);
+            Resources.bgForestBlur.setBounds(0, 0, Resources.GAME_WIDTH, Resources.GAME_HEIGHT);
+            Resources.bgForestBlur.draw(Resources.game.batch, 1);
             Resources.game.batch.end();
         }
 
@@ -115,20 +210,19 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public void pause()
     {
-        Resources.state = State.PAUSE;
-        CharacterController.setPause(true);
+        gui.setWindowMenu();
     }
 
     @Override
     public void resume()
     {
-        Resources.state = State.GAME;
-        CharacterController.setPause(false);
+        Resources.reload();
     }
 
     @Override
-    public void hide() {
-
+    public void hide()
+    {
+       gui.setWindowMenu();
     }
 
     @Override
@@ -137,6 +231,7 @@ public class GameScreen implements Screen, InputProcessor
         stage.dispose();
         gui.dispose();
         gui.dispose();
+        System.out.println("Disposed:  Game Screen");
     }
 
     static void setUnit(CharacterType type) throws NotEnoughMonyException
@@ -186,7 +281,7 @@ public class GameScreen implements Screen, InputProcessor
             System.out.println("Delete Unit type " + u.getType() + " direction " + u.getDirection());
         }
         units.clear();
-        stage.clear();
+        //stage.clear();
     }
 
     static UserForpost getUserForpost() {
@@ -200,6 +295,8 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public boolean keyDown(int keycode)
     {
+        if (keycode == Input.Keys.BACK)
+            gui.setWindowExit();
         return false;
     }
 
@@ -229,7 +326,7 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
-        if (Resources.state == State.GAME)
+        if (Resources.state == State.GAME && Gdx.app.getType() == Application.ApplicationType.Desktop)
             if (prefX != -1)//&& prefY != -1) //&& (camera.position.x >= Resources.WORLD_WIDTH_2 || prefX - screenX > 0)
                     //&& (camera.position.x <= Resources.GAME_WIDTH - Resources.WORLD_WIDTH_2 || prefX - screenX < 0))
             {

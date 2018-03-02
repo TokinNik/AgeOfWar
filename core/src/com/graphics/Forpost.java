@@ -25,7 +25,7 @@ public class Forpost extends Actor
         if (dir == 1)
         {
             animation = Resources.fortDamageAnimationL;
-            forpostImage = Resources.FORT_U;
+            forpostImage = Resources.fortU;
             forpostImage.setBounds(0,0,600,400);
             setBounds(0,0,600,400);
             this.currentHP = GameScreen.getUserForpost().getMaxHealth();
@@ -33,7 +33,7 @@ public class Forpost extends Actor
         if (dir == -1)
         {
             animation = Resources.fortDamageAnimationR;
-            forpostImage = Resources.FORT_G;
+            forpostImage = Resources.fortG;
             forpostImage.setBounds(Resources.GAME_WIDTH - 600, 0, 600, 400);
             setBounds(Resources.GAME_WIDTH - 600, 0, 600, 400);
             this.currentHP = GameScreen.getGameForpost().getMaxHealth();

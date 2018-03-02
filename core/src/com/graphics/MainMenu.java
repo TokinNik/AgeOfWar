@@ -2,6 +2,9 @@ package com.graphics;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -21,7 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class MainMenu implements Screen
+public class MainMenu implements Screen,InputProcessor
 {
     private static Skin skin;
     private Stage stage;
@@ -34,14 +37,13 @@ public class MainMenu implements Screen
         camera.setToOrtho(false, Resources.WORLD_WIDTH, Resources.WORLD_HEIGHT);
         stage = new Stage(new FitViewport(Resources.WORLD_WIDTH, Resources.WORLD_HEIGHT));
         state = true;
-        
     }
 
     @Override
     public void show()
     {
         skin = new Skin();
-        skin.addRegions(Resources.GUI_ATLAS);
+        skin.addRegions(Resources.guiAtlas);
 
         TextButton.TextButtonStyle tbs = new TextButton.TextButtonStyle();
         tbs.up = skin.getDrawable("text_button_s1");
@@ -59,7 +61,7 @@ public class MainMenu implements Screen
 
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal(Resources.menuMusicPath));
         bgMusic.setLooping(true);
-        bgMusic.setVolume(Options.musicVolume);
+        bgMusic.setVolume(Resources.OPTIONS.getFloat("Music Volume"));
         bgMusic.play();
 
         final TextButton bNewGame = new TextButton("New Game", Resources.tbs_s);
@@ -126,8 +128,11 @@ public class MainMenu implements Screen
         stage.addActor(bAboutUs);
 
 
-        Gdx.input.setInputProcessor(stage);
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(this, stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
         Gdx.input.setCursorCatched(false);
+        Gdx.input.setCatchMenuKey(true);
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
@@ -144,24 +149,29 @@ public class MainMenu implements Screen
     public void resize(int width, int height)   {}
 
     @Override
-    public void pause() {
-
+    public void pause()
+    {
+        state = false;
     }
 
     @Override
-    public void resume() {
-
+    public void resume()
+    {
+        state = true;
+        Resources.reload();
     }
 
     @Override
-    public void hide() {
-
+    public void hide()
+    {
+        state = false;
     }
 
     @Override
     public void dispose()
     {
         skin.dispose();
+        System.out.println("Disposed:  Main Menu");
     }
 
     private void setWindowExit()
@@ -182,6 +192,7 @@ public class MainMenu implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                dispose();
                 Gdx.app.exit();
             }
         });
@@ -210,7 +221,7 @@ public class MainMenu implements Screen
 
         final Group window = new Group();
 
-        final Image bg = new Image(Resources.GUI_SKIN.getDrawable("menu_bg_1"));
+        final Image bg = new Image(Resources.guiSkin.getDrawable("menu_bg_1"));
         bg.setPosition(Resources.WORLD_WIDTH_2 - 150, Resources.WORLD_HEIGHT_2 -215);
 
         final Label optionsL = new Label("Options",Resources.simpleLSWhite);
@@ -219,17 +230,18 @@ public class MainMenu implements Screen
         final Label musicL = new Label("Music volume", Resources.simpleLSWhite);
         musicL.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 100);
 
-        Slider.SliderStyle slider = new Slider.SliderStyle(Resources.GUI_SKIN.getDrawable("slide_line"),
-                                                        Resources.GUI_SKIN.getDrawable("slide_point"));
+        Slider.SliderStyle slider = new Slider.SliderStyle(Resources.guiSkin.getDrawable("slide_line"),
+                                                        Resources.guiSkin.getDrawable("slide_point"));
         final Slider musicS = new Slider(0f, 1f, 0.1f  , false, slider);
         musicS.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 85);
         musicS.setSize(250 , musicS.getHeight());
-        musicS.setValue(Options.musicVolume);
+        musicS.setValue(Resources.OPTIONS.getFloat("Music Volume"));
         musicS.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Options.musicVolume = musicS.getValue();
-                bgMusic.setVolume(Options.musicVolume);
+                Resources.OPTIONS.putFloat("Music Volume", musicS.getValue());
+                Resources.OPTIONS.flush();
+                bgMusic.setVolume(Resources.OPTIONS.getFloat("Music Volume"));
             }
         });
 
@@ -239,11 +251,12 @@ public class MainMenu implements Screen
         final Slider effectS = new Slider(0f, 1f, 0.1f  , false, slider);
         effectS.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 35);
         effectS.setSize(250 , effectS.getHeight());
-        effectS.setValue(Options.effectVolume);
+        effectS.setValue(Resources.OPTIONS.getFloat("Effect Volume"));
         effectS.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Options.effectVolume = effectS.getValue();
+                Resources.OPTIONS.putFloat("Effect Volume", effectS.getValue());
+                Resources.OPTIONS.flush();
             }
         });
 
@@ -268,5 +281,50 @@ public class MainMenu implements Screen
         window.addActor(returnB);
 
         stage.addActor(window);
+    }
+
+    @Override
+    public boolean keyDown(int keycode)
+    {
+        if (keycode == Input.Keys.BACK && state)
+            setWindowExit();
+        if (keycode == Input.Keys.MENU && state)
+            setWindowOptions();
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
