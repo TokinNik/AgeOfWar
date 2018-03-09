@@ -3,10 +3,13 @@ package com.controller;
 import com.model.Character;
 import com.model.CharacterType;
 import com.model.GameObject;
+import com.model.Rider;
 import com.model.UserForpost;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class UserArmyChecker implements Runnable {
@@ -31,10 +34,22 @@ public class UserArmyChecker implements Runnable {
                 break;
             }
 
+            Set<GameObject> gameObjectsInEffectedArea = new HashSet<GameObject>();
             float tempFirstUserPosition = UserForpost.CLOSEST_USER_OBJECT;
             GameObject tempObject = UserForpost.getInstance();
 
+            if (CharacterController.getUserGave() != null) {
+                GameObject object = CharacterController.getUserGave();
+                tempFirstUserPosition = object.getPosition();
+                tempObject = object;
+            }
+
+            if (tempFirstUserPosition + Rider.AFFECTED_AREA > CharacterController.clothestGameObjectPosition) {
+                gameObjectsInEffectedArea.add(tempObject);
+            }
+
             Iterator<Map.Entry<Character, CharacterType>> iterator = CharacterController.getUserArmy().entrySet().iterator();
+
             while (iterator.hasNext()) {
                 Character temp = iterator.next().getKey();
 
@@ -45,11 +60,16 @@ public class UserArmyChecker implements Runnable {
                         tempFirstUserPosition = temp.getPosition();
                         tempObject = temp;
                     }
+
+                    if (temp.getPosition() + Rider.AFFECTED_AREA > CharacterController.clothestGameObjectPosition) {
+                        gameObjectsInEffectedArea.add(temp);
+                    }
                 }
             }
 
             CharacterController.clothestUserObject = tempObject;
             CharacterController.clothestUserObjectPosition = tempFirstUserPosition;
+            CharacterController.setGroupOfClothestUserObject(gameObjectsInEffectedArea);
 
             try {
                 TimeUnit.MILLISECONDS.sleep(100);

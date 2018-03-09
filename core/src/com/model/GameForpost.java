@@ -5,7 +5,7 @@ public class GameForpost extends GameObject {
     public static final float CLOSEST_NPC_OBJECT = 900;
 
     private GameForpost() {
-        super(1000, false, 1900, StageOfEvolution.FIRST);
+        super(1000, false, 1000, StageOfEvolution.FIRST);
     }
 
     public static synchronized GameForpost getInstance() {

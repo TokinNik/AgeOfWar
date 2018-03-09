@@ -27,6 +27,10 @@ public class CharacterController {
     private static boolean gameFinished = false;
     private static int totalScore = 0;
     private static int  totalMoney = 100;
+    private static Gave userGave;
+    private static Gave gameGave;
+    private static Set<GameObject> groupOfClothestUserObject = new HashSet<GameObject>();
+    private static Set<GameObject> groupOfClothestGameObject = new HashSet<GameObject>();
     public static float clothestUserObjectPosition = UserForpost.CLOSEST_USER_OBJECT;
     public static GameObject clothestUserObject = UserForpost.getInstance();
     public static float clothestGameObjectPosition = GameForpost.CLOSEST_NPC_OBJECT;
@@ -97,8 +101,6 @@ public class CharacterController {
     public static Map<Character, CharacterType> getUserArmy() {return userArmy;}
     public static int getUserArmyCount(){return userArmy.size();}
 
-    public static void setUserArmy(Map<Character, CharacterType> userArmy) {CharacterController.userArmy = userArmy;}
-
     public static Map<Character, CharacterType> getGameArmy() {
         return gameArmy;
     }
@@ -126,6 +128,38 @@ public class CharacterController {
 
     public static void addTotalScore(int totalScore) {
         CharacterController.totalScore += totalScore;
+    }
+
+    public static void setUserGave(Gave userGave) {
+        CharacterController.userGave = userGave;
+    }
+
+    public static Gave getUserGave() {
+        return userGave;
+    }
+
+    public static void setGameGave(Gave gameGave) {
+        CharacterController.gameGave = gameGave;
+    }
+
+    public static Gave getGameGave() {
+        return gameGave;
+    }
+
+    public static void setGroupOfClothestUserObject(Set<GameObject> groupOfClothestUserObject) {
+        CharacterController.groupOfClothestUserObject = groupOfClothestUserObject;
+    }
+
+    public static Set<GameObject> getGroupOfClothestUserObject() {
+        return groupOfClothestUserObject;
+    }
+
+    public static void setGroupOfClothestGameObject(Set<GameObject> groupOfClothestGameObject) {
+        CharacterController.groupOfClothestGameObject = groupOfClothestGameObject;
+    }
+
+    public static Set<GameObject> getGroupOfClothestGameObject() {
+        return groupOfClothestGameObject;
     }
 
     public static void addMoney(int delta) {

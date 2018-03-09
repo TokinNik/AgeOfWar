@@ -58,7 +58,19 @@ public abstract class Character extends GameObject implements Runnable {
             if (isUsers()) {
                 if ((CharacterController.clothestGameObjectPosition - getPosition()) <= getAffectedArea()) {
                     setState(CharacterState.REDYTOFIGHT);
-                    fight(CharacterController.clothestGameObject);
+                    if (type == CharacterType.RIDER) {
+
+                        for (GameObject object: CharacterController.getGroupOfClothestGameObject()) {
+                            fight(object);
+                        }
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(800);
+                        } catch (InterruptedException e) {
+                            return;
+                        }
+                    } else {
+                        fight(CharacterController.clothestGameObject);
+                    }
                 } else {
                     setState(CharacterState.REDYTOGO);
                     move();
@@ -66,7 +78,19 @@ public abstract class Character extends GameObject implements Runnable {
             } else {
                 if ((getPosition() - CharacterController.clothestUserObjectPosition) <= getAffectedArea()) {
                     setState(CharacterState.REDYTOFIGHT);
-                    fight(CharacterController.clothestUserObject);
+                    if (type == CharacterType.RIDER) {
+                        for (GameObject object: CharacterController.getGroupOfClothestUserObject()) {
+                            fight(object);
+                        }
+
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(800);
+                        } catch (InterruptedException e) {
+                            return;
+                        }
+                    } else {
+                        fight(CharacterController.clothestUserObject);
+                    }
                 } else {
                     move();
                 }
