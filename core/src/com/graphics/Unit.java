@@ -37,7 +37,7 @@ public class Unit extends Actor
         levelL = new Label( character.getStage().toString() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
         levelL.setPosition(getX() - 5, getY() + getHeight() + 20);
 
-        hBar = new Image(Resources.GUI_SKIN.getDrawable("hBar_green"));
+        hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
     }
 
@@ -51,7 +51,7 @@ public class Unit extends Actor
         levelL = new Label( character.getStage() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 
-        hBar = new Image(Resources.GUI_SKIN.getDrawable("hBar_green"));
+        hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
     }
 
@@ -67,9 +67,9 @@ public class Unit extends Actor
 
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth() / character.getMaxHealth(), 10);
         if (character.getHealth() <= character.getMaxHealth() * 0.6f)
-            hBar.setDrawable(Resources.GUI_SKIN.getDrawable("hBar_yellow"));
+            hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
         if (character.getHealth() <= character.getMaxHealth() * 0.3f)
-            hBar.setDrawable(Resources.GUI_SKIN.getDrawable("hBar_red"));
+            hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
 
         batch.draw(currentFrame, getX(), getY());
         levelL.draw(batch, parentAlpha);
