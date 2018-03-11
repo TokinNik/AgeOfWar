@@ -41,6 +41,7 @@ public class GameGUI extends Stage implements InputProcessor
     private final Label unitCost_5L;
     private Button menuB;
     private Button evolveB;
+    private Button shieldB;
     private Music bgMusic;
 
     GameGUI ()
@@ -222,7 +223,7 @@ public class GameGUI extends Stage implements InputProcessor
                     {
                         GameScreen.setUnit(CharacterType.INCREDIBLE);
                         updateLabels();
-                        System.out.println("UNIT 4");
+                        System.out.println("UNIT 5");
                     } catch (NotEnoughMonyException e)
                     {
                         System.out.println("!!!!!!!!!!!!!Money!!!!!!!!!!!!!!");
@@ -230,6 +231,20 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
         unitsG.addActor(setUnit_5B);
+
+//        Button setUnit_6B = new Button(bs);
+//        setUnit_6B.setPosition(550, Resources.WORLD_HEIGHT - 100);
+//        setUnit_6B.setSize(100, 100);
+//        setUnit_6B.addListener(new ClickListener()
+//        {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y)
+//            {
+//                if (Resources.state == State.GAME)
+//                    GameScreen.setArrow(1, 100, 100, 1000, 100);
+//            }
+//        });
+//        unitsG.addActor(setUnit_6B);
         addActor(unitsG);
 
         menuB = new Button(new Button.ButtonStyle(
@@ -272,6 +287,23 @@ public class GameGUI extends Stage implements InputProcessor
         });
         evolveB.setVisible(false);
         addActor(evolveB);
+
+        shieldB = new Button(new Button.ButtonStyle(
+                Resources.guiSkin.getDrawable("shield_b1"),
+                Resources.guiSkin.getDrawable("shield_b2"),
+                Resources.guiSkin.getDrawable("shield_b1")));
+        shieldB.setBounds(Resources.WORLD_WIDTH - 110, Resources.WORLD_HEIGHT - 130, 100,120);
+        shieldB.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (Resources.state == State.GAME)
+                    GameScreen.setShield(true);
+            }
+        });
+        //shieldB.setVisible(false);
+        addActor(shieldB);
 
         hBarU = new Image(Resources.guiSkin.getDrawable("hBar_green"));
         hBarU.setPosition(enemyBaseL.getX() + enemyBaseL.getWidth() + 25, 30);
@@ -355,7 +387,7 @@ public class GameGUI extends Stage implements InputProcessor
         final Label l = new Label("Menu", Resources.simpleLSWhite);
         l.setPosition(Resources.WORLD_WIDTH_2 - l.getPrefWidth()/2, Resources.WORLD_HEIGHT_2 + 155);
 
-        final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_m);
+        final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_medium);
         toMenuB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 - 200);
         toMenuB.addListener(new ClickListener()
         {
@@ -370,7 +402,7 @@ public class GameGUI extends Stage implements InputProcessor
                 dispose();
             }
         });
-        final TextButton optionsB = new TextButton("Options", Resources.tbs_m);
+        final TextButton optionsB = new TextButton("Options", Resources.tbs_medium);
         optionsB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 - 100);
         optionsB.addListener(new ClickListener()
         {
@@ -381,9 +413,9 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
 
-        final TextButton resetB = new TextButton("Reset Level", Resources.tbs_m);
+        final TextButton resetB = new TextButton("Reset Level", Resources.tbs_medium);
 
-        final TextButton continueB = new TextButton("Continue", Resources.tbs_m);
+        final TextButton continueB = new TextButton("Continue", Resources.tbs_medium);
         continueB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 100);
         continueB.addListener(new ClickListener()
         {
@@ -435,6 +467,16 @@ public class GameGUI extends Stage implements InputProcessor
         final Label l;
         if (win)
         {
+            if (Resources.currentLvL == 1)
+            {
+                Resources.OPTIONS.putBoolean("Lvl 2 key", true);
+                Resources.OPTIONS.flush();
+            }
+            if (Resources.currentLvL == 2)
+            {
+                Resources.OPTIONS.putBoolean("Lvl 3 key", true);
+                Resources.OPTIONS.flush();
+            }
             l = new Label("Congratulation!!!", Resources.simpleLSWhite);
             l.setPosition(Resources.WORLD_WIDTH_2 - l.getPrefWidth()/2, Resources.WORLD_HEIGHT_2 + 155);
             enemyBaseL.setText("| Enemy Base Health: " + 0 + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
@@ -446,7 +488,7 @@ public class GameGUI extends Stage implements InputProcessor
             yourBaseL.setText("| Your Base Health: " + 0 + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         }
 
-        final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_m);
+        final TextButton toMenuB = new TextButton("Exit to Menu", Resources.tbs_medium);
         toMenuB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 - 100);
         toMenuB.addListener(new ClickListener()
         {
@@ -461,17 +503,30 @@ public class GameGUI extends Stage implements InputProcessor
                 dispose();
             }
         });
-        final TextButton continueB = new TextButton("Continue", Resources.tbs_m);
+
+        final TextButton continueB = new TextButton("Continue", Resources.tbs_medium);
         continueB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 + 100);
-        continueB.addListener(new ClickListener()
-        {
+        continueB.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                //Переход на следующий уровень
+            public void clicked(InputEvent event, float x, float y) {
+                window.addAction(Actions.removeActor());
+
+                if (Resources.currentLvL == 1)
+                    Resources.currentLvL = 2;
+                if (Resources.currentLvL == 2)
+                    Resources.currentLvL = 3;
+
+                GameScreen.clear();
+                CharacterController.reset();
+                CharacterController.start();
+                Resources.state = State.GAME;
+                updateCost();
             }
         });
-        final TextButton resetB = new TextButton("Reset Level", Resources.tbs_m);
+        if (!win)
+            continueB.setVisible(false);
+
+        final TextButton resetB = new TextButton("Reset Level", Resources.tbs_medium);
         resetB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2);
         resetB.addListener(new ClickListener()
         {
@@ -539,7 +594,7 @@ public class GameGUI extends Stage implements InputProcessor
             }
         });
 
-        final TextButton returnB = new TextButton("Return", Resources.tbs_m);
+        final TextButton returnB = new TextButton("Return", Resources.tbs_medium);
         returnB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 - 200);
         returnB.addListener(new ClickListener()
         {
@@ -574,7 +629,7 @@ public class GameGUI extends Stage implements InputProcessor
         final Label l = new Label("Are you sure you want to exit?", Resources.simpleLSWhite);
         l.setPosition((Resources.WORLD_WIDTH_2)-l.getPrefWidth()/2, (Resources.WORLD_HEIGHT_2)+55);
 
-        final TextButton bYes = new TextButton("Yes", Resources.tbs_s);
+        final TextButton bYes = new TextButton("Yes", Resources.tbs_small);
         bYes.setPosition((Resources.WORLD_WIDTH_2)-125, (Resources.WORLD_HEIGHT_2));
         bYes.addListener(new ClickListener()
         {
@@ -585,7 +640,7 @@ public class GameGUI extends Stage implements InputProcessor
                 Gdx.app.exit();
             }
         });
-        final TextButton bNo = new TextButton("No", Resources.tbs_s);
+        final TextButton bNo = new TextButton("No", Resources.tbs_small);
         bNo.setPosition((Resources.WORLD_WIDTH_2)+25, (Resources.WORLD_HEIGHT_2));
         bNo.addListener(new ClickListener()
         {

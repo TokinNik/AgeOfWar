@@ -32,6 +32,8 @@ public class GameScreen implements Screen, InputProcessor
     //private static float prefY;
     private static UserForpost userForpost;
     private static GameForpost gameForpost;
+    private static Shield shieldU;
+    private static Shield shieldG;
 
     GameScreen ()
     {
@@ -65,6 +67,12 @@ public class GameScreen implements Screen, InputProcessor
         stage.addActor(userF);
         stage.addActor(gameF);
 
+        shieldU = new Shield(1);
+        shieldG = new Shield(-1);
+
+        stage.addActor(shieldG);
+        stage.addActor(shieldU);
+
         InputMultiplexer inputMultiplexer = new InputMultiplexer(new GestureDetector(new GestureDetector.GestureListener() {
             @Override
             public boolean touchDown(float x, float y, int pointer, int button) {
@@ -89,7 +97,7 @@ public class GameScreen implements Screen, InputProcessor
             @Override
             public boolean pan(float x, float y, float deltaX, float deltaY)
             {
-                if (Resources.state == State.GAME && Gdx.app.getType() == Application.ApplicationType.Android)
+                if (Resources.state == State.GAME)// && Gdx.app.getType() == Application.ApplicationType.Android)
                     if (prefX != -1)//&& prefY != -1) //&& (camera.position.x >= Resources.WORLD_WIDTH_2 || prefX - screenX > 0)
                     //&& (camera.position.x <= Resources.GAME_WIDTH - Resources.WORLD_WIDTH_2 || prefX - screenX < 0))
                     {
@@ -216,7 +224,6 @@ public class GameScreen implements Screen, InputProcessor
     @Override
     public void resume()
     {
-        Resources.reload();
     }
 
     @Override
@@ -243,6 +250,15 @@ public class GameScreen implements Screen, InputProcessor
         stage.addActor(unit);
     }
 
+    static void setShield(Boolean user)
+    {
+        System.out.println("Set Shield for " + (user ? "user" : "game"));
+        if(user)
+            shieldU.setActive(true);
+        else
+            shieldG.setActive(true);
+    }
+
     public static void setCompUnit(CharacterType type, Character character) throws NotEnoughMonyException
     {
         System.out.println("Set Unit type " + type);
@@ -250,6 +266,14 @@ public class GameScreen implements Screen, InputProcessor
         Unit unit = new Unit(type, character);
         units.add(unit);
         stage.addActor(unit);
+    }
+
+    static void setArrow(int dir, float x1, float y1, float x2, float y2)
+    {
+        System.out.println("Set Arrow " + x1 + " " + y1 + " " + x2 + " " + y2);
+
+        Arrow arrow = new Arrow(dir, x1, y1, x2, y2);
+        stage.addActor(arrow);
     }
 
     private void delUnit(int num)
@@ -267,6 +291,8 @@ public class GameScreen implements Screen, InputProcessor
             System.out.println("Delete Unit type " + u.getType() + " direction " + u.getDirection());
         }
         units.clear();
+        shieldG.setActive(false);
+        shieldU.setActive(false);
         prefX = -1;
         //prefY = -1;
         gui.updateLabels();

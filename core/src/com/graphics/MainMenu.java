@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.sun.org.apache.regexp.internal.RE;
 
 public class MainMenu implements Screen,InputProcessor
 {
@@ -49,12 +50,22 @@ public class MainMenu implements Screen,InputProcessor
         tbs.up = skin.getDrawable("text_button_s1");
         tbs.down = skin.getDrawable("text_button_s2");
         tbs.font = Resources.game.standartFontWhite;
-        Resources.tbs_s = tbs;
+        Resources.tbs_small = tbs;
         TextButton.TextButtonStyle tbs1 = new TextButton.TextButtonStyle();
         tbs1.up = skin.getDrawable("text_button_m1");
         tbs1.down = skin.getDrawable("text_button_m2");
         tbs1.font = Resources.game.standartFontWhite;
-        Resources.tbs_m = tbs1;
+        Resources.tbs_medium = tbs1;
+        TextButton.TextButtonStyle tbs2 = new TextButton.TextButtonStyle();
+        tbs2.up = skin.getDrawable("text_button_unactive_m");
+        tbs2.down = skin.getDrawable("text_button_unactive_m");
+        tbs2.font = Resources.game.standartFontWhite;
+        Resources.tbs_unactive_medium = tbs2;
+        TextButton.TextButtonStyle tbs3 = new TextButton.TextButtonStyle();
+        tbs3.up = skin.getDrawable("text_button_unactive_s");
+        tbs3.down = skin.getDrawable("text_button_unactive_s");
+        tbs3.font = Resources.game.standartFontWhite;
+        Resources.tbs_unactive_small = tbs3;
 
         Resources.simpleLSWhite = new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE);
         Resources.simpleLSBlack = new Label.LabelStyle(Resources.game.standartFontWhite, Color.BLACK);
@@ -64,7 +75,38 @@ public class MainMenu implements Screen,InputProcessor
         bgMusic.setVolume(Resources.OPTIONS.getFloat("Music Volume"));
         bgMusic.play();
 
-        final TextButton bNewGame = new TextButton("New Game", Resources.tbs_s);
+//        Resources.OPTIONS.putBoolean("Lvl 2 key", false);
+//        Resources.OPTIONS.putBoolean("Lvl 3 key", false);
+//        Resources.OPTIONS.flush();
+
+        final TextButton bNewGame = new TextButton("New Game", Resources.tbs_small);
+        final TextButton bOptions = new TextButton("Options", Resources.tbs_small);
+        final TextButton bAboutUs = new TextButton("About Us", Resources.tbs_small);
+
+        final TextButton bEasyLvl = new TextButton("Easy", Resources.tbs_small);
+        final TextButton bNormalLvl = new TextButton("Normal", Resources.tbs_unactive_small);
+        if (Resources.OPTIONS.getBoolean("Lvl 2 key"))
+            bNormalLvl.setStyle(Resources.tbs_small);
+        final TextButton bHardLvl = new TextButton("Hard", Resources.tbs_unactive_small);
+        if (Resources.OPTIONS.getBoolean("Lvl 3 key"))
+            bHardLvl.setStyle(Resources.tbs_small);
+        final TextButton bReturn = new TextButton("Return", Resources.tbs_small);
+
+        final TextButton bExit = new TextButton("Exit", Resources.tbs_small);
+
+        final Group mainMenu = new Group();
+        mainMenu.addActor(bNewGame);
+        mainMenu.addActor(bOptions);
+        mainMenu.addActor(bAboutUs);
+        mainMenu.addActor(bExit);
+
+        final Group choiceLvL = new Group();
+        choiceLvL.addActor(bEasyLvl);
+        choiceLvL.addActor(bNormalLvl);
+        choiceLvL.addActor(bHardLvl);
+        choiceLvL.addActor(bReturn);
+        choiceLvL.setVisible(false);
+
         bNewGame.setPosition((Resources.WORLD_WIDTH_2) - 75, (Resources.WORLD_HEIGHT_2) + 150);
         bNewGame.setSize(150, 50);
         bNewGame.addListener(new ClickListener()
@@ -73,14 +115,11 @@ public class MainMenu implements Screen,InputProcessor
             public void clicked(InputEvent event, float x, float y)
             {
                 System.out.println("New Game");
-                bgMusic.stop();
-                bgMusic.dispose();
-                Resources.game.setScreen(new LoadScreen(ScreenType.Game));
+                mainMenu.setVisible(false);
+                choiceLvL.setVisible(true);
             }
         });
-        stage.addActor(bNewGame);
 
-        final TextButton bOptions = new TextButton("Options", Resources.tbs_s);
         bOptions.setPosition((Resources.WORLD_WIDTH_2) - 75, (Resources.WORLD_HEIGHT_2) + 50);
         bOptions.setSize(150, 50);
         bOptions.addListener(new ClickListener()
@@ -92,7 +131,7 @@ public class MainMenu implements Screen,InputProcessor
                 System.out.println("Options");
             }
         });
-        final TextButton bAboutUs = new TextButton("About Us", Resources.tbs_s);
+
         bAboutUs.setPosition((Resources.WORLD_WIDTH_2) - 75, (Resources.WORLD_HEIGHT_2) - 50 );
         bAboutUs.setSize(150, 50);
         bAboutUs.addListener(new ClickListener()
@@ -108,7 +147,7 @@ public class MainMenu implements Screen,InputProcessor
         });
         if (Gdx.app.getType() == Application.ApplicationType.Desktop)
         {
-            final TextButton bExit = new TextButton("Exit", Resources.tbs_s);
+
             bExit.setPosition((Resources.WORLD_WIDTH_2) - 75, (Resources.WORLD_HEIGHT_2) - 150);
             bExit.setSize(150, 50);
             bExit.addListener(new ClickListener()
@@ -123,9 +162,73 @@ public class MainMenu implements Screen,InputProcessor
             stage.addActor(bExit);
         }
 
+        bEasyLvl.setPosition((Resources.WORLD_WIDTH_2) - 75, (Resources.WORLD_HEIGHT_2) + 150);
+        bEasyLvl.setSize(150, 50);
+        bEasyLvl.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                System.out.println("Easy LvL");
+                Resources.currentLvL = 1;
+                bgMusic.stop();
+                bgMusic.dispose();
+                Resources.game.setScreen(new LoadScreen(ScreenType.Game));
+            }
+        });
 
-        stage.addActor(bOptions);
-        stage.addActor(bAboutUs);
+        bNormalLvl.setPosition((Resources.WORLD_WIDTH_2) - 75, (Resources.WORLD_HEIGHT_2) + 50 );
+        bNormalLvl.setSize(150, 50);
+        bNormalLvl.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (Resources.OPTIONS.getBoolean("Lvl 2 key"))
+                {
+                    System.out.println("Normal LvL");
+                    Resources.currentLvL = 2;
+                    bgMusic.stop();
+                    bgMusic.dispose();
+                    Resources.game.setScreen(new LoadScreen(ScreenType.Game));
+                }
+            }
+        });
+
+        bHardLvl.setPosition((Resources.WORLD_WIDTH_2) - 75, (Resources.WORLD_HEIGHT_2) - 50 );
+        bHardLvl.setSize(150, 50);
+        bHardLvl.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (Resources.OPTIONS.getBoolean("Lvl 3 key"))
+                {
+                    System.out.println("Hard LvL");
+                    Resources.currentLvL = 3;
+                    bgMusic.stop();
+                    bgMusic.dispose();
+                    Resources.game.setScreen(new LoadScreen(ScreenType.Game));
+                }
+            }
+        });
+
+        bReturn.setPosition((Resources.WORLD_WIDTH_2) - 75, (Resources.WORLD_HEIGHT_2) - 150 );
+        bReturn.setSize(150, 50);
+        bReturn.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                System.out.println("Return");
+                mainMenu.setVisible(true);
+                choiceLvL.setVisible(false);
+            }
+        });
+
+
+        stage.addActor(mainMenu);
+        stage.addActor(choiceLvL);
 
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer(this, stage);
@@ -158,7 +261,6 @@ public class MainMenu implements Screen,InputProcessor
     public void resume()
     {
         state = true;
-        Resources.reload();
     }
 
     @Override
@@ -185,7 +287,7 @@ public class MainMenu implements Screen,InputProcessor
         final Label l = new Label("Are you sure you want to exit?", Resources.simpleLSWhite);
         l.setPosition((Resources.WORLD_WIDTH_2)-l.getPrefWidth()/2, (Resources.WORLD_HEIGHT_2)+55);
 
-        final TextButton bYes = new TextButton("Yes", Resources.tbs_s);
+        final TextButton bYes = new TextButton("Yes", Resources.tbs_small);
         bYes.setPosition((Resources.WORLD_WIDTH_2)-125, (Resources.WORLD_HEIGHT_2));
         bYes.addListener(new ClickListener()
         {
@@ -196,7 +298,7 @@ public class MainMenu implements Screen,InputProcessor
                 Gdx.app.exit();
             }
         });
-        final TextButton bNo = new TextButton("No", Resources.tbs_s);
+        final TextButton bNo = new TextButton("No", Resources.tbs_small);
         bNo.setPosition((Resources.WORLD_WIDTH_2)+25, (Resources.WORLD_HEIGHT_2));
         bNo.addListener(new ClickListener()
         {
@@ -260,7 +362,7 @@ public class MainMenu implements Screen,InputProcessor
             }
         });
 
-        final TextButton returnB = new TextButton("Return", Resources.tbs_m);
+        final TextButton returnB = new TextButton("Return", Resources.tbs_medium);
         returnB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2 - 200);
         returnB.addListener(new ClickListener()
         {

@@ -5,91 +5,112 @@ filter: Nearest,Nearest
 repeat: none
 bg_gui_bot
   rotate: false
-  xy: 1, 449
+  xy: 1, 931
   size: 1000, 50
   orig: 1000, 50
   offset: 0, 0
   index: -1
 choise_window_bg
   rotate: false
-  xy: 1, 347
+  xy: 1, 829
   size: 600, 100
   orig: 600, 100
   offset: 0, 0
   index: -1
-exit_window_bg
-  rotate: false
-  xy: 1, 245
-  size: 300, 100
-  orig: 300, 100
-  offset: 0, 0
-  index: -1
 menu_bg
   rotate: false
-  xy: 603, 47
+  xy: 1, 427
   size: 300, 400
   orig: 300, 400
   offset: 0, 0
   index: 1
+shield_b1
+  rotate: false
+  xy: 1, 180
+  size: 200, 245
+  orig: 200, 245
+  offset: 0, 0
+  index: -1
+shield_b2
+  rotate: false
+  xy: 303, 582
+  size: 200, 245
+  orig: 200, 245
+  offset: 0, 0
+  index: -1
+exit_window_bg
+  rotate: false
+  xy: 603, 829
+  size: 300, 100
+  orig: 300, 100
+  offset: 0, 0
+  index: -1
 menu_b1
   rotate: false
-  xy: 1, 143
+  xy: 1, 78
   size: 200, 100
   orig: 200, 100
   offset: 0, 0
   index: -1
 menu_b2
   rotate: false
-  xy: 303, 245
+  xy: 303, 480
   size: 200, 100
   orig: 200, 100
   offset: 0, 0
   index: -1
 text_button_m1
   rotate: false
-  xy: 203, 193
+  xy: 505, 777
   size: 250, 50
   orig: 250, 50
   offset: 0, 0
   index: -1
 text_button_m2
   rotate: false
-  xy: 203, 141
+  xy: 505, 725
+  size: 250, 50
+  orig: 250, 50
+  offset: 0, 0
+  index: -1
+text_button_unactive_m
+  rotate: false
+  xy: 505, 673
   size: 250, 50
   orig: 250, 50
   offset: 0, 0
   index: -1
 hBar_green
   rotate: false
-  xy: 1, 131
+  xy: 1, 66
   size: 200, 10
   orig: 200, 10
   offset: 0, 0
   index: -1
 hBar_red
   rotate: false
-  xy: 1, 119
+  xy: 303, 468
   size: 200, 10
   orig: 200, 10
   offset: 0, 0
   index: -1
 hBar_yellow
   rotate: false
-  xy: 203, 129
+  xy: 505, 661
   size: 200, 10
   orig: 200, 10
   offset: 0, 0
   index: -1
 slide_line
   rotate: false
-  xy: 1, 107
+  xy: 1, 54
   size: 200, 10
   orig: 200, 10
   offset: 0, 0
   index: -1
 evolve_b1
   rotate: false
-  xy: 1, 54
+  xy: 505, 608
   size: 150, 51
   orig: 150, 51
   offset: 0, 0
@@ -101,51 +122,65 @@ evolve_b2
   orig: 150, 51
   offset: 0, 0
   index: -1
+evolve_unactive_b
+  rotate: false
+  xy: 505, 555
+  size: 150, 51
+  orig: 150, 51
+  offset: 0, 0
+  index: -1
 unit_cell_s1
   rotate: false
-  xy: 905, 347
+  xy: 757, 727
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 unit_cell_s2
   rotate: false
-  xy: 905, 245
+  xy: 203, 325
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 text_button_s1
   rotate: false
-  xy: 905, 193
+  xy: 505, 503
   size: 100, 50
   orig: 100, 50
   offset: 0, 0
   index: -1
 text_button_s2
   rotate: false
-  xy: 905, 141
+  xy: 757, 675
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+text_button_unactive_s
+  rotate: false
+  xy: 203, 273
   size: 100, 50
   orig: 100, 50
   offset: 0, 0
   index: -1
 exitButton2
   rotate: false
-  xy: 505, 300
+  xy: 905, 884
   size: 45, 45
   orig: 45, 45
   offset: 0, 0
   index: -1
 exitButton3
   rotate: false
-  xy: 455, 198
+  xy: 657, 614
   size: 45, 45
   orig: 45, 45
   offset: 0, 0
   index: -1
 slide_point
   rotate: false
-  xy: 203, 112
+  xy: 1003, 966
   size: 15, 15
   orig: 15, 15
   offset: 0, 0

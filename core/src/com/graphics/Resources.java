@@ -28,23 +28,42 @@ public class Resources
     public static final float GAME_WIDTH_2 = GAME_WIDTH / 2;
     public static final float GAME_HEIGHT_2 = GAME_HEIGHT / 2;
     public static final Preferences OPTIONS = Gdx.app.getPreferences("Options");
+    public static int currentLvL = 1;
     public static Label.LabelStyle simpleLSWhite;
     public static Label.LabelStyle simpleLSBlack;
     public static State state = State.GAME;
     public static Start game;
     public static Animation<TextureRegion> testAnimationR = setAnim("units/example/runner_testR.png", 6, 5, 0.025f);
     public static Animation<TextureRegion> testAnimationL = setAnim("units/example/runner_testL.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> greenAnimationR = setAnim("units/example/runner_greenR.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> greenAnimationL = setAnim("units/example/runner_greenL.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> yellowAnimationR = setAnim("units/example/runner_yellowR.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> yellowAnimationL = setAnim("units/example/runner_yellowL.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> redAnimationR = setAnim("units/example/runner_redR.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> redAnimationL = setAnim("units/example/runner_redL.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> blueAnimationR = setAnim("units/example/runner_blueR.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> blueAnimationL = setAnim("units/example/runner_blueL.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> purpleAnimationR = setAnim("units/example/runner_purpleR.png", 6, 5, 0.025f);
+    public static Animation<TextureRegion> purpleAnimationL = setAnim("units/example/runner_purpleL.png", 6, 5, 0.025f);
     public static Animation<TextureRegion> fortDamageAnimationL = setAnim("units/caveL_damage_anim.png", 2, 1, 0.1f);
     public static Animation<TextureRegion> fortDamageAnimationR = setAnim("units/caveR_damage_anim.png", 2, 1, 0.1f);
+    public static Animation<TextureRegion> shieldDamageAnimationL = setAnim("units/shieldL_damage_anim.png", 2, 1, 0.1f);
+    public static Animation<TextureRegion> shieldDamageAnimationR = setAnim("units/shieldR_damage_anim.png", 2, 1, 0.1f);
     public static TextureAtlas guiAtlas = new TextureAtlas("gui/gui.atlas");
     public static Skin guiSkin = new Skin(guiAtlas);
-    public static TextButton.TextButtonStyle tbs_s;
-    public static TextButton.TextButtonStyle tbs_m;
+    public static TextButton.TextButtonStyle tbs_small;
+    public static TextButton.TextButtonStyle tbs_medium;
+    public static TextButton.TextButtonStyle tbs_unactive_small;
+    public static TextButton.TextButtonStyle tbs_unactive_medium;
     public static Image bgForest = new Image(new Texture("gui/forest_bg.jpg"));//android/assets
     public static Image bgForestBlur = new Image(new Texture("gui/forest_blur_bg.jpg"));
     public static Image fortU = new Image(new Texture("units/caveL.png"));
     public static Image fortG = new Image(new Texture("units/caveR.png"));
-    public static Image arrow = new Image(new Texture("units/example/arrow1.jpg"));
+    public static Image shieldU = new Image(new Texture("units/shieldL.png"));
+    public static Image shieldG = new Image(new Texture("units/shieldR.png"));
+    public static Texture arrowL = new Texture("units/example/arrowL_black.png");
+    public static Texture arrowR = new Texture("units/example/arrowR_black.png");
+    public static Texture arrow = new Texture("units/example/arrowT.jpg");
     public static Animation<TextureRegion> loadAnimation = setAnim("gui/load_anim.png", 5, 1, 0.5f);
     public static String menuMusicPath = "music/main_menu.mp3";
     public static String game1MusicPath = "music/in_game_1.mp3";
@@ -81,24 +100,5 @@ public class Resources
         tbs.down = guiSkin.getDrawable(name + "2");
         tbs.font = game.standartFontWhite;
         return tbs;
-    }
-
-    public static void reload()
-    {
-        System.out.println("Reload-------");
-//        tbs_s = setTBS(1);
-//        tbs_m = setTBS(2);
-//        testAnimationR = setAnim("units/example/runner_testR.png", 6, 5, 0.025f);
-//        testAnimationL = setAnim("units/example/runner_testL.png", 6, 5, 0.025f);
-//        fortDamageAnimationL = setAnim("units/caveL_damage_anim.png", 2, 1, 0.1f);
-//        fortDamageAnimationR = setAnim("units/caveR_damage_anim.png", 2, 1, 0.1f);
-//        guiAtlas = new TextureAtlas("gui/gui.atlas");
-//        guiSkin = new Skin(guiAtlas);
-//        bgForest = new Image(new Texture("gui/forest_bg.jpg"));//android/assets
-//        bgForestBlur = new Image(new Texture("gui/forest_blur_bg.jpg"));
-//        fortU = new Image(new Texture("units/caveL.png"));
-//        Image FORT_G = new Image(new Texture("units/caveR.png"));
-//        Image ARROW = new Image(new Texture("units/example/arrow1.jpg"));
-//        Animation<TextureRegion> LOAD_ANIMATION = setAnim("gui/load_anim.png", 5, 1, 0.5f);
     }
 }

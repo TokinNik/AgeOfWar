@@ -90,7 +90,7 @@ public class LoadScreen implements Screen, InputProcessor
     @Override
     public void resume()
     {
-        Resources.reload();
+
     }
 
     @Override
@@ -117,7 +117,7 @@ public class LoadScreen implements Screen, InputProcessor
         final Label l = new Label("Are you sure you want to exit?", Resources.simpleLSWhite);
         l.setPosition((Resources.WORLD_WIDTH_2)-l.getPrefWidth()/2, (Resources.WORLD_HEIGHT_2)+55);
 
-        final TextButton bYes = new TextButton("Yes", Resources.tbs_s);
+        final TextButton bYes = new TextButton("Yes", Resources.tbs_small);
         bYes.setPosition((Resources.WORLD_WIDTH_2)-125, (Resources.WORLD_HEIGHT_2));
         bYes.addListener(new ClickListener()
         {
@@ -128,7 +128,7 @@ public class LoadScreen implements Screen, InputProcessor
                 Gdx.app.exit();
             }
         });
-        final TextButton bNo = new TextButton("No", Resources.tbs_s);
+        final TextButton bNo = new TextButton("No", Resources.tbs_small);
         bNo.setPosition((Resources.WORLD_WIDTH_2)+25, (Resources.WORLD_HEIGHT_2));
         bNo.addListener(new ClickListener()
         {
