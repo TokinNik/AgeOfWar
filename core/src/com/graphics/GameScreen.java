@@ -270,7 +270,7 @@ public class GameScreen implements Screen, InputProcessor
 
     static void setArrow(int dir, float x1, float y1, float x2, float y2)
     {
-        System.out.println("Set Arrow " + x1 + " " + y1 + " " + x2 + " " + y2);
+        //System.out.println("Set Arrow " + x1 + " " + y1 + " " + x2 + " " + y2);
 
         Arrow arrow = new Arrow(dir, x1, y1, x2, y2);
         stage.addActor(arrow);

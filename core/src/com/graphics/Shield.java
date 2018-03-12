@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.controller.CharacterController;
+import com.model.Gave;
 
 class Shield extends Actor
 {
@@ -18,17 +20,20 @@ class Shield extends Actor
     private TextureRegion currentFrame;
     private Image shieldImage;
     private boolean active;
+    private Gave gave;
 
 
     Shield (int dir)
     {
         if (dir == 1)
         {
+            gave = new Gave(true, CharacterController.getUserEvolveStage());
+            CharacterController.setUserGave(gave);
             animation = Resources.shieldDamageAnimationL;
             shieldImage = Resources.shieldU;
             shieldImage.setBounds(0,0,631,533);
             setBounds(0,0,631,533);
-            this.currentHP = GameScreen.getUserForpost().getMaxHealth();
+            this.currentHP = gave.getMaxHealth();
             setVisible(false);
             this.active = false;
         }
@@ -69,20 +74,13 @@ class Shield extends Actor
     @Override
     public void act(float delta)
     {
-        if (direction == 1 && currentHP > GameScreen.getUserForpost().getHealth())
+        if (direction == 1 && currentHP > gave.getHealth())
         {
-            currentHP = GameScreen.getUserForpost().getHealth();
+            currentHP = gave.getHealth();
             takeDamage();
         }
-        if (direction == 1 && currentHP < GameScreen.getUserForpost().getHealth())
-            currentHP = GameScreen.getUserForpost().getMaxHealth();
-        if (direction == -1 && currentHP > GameScreen.getGameForpost().getHealth())
-        {
-            currentHP = GameScreen.getGameForpost().getHealth();
-            takeDamage();
-        }
-        if (direction == -1 && currentHP < GameScreen.getGameForpost().getHealth())
-            currentHP = GameScreen.getGameForpost().getMaxHealth();
+        if (direction == 1 && currentHP < gave.getHealth())
+            currentHP = gave.getMaxHealth();
         super.act(delta);
     }
 
@@ -90,6 +88,7 @@ class Shield extends Actor
     {
         if (animCount <= 0)
             animCount = 10;
+        System.out.println(CharacterController.clothestUserObjectPosition + "_+_+_+_ " + gave.getHealth());
     }
 
     public void setActive(boolean active)

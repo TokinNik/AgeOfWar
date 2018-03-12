@@ -92,6 +92,7 @@ public abstract class Character extends GameObject implements Runnable {
                         fight(CharacterController.clothestUserObject);
                     }
                 } else {
+                    setState(CharacterState.REDYTOGO);
                     move();
                 }
             }
