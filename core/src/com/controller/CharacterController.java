@@ -6,15 +6,10 @@ import com.model.*;
 import com.model.Character;
 
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CharacterController {
     private static Map<Character, CharacterType> userArmy = new ConcurrentHashMap<Character, CharacterType>();
@@ -27,8 +22,8 @@ public class CharacterController {
     private static boolean gameFinished = false;
     private static int totalScore = 0;
     private static int  totalMoney = 100;
-    private static Gave userGave;
-    private static Gave gameGave;
+    private static Gate userGate;
+    private static Gate gameGate;
     private static Set<GameObject> groupOfClothestUserObject = new HashSet<GameObject>();
     private static Set<GameObject> groupOfClothestGameObject = new HashSet<GameObject>();
     public static float clothestUserObjectPosition = UserForpost.CLOSEST_USER_OBJECT;
@@ -130,20 +125,20 @@ public class CharacterController {
         CharacterController.totalScore += totalScore;
     }
 
-    public static void setUserGave(Gave userGave) {
-        CharacterController.userGave = userGave;
+    public static void setUserGate(Gate userGate) {
+        CharacterController.userGate = userGate;
     }
 
-    public static Gave getUserGave() {
-        return userGave;
+    public static Gate getUserGate() {
+        return userGate;
     }
 
-    public static void setGameGave(Gave gameGave) {
-        CharacterController.gameGave = gameGave;
+    public static void setGameGate(Gate gameGate) {
+        CharacterController.gameGate = gameGate;
     }
 
-    public static Gave getGameGave() {
-        return gameGave;
+    public static Gate getGameGate() {
+        return gameGate;
     }
 
     public static void setGroupOfClothestUserObject(Set<GameObject> groupOfClothestUserObject) {

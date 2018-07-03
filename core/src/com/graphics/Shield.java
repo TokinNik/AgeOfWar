@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.controller.CharacterController;
-import com.model.Gave;
+import com.model.Gate;
 
 class Shield extends Actor
 {
@@ -20,20 +20,20 @@ class Shield extends Actor
     private TextureRegion currentFrame;
     private Image shieldImage;
     private boolean active;
-    private Gave gave;
+    private Gate gate;
 
 
     Shield (int dir)
     {
         if (dir == 1)
         {
-            gave = new Gave(true, CharacterController.getUserEvolveStage());
-            CharacterController.setUserGave(gave);
+            gate = new Gate(true, CharacterController.getUserEvolveStage());
+            CharacterController.setUserGate(gate);
             animation = Resources.shieldDamageAnimationL;
             shieldImage = Resources.shieldU;
             shieldImage.setBounds(0,0,631,533);
             setBounds(0,0,631,533);
-            this.currentHP = gave.getMaxHealth();
+            this.currentHP = gate.getMaxHealth();
             setVisible(false);
             this.active = false;
         }
@@ -74,21 +74,21 @@ class Shield extends Actor
     @Override
     public void act(float delta)
     {
-        if (direction == 1 && currentHP > gave.getHealth())
+        if (direction == 1 && currentHP > gate.getHealth())
         {
-            currentHP = gave.getHealth();
+            currentHP = gate.getHealth();
             takeDamage();
         }
-        if (direction == 1 && currentHP < gave.getHealth())
-            currentHP = gave.getMaxHealth();
+        if (direction == 1 && currentHP < gate.getHealth())
+            currentHP = gate.getMaxHealth();
         super.act(delta);
     }
 
-    private void takeDamage ()
+    private void takeDamage()
     {
         if (animCount <= 0)
             animCount = 10;
-        System.out.println(CharacterController.clothestUserObjectPosition + "_+_+_+_ " + gave.getHealth());
+        System.out.println(CharacterController.clothestUserObjectPosition + "_+_+_+_ " + gate.getHealth());
     }
 
     public void setActive(boolean active)

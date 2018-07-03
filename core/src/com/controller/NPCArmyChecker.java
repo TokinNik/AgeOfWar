@@ -36,8 +36,8 @@ public class NPCArmyChecker implements Runnable {
             GameObject tempObject = GameForpost.getInstance();
 
 
-            if (CharacterController.getGameGave() != null && CharacterController.getGameGave().getHealth() > 0) {
-                GameObject object = CharacterController.getGameGave();
+            if (CharacterController.getGameGate() != null && CharacterController.getGameGate().getHealth() > 0) {
+                GameObject object = CharacterController.getGameGate();
                 tempFirstGemeUnitPosition = object.getPosition();
                 tempObject = object;
             }

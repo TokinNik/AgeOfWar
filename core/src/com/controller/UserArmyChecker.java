@@ -38,8 +38,8 @@ public class UserArmyChecker implements Runnable {
             float tempFirstUserPosition = UserForpost.CLOSEST_USER_OBJECT;
             GameObject tempObject = UserForpost.getInstance();
 
-            if (CharacterController.getUserGave() != null) {
-                GameObject object = CharacterController.getUserGave();
+            if (CharacterController.getUserGate() != null) {
+                GameObject object = CharacterController.getUserGate();
                 tempFirstUserPosition = object.getPosition();
                 tempObject = object;
             }

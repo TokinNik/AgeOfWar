@@ -93,7 +93,7 @@ public class Resources
                 name = "text_button_m";
                 break;
             default:
-                name = "text_button_s";
+                name = "text_button_l";
                 break;
         }
         tbs.up = guiSkin.getDrawable(name + "1");
