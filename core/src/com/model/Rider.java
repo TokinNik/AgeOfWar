@@ -1,18 +1,16 @@
 package com.model;
 
-import java.util.concurrent.TimeUnit;
-
 //
-public class Rider extends Character {
+public class Rider extends Unit {
     public static final float AFFECTED_AREA = 200;
     private static final int BASE_PRICE = 150;
 
-    public Rider(boolean users, StageOfEvolution stage) {
-        super(250, 10f, 1, 8, 150, users, stage, CharacterType.RIDER);
+    public Rider(int id, boolean users, StageOfEvolution stage, Object syncObj) {
+        super(id,250, 10f, 1, 8, 150, users, stage, CharacterType.RIDER, syncObj);
     }
 
     @Override
-    public void fight(GameObject gameObject) {
+    public void fight(VulnerableObject gameObject) {
       /*  try {
             TimeUnit.MILLISECONDS.sleep(800);
         } catch (InterruptedException e) {

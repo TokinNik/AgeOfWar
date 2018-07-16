@@ -1,31 +1,28 @@
 package com.controller;
 
 import com.exception.NotEnoughMonyException;
-import com.model.Character;
-import com.model.CharacterFactory;
+import com.model.Unit;
+import com.model.UnitFactory;
 import com.model.CharacterType;
 import com.graphics.GameScreen;
-import com.model.UserForpost;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
-import javax.xml.crypto.Data;
-
 public class NPCController implements Runnable {
     private static final Map<CharacterType, Map<Integer, CharacterType[]>> TAMPLATES_OF_RESPOND = new HashMap<CharacterType, Map<Integer, CharacterType[]>>();
     private static final Map<CharacterType, Float[]> chanceOfCreate = new TreeMap<CharacterType, Float[]>();
-    private static Date timeOfAgeStart = new Date();
+    private Date timeOfAgeStart = new Date();
     private static float friquency = 0.4f;
     private static float tamplatesFriquent = 0;
     private static final Integer first = 1;
     private static final Integer second = 2;
     private static final Integer third = 3;
+    private UnitController controller;
+    private final Object syncObj;
 
     static {
         Map<Integer, CharacterType[]> chance = new HashMap<Integer, CharacterType[]>();
@@ -62,22 +59,26 @@ public class NPCController implements Runnable {
         chanceOfCreate.put(CharacterType.INCREDIBLE, new Float[] {  0f,   0f,    0f,    0f,   0f,    0f,    1f,    1f});
     }
 
+    public NPCController(UnitController controller, Object syncObj) {
+        this.controller = controller;
+        this.syncObj = syncObj;
+    }
 
     @Override
     public void run() {
         while (true) {
 
-            if (CharacterController.isPause()) {
-                synchronized (CharacterController.lock) {
+            if (controller.isPause()) {
+                synchronized (syncObj) {
                     try {
-                        CharacterController.lock.wait();
+                        syncObj.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
 
-            if (CharacterController.isGameFinished()) {
+            if (controller.isGameFinished()) {
                 break;
             }
 
@@ -112,7 +113,10 @@ public class NPCController implements Runnable {
 
         for (Map.Entry<CharacterType, Float[] > entry : chanceOfCreate.entrySet()) {
             if (rand < entry.getValue()[num]) {
-                createNewCharacter(entry.getKey());
+                try {
+                    controller.createNewUnit(entry.getKey(), false);
+                } catch (NotEnoughMonyException e) {
+                }
                 break;
             }
         }
@@ -120,8 +124,9 @@ public class NPCController implements Runnable {
     }
 
     private void respondCharacter() {
-        if (CharacterController.clothestUserObjectPosition > 200 ) {
-            CharacterType type = ( (Character) CharacterController.clothestUserObject).getType();
+
+        if (controller.clothestUserObject.getPosition() > 200 ) {
+            CharacterType type = ( (Unit) controller.clothestUserObject).getType();
             Map<Integer, CharacterType[]> tamplate = TAMPLATES_OF_RESPOND.get(type);
             CharacterType[] finalySet = null;
             float random = (float) Math.random();
@@ -183,7 +188,10 @@ public class NPCController implements Runnable {
             }
 
             for (CharacterType characterType : finalySet) {
-                createNewCharacter(characterType);
+                try {
+                    controller.createNewUnit(characterType, false);
+                } catch (NotEnoughMonyException e) {
+                }
                 try {
                     TimeUnit.MILLISECONDS.sleep(800);
                 } catch (InterruptedException e) {
@@ -191,20 +199,5 @@ public class NPCController implements Runnable {
                 }
             }
         }
-    }
-
-    public void createNewCharacter(CharacterType type) {
-        Character character = CharacterFactory.createCharacter(type, false, CharacterController.NPCEvolveState);
-
-        try {
-            GameScreen.setCompUnit(type, character);
-        } catch (NotEnoughMonyException e) {
-        }
-
-        CharacterController.addCharacterToGameArmy(character, type);
-
-        Thread characterThread = new Thread(character);
-        CharacterController.addNewThread(characterThread);
-        characterThread.start();
     }
 }

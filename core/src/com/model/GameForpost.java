@@ -1,11 +1,11 @@
 package com.model;
 
-public class GameForpost extends GameObject {
+public class GameForpost extends VulnerableObject {
     private static GameForpost instance;
-    public static final float CLOSEST_NPC_OBJECT = 900;
+    public static final float NPC_FORPOST_COORDINATE = 1000;
 
     private GameForpost() {
-        super(1000, false, 1000, StageOfEvolution.FIRST);
+        super(1000, false, NPC_FORPOST_COORDINATE, StageOfEvolution.FIRST);
     }
 
     public static synchronized GameForpost getInstance() {

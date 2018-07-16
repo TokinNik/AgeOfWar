@@ -1,40 +1,48 @@
 package com.controller;
 
-import com.model.Character;
 import com.model.GameForpost;
 import com.model.UserForpost;
 
 import java.util.concurrent.TimeUnit;
 
 public class WinnerChecker implements Runnable {
+    UnitController controller;
+    Object syncObj;
+
+    public WinnerChecker(UnitController controller, Object syncObj) {
+        this.controller = controller;
+        this.syncObj = syncObj;
+    }
 
     @Override
     public void run() {
         while (true) {
 
-            if (CharacterController.isPause()) {
-                synchronized (CharacterController.lock) {
+            if (controller.isPause()) {
+                synchronized (controller.syncObj) {
                     try {
-                        CharacterController.lock.wait();
+                        syncObj.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
 
-            if (CharacterController.isGameFinished()) {
+            if (controller.isGameFinished()) {
                 break;
             }
 
             try {
-                TimeUnit.MILLISECONDS.sleep(300);
+                TimeUnit.MILLISECONDS.sleep(400);
                 if (UserForpost.getInstance().getHealth() <= 0) {
-                    CharacterController.setUserWin(true);
+                    controller.gameListaner.onForpostDestroy(true);
+                    controller.setGameFinished(true);
                     break;
                 }
 
                 if (GameForpost.getInstance().getHealth() <= 0) {
-                    CharacterController.setGameWin(true);
+                    controller.gameListaner.onForpostDestroy(false);
+                    controller.setGameFinished(true);
                     break;
                 }
 

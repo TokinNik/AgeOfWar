@@ -14,9 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.controller.CharacterController;
+import com.controller.UnitController;
 import com.exception.NotEnoughMonyException;
-import com.model.Character;
+import com.model.Unit;
 import com.model.CharacterType;
 import com.model.GameForpost;
 import com.model.UserForpost;
@@ -27,7 +27,7 @@ public class GameScreen implements Screen, InputProcessor
     private static OrthographicCamera camera;
     private static Stage stage;
     private static GameGUI gui;
-    private static Array<Unit> units;
+    private static Array<com.graphics.Unit> units;
     private static float prefX;
     //private static float prefY;
     private static UserForpost userForpost;
@@ -45,18 +45,18 @@ public class GameScreen implements Screen, InputProcessor
         userForpost = UserForpost.getInstance();
         gameForpost = GameForpost.getInstance();
         gui = new GameGUI();
-        units = new Array<Unit>();
+        units = new Array<com.graphics.Unit>();
         prefX = -1;
         //prefY = -1;
 
-        CharacterController.start();
+        UnitController.start();
     }
 
     @Override
     public void show()
     {
         Resources.state = State.GAME;
-        CharacterController.setPause(false);
+        UnitController.setPause(false);
         final Image bg = Resources.bgForest;
         bg.setBounds(0, 0, Resources.GAME_WIDTH, Resources.GAME_HEIGHT);
         stage.addActor(bg);
@@ -177,9 +177,9 @@ public class GameScreen implements Screen, InputProcessor
             Gdx.gl.glClearColor(0, 0.2f, 0.1f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            if (CharacterController.isGameWin())
+            if (UnitController.isGameWin())
                 gui.setGameEndMenu(true);
-            if (CharacterController.isUserWin())
+            if (UnitController.isUserWin())
                 gui.setGameEndMenu(false);
 
 
@@ -187,10 +187,10 @@ public class GameScreen implements Screen, InputProcessor
             gui.updateLabels();
 
             int i = 0;
-            for (Unit u: units)
+            for (com.graphics.Unit u: units)
             {
 
-                if (!u.getCharacter().isAlive())
+                if (!u.getUnit().isAlive())
                     delUnit(i);
 
                 i++;
@@ -245,7 +245,7 @@ public class GameScreen implements Screen, InputProcessor
     {
         System.out.println("Set Unit type " + type);
 
-        Unit unit = new Unit(type);
+        com.graphics.Unit unit = new com.graphics.Unit(type);
         units.add(unit);
         stage.addActor(unit);
     }
@@ -259,11 +259,11 @@ public class GameScreen implements Screen, InputProcessor
             shieldG.setActive(true);
     }
 
-    public static void setCompUnit(CharacterType type, Character character) throws NotEnoughMonyException
+    public static void setCompUnit(CharacterType type, Unit character) throws NotEnoughMonyException
     {
         System.out.println("Set Unit type " + type);
 
-        Unit unit = new Unit(type, character);
+        com.graphics.Unit unit = new com.graphics.Unit(type, character);
         units.add(unit);
         stage.addActor(unit);
     }
@@ -285,7 +285,7 @@ public class GameScreen implements Screen, InputProcessor
 
     static void clear()
     {
-        for (Unit u: units)
+        for (com.graphics.Unit u: units)
         {
             u.remove();
             System.out.println("Delete Unit type " + u.getType() + " direction " + u.getDirection());
@@ -301,7 +301,7 @@ public class GameScreen implements Screen, InputProcessor
 
     static void exit()
     {
-        for (Unit u: units)
+        for (com.graphics.Unit u: units)
         {
             u.remove();
             System.out.println("Delete Unit type " + u.getType() + " direction " + u.getDirection());

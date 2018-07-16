@@ -1,57 +1,59 @@
 package com.controller;
 
-import com.model.Character;
-import com.model.CharacterType;
 import com.model.GameForpost;
 import com.model.GameObject;
 import com.model.Rider;
+import com.model.Unit;
+import com.model.UnitState;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 public class NPCArmyChecker implements Runnable {
+    private UnitController controller;
+    private final Object syncObj;
+
+    public NPCArmyChecker(UnitController controller, final Object syncObj) {
+        this.controller = controller;
+        this.syncObj = syncObj;
+    }
 
     @Override
     public void run() {
         while (true) {
 
-            if (CharacterController.isPause()) {
-                synchronized (CharacterController.lock) {
+            if (controller.isPause()) {
+                synchronized (syncObj) {
                     try {
-                        CharacterController.lock.wait();
+                        syncObj.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
 
-            if (CharacterController.isGameFinished()) {
+            if (controller.isGameFinished()) {
                 break;
             }
 
-            Set<GameObject> gameObjectsInEffectedArea = new HashSet<GameObject>();
-            float tempFirstGemeUnitPosition = GameForpost.CLOSEST_NPC_OBJECT;
+            float tempFirstGemeUnitPosition = GameForpost.NPC_FORPOST_COORDINATE;
             GameObject tempObject = GameForpost.getInstance();
 
 
-            if (CharacterController.getGameGate() != null && CharacterController.getGameGate().getHealth() > 0) {
-                GameObject object = CharacterController.getGameGate();
+            if (controller.getGameGate() != null && controller.getGameGate().getHealth() > 0) {
+                GameObject object = controller.getGameGate();
                 tempFirstGemeUnitPosition = object.getPosition();
                 tempObject = object;
             }
 
-            if (CharacterController.clothestUserObjectPosition + Rider.AFFECTED_AREA > tempFirstGemeUnitPosition) {
-                gameObjectsInEffectedArea.add(tempObject);
-            }
-
-
-            Iterator<Map.Entry<Character, CharacterType>> iterator = CharacterController.getGameArmy().entrySet().iterator();
+            Iterator<Unit> iterator = controller.getGameArmy().iterator();
             while (iterator.hasNext()) {
-                Character temp = iterator.next().getKey();
+                Unit temp = iterator.next();
 
-                if (!temp.isAlive()) {
+                if (temp.getHealth() <= 0) {
+                    temp.changeState(UnitState.DIE);
+                    controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.DIE);
                     iterator.remove();
                 } else {
                     if (temp.getPosition() < tempFirstGemeUnitPosition) {
@@ -59,15 +61,23 @@ public class NPCArmyChecker implements Runnable {
                         tempObject = temp;
                     }
 
-                    if (CharacterController.clothestUserObjectPosition + Rider.AFFECTED_AREA > temp.getPosition()) {
-                        gameObjectsInEffectedArea.add(temp);
+                    if (temp.getPosition() - temp.getAffectedArea() < controller.clothestUserObject.getPosition()) {
+                        if (temp.getState() == UnitState.WALK) {
+                            temp.changeState(UnitState.FIGHT);
+                            controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.FIGHT);
+                        }
+                    } else {
+                        if (temp.getState() == UnitState.FIGHT) {
+                            temp.changeState(UnitState.WALK);
+                            controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.WALK);
+                        } else {
+                            controller.gameListaner.onCoordinateChange(false, temp.getId(), temp.getPosition());
+                        }
                     }
                 }
             }
 
-            CharacterController.clothestGameObject = tempObject;
-            CharacterController.clothestGameObjectPosition = tempFirstGemeUnitPosition;
-            CharacterController.setGroupOfClothestGameObject(gameObjectsInEffectedArea);
+            controller.clothestGameObject = tempObject;
         }
     }
 }

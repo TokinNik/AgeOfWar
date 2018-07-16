@@ -10,13 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.controller.CharacterController;
+import com.controller.UnitController;
 import com.exception.NotEnoughMonyException;
-import com.model.Character;
-import com.model.CharacterState;
+import com.model.UnitState;
 import com.model.CharacterType;
-
-import java.util.Random;
 
 public class Unit extends Actor
 {
@@ -28,15 +25,15 @@ public class Unit extends Actor
     private TextureRegion currentFrame;
     private Image hBar;
     private Label levelL;
-    private Character character;
+    private com.model.Unit unit;
 
 
     Unit (CharacterType type) throws NotEnoughMonyException
     {
-        character = CharacterController.createNewCharacter(type);
+        unit = UnitController.createNewUnit(type);
         this.direction = 1;
         atackTime = TimeUtils.millis();
-        setBounds(character.getPosition() * 2f, 50, 240, 288);
+        setBounds(unit.getPosition() * 2f, 50, 240, 288);
 
         switch (type)
         {
@@ -59,18 +56,18 @@ public class Unit extends Actor
                 animation = Resources.testAnimationR;
         }
 
-        levelL = new Label( character.getStage().toString() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
+        levelL = new Label( unit.getStage().toString() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
         levelL.setPosition(getX() - 5, getY() + getHeight() + 20);
 
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
-        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
+        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * unit.getHealth()/ unit.getMaxHealth(), 10);
     }
 
-    Unit(CharacterType type, Character c) throws  NotEnoughMonyException
+    Unit(CharacterType type, com.model.Unit c) throws  NotEnoughMonyException
     {
-        this.character = c;
+        this.unit = c;
         this.direction = -1;
-        setBounds(character.getPosition() * 2f, 50, 240, 288);
+        setBounds(unit.getPosition() * 2f, 50, 240, 288);
 
         switch (type)
         {
@@ -93,11 +90,11 @@ public class Unit extends Actor
                 animation = Resources.testAnimationL;
         }
 
-        levelL = new Label( character.getStage() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
+        levelL = new Label( unit.getStage() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
-        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth()/character.getMaxHealth(), 10);
+        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * unit.getHealth()/ unit.getMaxHealth(), 10);
     }
 
     @Override
@@ -106,16 +103,16 @@ public class Unit extends Actor
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
 
-        addAction(Actions.moveTo( character.getPosition() * 2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
+        addAction(Actions.moveTo( unit.getPosition() * 2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
 
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 
-        if (character.getHealth() > 0)
-            hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * character.getHealth() / character.getMaxHealth(), 10);
+        if (unit.getHealth() > 0)
+            hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * unit.getHealth() / unit.getMaxHealth(), 10);
 
-        if (character.getHealth() <= character.getMaxHealth() * 0.6f)
+        if (unit.getHealth() <= unit.getMaxHealth() * 0.6f)
             hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
-        if (character.getHealth() <= character.getMaxHealth() * 0.3f)
+        if (unit.getHealth() <= unit.getMaxHealth() * 0.3f)
             hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
 
         batch.draw(currentFrame, getX(), getY());
@@ -128,7 +125,7 @@ public class Unit extends Actor
     @Override
     public void act(float delta)
     {
-        if(character.getType() == CharacterType.ARCHER && character.getState() == CharacterState.REDYTOFIGHT && TimeUtils.timeSinceMillis(atackTime) > 800)
+        if(unit.getType() == CharacterType.ARCHER && unit.getState() == UnitState.FIGHT && TimeUtils.timeSinceMillis(atackTime) > 800)
             if (direction == 1)
             {
                 if (Math.random() > 0.5)
@@ -156,5 +153,5 @@ public class Unit extends Actor
 
     int getDirection() {return direction;}
 
-    public Character getCharacter(){return character;}
+    public com.model.Unit getUnit(){return unit;}
 }
