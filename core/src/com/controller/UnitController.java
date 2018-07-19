@@ -11,12 +11,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class UnitController {
     protected GameChangeListaner gameListaner;
-    private Set<Unit> userArmy = Collections.newSetFromMap(new ConcurrentHashMap<Unit, Boolean>());
-    private Set<Unit> gameArmy = Collections.newSetFromMap(new ConcurrentHashMap<Unit, Boolean>());
+    protected Set<Unit> userArmy = Collections.newSetFromMap(new ConcurrentHashMap<Unit, Boolean>());
+    protected Set<Unit> gameArmy = Collections.newSetFromMap(new ConcurrentHashMap<Unit, Boolean>());
     private StageOfEvolution userEvolveStage = StageOfEvolution.FIRST;
     private StageOfEvolution NPCEvolveState = StageOfEvolution.FIRST;
     private boolean pause = false;
@@ -30,8 +32,7 @@ public class UnitController {
     public final Object syncObj = new Object();
     private GameEvent gameState = GameEvent.PROCESSED;
     private AtomicInteger unitID = new AtomicInteger(0);
-
-    private static Set<Thread> allCurrentThreads = Collections.newSetFromMap(new ConcurrentHashMap<Thread, Boolean>());
+    private Executor executor = Executors.newCachedThreadPool();
 
     public UnitController(GameChangeListaner gameListaner) {
         this.gameListaner = gameListaner;
@@ -45,19 +46,14 @@ public class UnitController {
                 throw new NotEnoughMonyException();
             }
 
-            totalMoney -= unit.getPrice();
+            addMoney(-unit.getPrice());
             userArmy.add(unit);
         } else {
             gameListaner.onEnemyUnitCreate(type, unit.getId());
             gameArmy.add(unit);
         }
 
-        new Thread(unit).start();
-
-        Thread characterThread = new Thread(unit);
-        allCurrentThreads.add(characterThread);
-        characterThread.start();
-
+        executor.execute(unit);
         return unit.getId();
     }
 
@@ -102,12 +98,6 @@ public class UnitController {
         }
     }
 
-    public Set<Unit> getUserArmy() {return userArmy;}
-
-    public Set<Unit> getGameArmy() {
-        return gameArmy;
-    }
-
     public StageOfEvolution getUserEvolveStage() {
         return userEvolveStage;
     }
@@ -122,10 +112,6 @@ public class UnitController {
 
     public void addTotalScore(int totalScore) {
         this.totalScore += totalScore;
-    }
-
-    public GameEvent getGameState() {
-        return gameState;
     }
 
     public void setGameState(GameEvent gameState) {
@@ -150,6 +136,7 @@ public class UnitController {
 
     public void addMoney(int delta) {
         totalMoney += delta;
+        gameListaner.onMonyCountChange(totalMoney);
     }
 
     public void start() {
@@ -162,11 +149,6 @@ public class UnitController {
         NPCCheckerThread.setName("NPC_CHECKER");
         winnerThread.setName("WINNER");
         NPCControllerThread.setName("NPC_CONTROLLER");
-
-        allCurrentThreads.add(userThread);
-        allCurrentThreads.add(NPCCheckerThread);
-        allCurrentThreads.add(winnerThread);
-        allCurrentThreads.add(NPCControllerThread);
 
         userThread.start();
         NPCCheckerThread.start();
@@ -201,25 +183,10 @@ public class UnitController {
     public void reset() {
         gameFinished = true;
         resume();
-
-        for (Thread thread: allCurrentThreads) {
-            try {
-                if (thread.getName().equals("NPC_CONTROLLER")) {
-                    thread.interrupt();
-                }
-
-                thread.join();
-            }  catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
         userArmy.clear();
         gameArmy.clear();
-        allCurrentThreads.clear();
         userEvolveStage = StageOfEvolution.FIRST;
         NPCEvolveState = StageOfEvolution.FIRST;
-        pause = false;
         gameFinished = false;
         totalScore = 0;
         totalMoney = 1000;

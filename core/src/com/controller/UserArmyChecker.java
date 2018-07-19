@@ -50,7 +50,7 @@ public class UserArmyChecker implements Runnable {
                 tempObject = object;
             }
 
-            Iterator<Unit> iterator = controller.getUserArmy().iterator();
+            Iterator<Unit> iterator = controller.userArmy.iterator();
 
             while (iterator.hasNext()) {
                 Unit temp = iterator.next();

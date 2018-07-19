@@ -12,4 +12,5 @@ interface GameChangeListaner {
     void onEnemyUnitCreate(CharacterType type, int id);
     void onForpostDestroy(boolean userWin);
     void onEnemyEvolveStageChange(StageOfEvolution newStage);
+    void onMonyCountChange(int value);
 }

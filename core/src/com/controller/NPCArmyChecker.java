@@ -47,13 +47,14 @@ public class NPCArmyChecker implements Runnable {
                 tempObject = object;
             }
 
-            Iterator<Unit> iterator = controller.getGameArmy().iterator();
+            Iterator<Unit> iterator = controller.gameArmy.iterator();
             while (iterator.hasNext()) {
                 Unit temp = iterator.next();
 
                 if (temp.getHealth() <= 0) {
                     temp.changeState(UnitState.DIE);
                     controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.DIE);
+                    controller.addMoney((int)Math.round(temp.getPrice() * controller.getUserEvolveStage().getCoefficient() * 1.2));
                     iterator.remove();
                 } else {
                     if (temp.getPosition() < tempFirstGemeUnitPosition) {
