@@ -3,8 +3,11 @@ package com.model;
 import com.GameEvent;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Unit extends VulnerableObject implements Runnable, Movable {
+    private static final AtomicInteger unitId = new AtomicInteger(1);
+
     private int id;
     private float speed;
     private float armor;
@@ -12,7 +15,7 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
     private int direction;
     private int price;
     private UnitState state = UnitState.WALK;
-    private CharacterType type;
+    private UnitType type;
 
     private VulnerableObject clothestEnemy;
     private boolean nothingChanged = true;
@@ -20,9 +23,9 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
     private GameEvent gameState = GameEvent.PROCESSED;
     private final Object synchObj;
 
-    public Unit(int id, float health, float speed, float armor, float strength, int price, boolean users, StageOfEvolution stage, CharacterType type, final Object synchObj) {
+    public Unit(float health, float speed, float armor, float strength, int price, boolean users, StageOfEvolution stage, UnitType type, final Object synchObj) {
         super(health, users, users ? 0 : 1000, stage);
-        this.id = id;
+        this.id = unitId.incrementAndGet();
         this.speed = speed;
         this.armor = armor;
         this.strength = strength * stage.getCoefficient();
@@ -119,6 +122,7 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
         return price;
     }
 
+    @Override
     public int getId() { return id; }
 
     public float getSpeed() {
@@ -137,7 +141,7 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
         return strength;
     }
 
-    public CharacterType getType() {
+    public UnitType getType() {
         return type;
     }
 }

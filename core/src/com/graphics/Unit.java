@@ -10,15 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.controller.UnitController;
+import com.controller.GameController;
 import com.exception.NotEnoughMonyException;
 import com.model.UnitState;
-import com.model.CharacterType;
+import com.model.UnitType;
 
 public class Unit extends Actor
 {
     private Animation animation;
-    private CharacterType type;
+    private UnitType type;
     private int direction;
     private float stateTime;
     private long atackTime;
@@ -28,9 +28,9 @@ public class Unit extends Actor
     private com.model.Unit unit;
 
 
-    Unit (CharacterType type) throws NotEnoughMonyException
+    Unit (UnitType type) throws NotEnoughMonyException
     {
-        unit = UnitController.createNewUnit(type);
+        unit = GameController.createNewUnit(type);
         this.direction = 1;
         atackTime = TimeUtils.millis();
         setBounds(unit.getPosition() * 2f, 50, 240, 288);
@@ -63,7 +63,7 @@ public class Unit extends Actor
         hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * unit.getHealth()/ unit.getMaxHealth(), 10);
     }
 
-    Unit(CharacterType type, com.model.Unit c) throws  NotEnoughMonyException
+    Unit(UnitType type, com.model.Unit c) throws  NotEnoughMonyException
     {
         this.unit = c;
         this.direction = -1;
@@ -125,7 +125,7 @@ public class Unit extends Actor
     @Override
     public void act(float delta)
     {
-        if(unit.getType() == CharacterType.ARCHER && unit.getState() == UnitState.FIGHT && TimeUtils.timeSinceMillis(atackTime) > 800)
+        if(unit.getType() == UnitType.ARCHER && unit.getState() == UnitState.FIGHT && TimeUtils.timeSinceMillis(atackTime) > 800)
             if (direction == 1)
             {
                 if (Math.random() > 0.5)
@@ -149,7 +149,7 @@ public class Unit extends Actor
         super.act(delta);
     }
 
-    CharacterType getType() {return type;}
+    UnitType getType() {return type;}
 
     int getDirection() {return direction;}
 

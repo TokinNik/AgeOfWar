@@ -15,4 +15,9 @@ public class UserForpost extends VulnerableObject {
 
         return instance;
     }
+
+    @Override
+    public int getId() {
+        return 1;
+    }
 }

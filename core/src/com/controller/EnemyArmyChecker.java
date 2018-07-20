@@ -2,6 +2,7 @@ package com.controller;
 
 import com.GameEvent;
 import com.exception.LimitOfEvolutionException;
+import com.model.GameForpost;
 import com.model.StageOfEvolution;
 import com.model.Unit;
 import com.model.UnitState;
@@ -11,24 +12,22 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
-public class UserArmyChecker implements Runnable {
+public class EnemyArmyChecker implements Runnable {
     protected Set<Unit> army = Collections.newSetFromMap(new ConcurrentHashMap<Unit, Boolean>());
-    private StageOfEvolution evolveStage = StageOfEvolution.FIRST;
+    private StageOfEvolution evolveState = StageOfEvolution.FIRST;
     private GameController controller;
     private final Object syncObj;
-    private boolean finished;
+    private boolean finish;
 
-    protected UserArmyChecker(GameController controller, final Object syncObj) {
+    protected EnemyArmyChecker(GameController controller, final Object syncObj) {
         this.controller = controller;
         this.syncObj = syncObj;
     }
 
-    /*Check first unit of user army + remove dead unit*/
     @Override
     public void run() {
-        finished = false;
+        finish = false;
         while (true) {
             if (controller.pause) {
                 synchronized (syncObj) {
@@ -40,58 +39,53 @@ public class UserArmyChecker implements Runnable {
                 }
             }
 
-            if (finished) {
+            if (finish) {
                 for (Unit unit: army) {
                     unit.changeGameSate(GameEvent.FINISHED);
                 }
+
                 army.clear();
-                evolveStage = StageOfEvolution.FIRST;
+                evolveState = StageOfEvolution.FIRST;
                 break;
             }
 
-            VulnerableObject furthestObject = controller.clothestUserObject;
+            VulnerableObject furthestObject = GameForpost.getInstance();
 
             Iterator<Unit> iterator = army.iterator();
-
             while (iterator.hasNext()) {
                 Unit temp = iterator.next();
 
-                if (temp.getHealth() < 0) {
-                    iterator.remove();
+                if (temp.getHealth() <= 0) {
                     temp.changeState(UnitState.DIE);
-                    controller.gameListaner.onUnitStateChange(true, temp.getId(), UnitState.DIE);
+                    controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.DIE);
+                    controller.addMoney((int)Math.round(temp.getPrice() * evolveState.getCoefficient() * 1.2));
+                    iterator.remove();
                 } else {
-                    if (temp.getPosition() > furthestObject.getPosition()) {
+                    if (temp.getPosition() < furthestObject.getPosition()) {
                         furthestObject = temp;
                     }
 
-                    VulnerableObject vo = controller.clothestGameObject;
-                    if (temp.getPosition() + temp.getAffectedArea() > vo.getPosition()) {
+                    VulnerableObject vo = controller.clothestUserObject;
+                    if (temp.getPosition() - temp.getAffectedArea() < vo.getPosition()) {
 
                         temp.setClothestEnemy(vo);
                         if (temp.getState() == UnitState.WALK) {
                             temp.changeState(UnitState.FIGHT);
-                            controller.gameListaner.onUnitStateChange(true, temp.getId(), UnitState.FIGHT);
-                            controller.gameListaner.onHealthChange(false, vo.getId(), vo.getHealth());
+                            controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.FIGHT);
+                            controller.gameListaner.onHealthChange(true, vo.getId(), vo.getHealth());
                         }
                     } else {
                         if (temp.getState() == UnitState.FIGHT) {
                             temp.changeState(UnitState.WALK);
-                            controller.gameListaner.onUnitStateChange(true, temp.getId(), UnitState.WALK);
+                            controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.WALK);
                         } else {
-                            controller.gameListaner.onCoordinateChange(true, temp.getId(), temp.getPosition());
+                            controller.gameListaner.onCoordinateChange(false, temp.getId(), temp.getPosition());
                         }
                     }
                 }
             }
 
-            controller.clothestUserObject = furthestObject;
-
-            try {
-                TimeUnit.MILLISECONDS.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            controller.clothestGameObject = furthestObject;
         }
     }
 
@@ -99,12 +93,12 @@ public class UserArmyChecker implements Runnable {
         army.add(unit);
     }
 
-    public StageOfEvolution getEvolveStage() {
-        return evolveStage;
+    public StageOfEvolution getEvolveState() {
+        return evolveState;
     }
 
     public StageOfEvolution evolve() throws LimitOfEvolutionException {
-        switch (evolveStage) {
+        switch (evolveState) {
             case FIRST: {
                 return StageOfEvolution.SECOND;
             }
@@ -122,6 +116,6 @@ public class UserArmyChecker implements Runnable {
     }
 
     public void finish() {
-        finished = true;
+        finish = true;
     }
 }

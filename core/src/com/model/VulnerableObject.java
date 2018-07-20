@@ -8,6 +8,8 @@ public abstract class VulnerableObject extends GameObject {
         this.health = health;
     }
 
+    public abstract int getId();
+
     public float getHealth() {
         return health;
     }

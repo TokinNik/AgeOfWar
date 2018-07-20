@@ -2,9 +2,7 @@ package com.controller;
 
 import com.exception.NotEnoughMonyException;
 import com.model.Unit;
-import com.model.UnitFactory;
-import com.model.CharacterType;
-import com.graphics.GameScreen;
+import com.model.UnitType;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,53 +11,54 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class NPCController implements Runnable {
-    private static final Map<CharacterType, Map<Integer, CharacterType[]>> TAMPLATES_OF_RESPOND = new HashMap<CharacterType, Map<Integer, CharacterType[]>>();
-    private static final Map<CharacterType, Float[]> chanceOfCreate = new TreeMap<CharacterType, Float[]>();
+    private static final Map<UnitType, Map<Integer, UnitType[]>> TAMPLATES_OF_RESPOND = new HashMap<UnitType, Map<Integer, UnitType[]>>();
+    private static final Map<UnitType, Float[]> chanceOfCreate = new TreeMap<UnitType, Float[]>();
     private Date timeOfAgeStart = new Date();
     private static float friquency = 0.4f;
     private static float tamplatesFriquent = 0;
     private static final Integer first = 1;
     private static final Integer second = 2;
     private static final Integer third = 3;
-    private UnitController controller;
+    private GameController controller;
     private final Object syncObj;
+    private boolean finish;
 
     static {
-        Map<Integer, CharacterType[]> chance = new HashMap<Integer, CharacterType[]>();
-        chance.put(first, new CharacterType[]{CharacterType.FAT, CharacterType.FAT, CharacterType.FAT, CharacterType.ARCHER, CharacterType.ARCHER});
-        chance.put(second, new CharacterType[]{CharacterType.INCREDIBLE, CharacterType.ARCHER, CharacterType.ARCHER});
-        TAMPLATES_OF_RESPOND.put(CharacterType.INCREDIBLE, chance);
+        Map<Integer, UnitType[]> chance = new HashMap<Integer, UnitType[]>();
+        chance.put(first, new UnitType[]{UnitType.FAT, UnitType.FAT, UnitType.FAT, UnitType.ARCHER, UnitType.ARCHER});
+        chance.put(second, new UnitType[]{UnitType.INCREDIBLE, UnitType.ARCHER, UnitType.ARCHER});
+        TAMPLATES_OF_RESPOND.put(UnitType.INCREDIBLE, chance);
 
-        Map<Integer, CharacterType[]> riderChance = new HashMap<Integer, CharacterType[]>();
-        riderChance.put(first, new CharacterType[] {CharacterType.INFATRYMAN, CharacterType.INFATRYMAN, CharacterType.INFATRYMAN});
-        riderChance.put(second, new CharacterType[] {CharacterType.FAT, CharacterType.ARCHER});
-        riderChance.put(third, new CharacterType[] {CharacterType.RIDER});
-        TAMPLATES_OF_RESPOND.put(CharacterType.RIDER, riderChance);
+        Map<Integer, UnitType[]> riderChance = new HashMap<Integer, UnitType[]>();
+        riderChance.put(first, new UnitType[] {UnitType.INFATRYMAN, UnitType.INFATRYMAN, UnitType.INFATRYMAN});
+        riderChance.put(second, new UnitType[] {UnitType.FAT, UnitType.ARCHER});
+        riderChance.put(third, new UnitType[] {UnitType.RIDER});
+        TAMPLATES_OF_RESPOND.put(UnitType.RIDER, riderChance);
 
-        Map<Integer, CharacterType[]> fatChance = new HashMap<Integer, CharacterType[]>();
-        fatChance.put(first, new CharacterType[] {CharacterType.INFATRYMAN, CharacterType.INFATRYMAN, CharacterType.INFATRYMAN, CharacterType.ARCHER, CharacterType.ARCHER});
-        fatChance.put(second, new CharacterType[] {CharacterType.INFATRYMAN, CharacterType.ARCHER, CharacterType.ARCHER, CharacterType.ARCHER});
-        fatChance.put(third, new CharacterType[] {CharacterType.FAT, CharacterType.ARCHER});
-        TAMPLATES_OF_RESPOND.put(CharacterType.FAT, fatChance);
+        Map<Integer, UnitType[]> fatChance = new HashMap<Integer, UnitType[]>();
+        fatChance.put(first, new UnitType[] {UnitType.INFATRYMAN, UnitType.INFATRYMAN, UnitType.INFATRYMAN, UnitType.ARCHER, UnitType.ARCHER});
+        fatChance.put(second, new UnitType[] {UnitType.INFATRYMAN, UnitType.ARCHER, UnitType.ARCHER, UnitType.ARCHER});
+        fatChance.put(third, new UnitType[] {UnitType.FAT, UnitType.ARCHER});
+        TAMPLATES_OF_RESPOND.put(UnitType.FAT, fatChance);
 
-        Map<Integer, CharacterType[]> infantrymanChance = new HashMap<Integer, CharacterType[]>();
-        infantrymanChance.put(first, new CharacterType[] {CharacterType.INFATRYMAN});
-        infantrymanChance.put(second, new CharacterType[] {CharacterType.ARCHER});
-        TAMPLATES_OF_RESPOND.put(CharacterType.INFATRYMAN, infantrymanChance);
+        Map<Integer, UnitType[]> infantrymanChance = new HashMap<Integer, UnitType[]>();
+        infantrymanChance.put(first, new UnitType[] {UnitType.INFATRYMAN});
+        infantrymanChance.put(second, new UnitType[] {UnitType.ARCHER});
+        TAMPLATES_OF_RESPOND.put(UnitType.INFATRYMAN, infantrymanChance);
 
-        Map<Integer, CharacterType[]> archerChance = new HashMap<Integer, CharacterType[]>();
-        archerChance.put(first, new CharacterType[] {CharacterType.ARCHER});
-        archerChance.put(second, new CharacterType[] {CharacterType.INFATRYMAN});
-        TAMPLATES_OF_RESPOND.put(CharacterType.ARCHER, archerChance);
+        Map<Integer, UnitType[]> archerChance = new HashMap<Integer, UnitType[]>();
+        archerChance.put(first, new UnitType[] {UnitType.ARCHER});
+        archerChance.put(second, new UnitType[] {UnitType.INFATRYMAN});
+        TAMPLATES_OF_RESPOND.put(UnitType.ARCHER, archerChance);
 
-        chanceOfCreate.put(CharacterType.INFATRYMAN, new Float[] {0.8f, 0.6f,  0.4f, 0.35f, 0.4f, 0.35f,  0.3f, 0.25f});
-        chanceOfCreate.put(CharacterType.ARCHER, new Float[]     {  1f,   1f,  0.8f, 0.75f, 0.7f, 0.65f, 0.55f, 0.45f});
-        chanceOfCreate.put(CharacterType.FAT, new Float[]        {  0f,   0f,    1f,    1f, 0.9f, 0.85f,  0.7f, 0.65f});
-        chanceOfCreate.put(CharacterType.RIDER, new Float[]      {  0f,   0f,    0f,    0f,   1f,    1f,  0.9f, 0.85f});
-        chanceOfCreate.put(CharacterType.INCREDIBLE, new Float[] {  0f,   0f,    0f,    0f,   0f,    0f,    1f,    1f});
+        chanceOfCreate.put(UnitType.INFATRYMAN, new Float[] {0.8f, 0.6f,  0.4f, 0.35f, 0.4f, 0.35f,  0.3f, 0.25f});
+        chanceOfCreate.put(UnitType.ARCHER, new Float[]     {  1f,   1f,  0.8f, 0.75f, 0.7f, 0.65f, 0.55f, 0.45f});
+        chanceOfCreate.put(UnitType.FAT, new Float[]        {  0f,   0f,    1f,    1f, 0.9f, 0.85f,  0.7f, 0.65f});
+        chanceOfCreate.put(UnitType.RIDER, new Float[]      {  0f,   0f,    0f,    0f,   1f,    1f,  0.9f, 0.85f});
+        chanceOfCreate.put(UnitType.INCREDIBLE, new Float[] {  0f,   0f,    0f,    0f,   0f,    0f,    1f,    1f});
     }
 
-    public NPCController(UnitController controller, Object syncObj) {
+    public NPCController(GameController controller, Object syncObj) {
         this.controller = controller;
         this.syncObj = syncObj;
     }
@@ -67,8 +66,7 @@ public class NPCController implements Runnable {
     @Override
     public void run() {
         while (true) {
-
-            if (controller.isPause()) {
+            if (controller.pause) {
                 synchronized (syncObj) {
                     try {
                         syncObj.wait();
@@ -78,7 +76,7 @@ public class NPCController implements Runnable {
                 }
             }
 
-            if (controller.isGameFinished()) {
+            if (finish) {
                 break;
             }
 
@@ -111,7 +109,7 @@ public class NPCController implements Runnable {
             tamplatesFriquent = 0.1f;
         }
 
-        for (Map.Entry<CharacterType, Float[] > entry : chanceOfCreate.entrySet()) {
+        for (Map.Entry<UnitType, Float[] > entry : chanceOfCreate.entrySet()) {
             if (rand < entry.getValue()[num]) {
                 try {
                     controller.createNewUnit(entry.getKey(), false);
@@ -126,9 +124,9 @@ public class NPCController implements Runnable {
     private void respondCharacter() {
 
         if (controller.clothestUserObject.getPosition() > 200 ) {
-            CharacterType type = ( (Unit) controller.clothestUserObject).getType();
-            Map<Integer, CharacterType[]> tamplate = TAMPLATES_OF_RESPOND.get(type);
-            CharacterType[] finalySet = null;
+            UnitType type = ( (Unit) controller.clothestUserObject).getType();
+            Map<Integer, UnitType[]> tamplate = TAMPLATES_OF_RESPOND.get(type);
+            UnitType[] finalySet = null;
             float random = (float) Math.random();
 
             switch (type) {
@@ -187,7 +185,7 @@ public class NPCController implements Runnable {
 
             }
 
-            for (CharacterType characterType : finalySet) {
+            for (UnitType characterType : finalySet) {
                 try {
                     controller.createNewUnit(characterType, false);
                 } catch (NotEnoughMonyException e) {
@@ -199,5 +197,9 @@ public class NPCController implements Runnable {
                 }
             }
         }
+    }
+
+    public void finish() {
+        finish = true;
     }
 }

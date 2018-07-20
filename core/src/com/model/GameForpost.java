@@ -15,4 +15,9 @@ public class GameForpost extends VulnerableObject {
 
         return instance;
     }
+
+    @Override
+    public int getId() {
+        return 0;
+    }
 }

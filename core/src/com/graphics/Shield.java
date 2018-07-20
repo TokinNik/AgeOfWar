@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.controller.UnitController;
+import com.controller.GameController;
 import com.model.Gate;
 
 class Shield extends Actor
@@ -27,8 +27,8 @@ class Shield extends Actor
     {
         if (dir == 1)
         {
-            gate = new Gate(true, UnitController.getUserEvolveStage());
-            UnitController.setUserGate(gate);
+            gate = new Gate(true, GameController.getUserEvolveStage());
+            GameController.setUserGate(gate);
             animation = Resources.shieldDamageAnimationL;
             shieldImage = Resources.shieldU;
             shieldImage.setBounds(0,0,631,533);
@@ -88,7 +88,7 @@ class Shield extends Actor
     {
         if (animCount <= 0)
             animCount = 10;
-        System.out.println(UnitController.clothestUserObjectPosition + "_+_+_+_ " + gate.getHealth());
+        System.out.println(GameController.clothestUserObjectPosition + "_+_+_+_ " + gate.getHealth());
     }
 
     public void setActive(boolean active)

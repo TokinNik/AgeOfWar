@@ -6,19 +6,20 @@ import com.model.UserForpost;
 import java.util.concurrent.TimeUnit;
 
 public class WinnerChecker implements Runnable {
-    UnitController controller;
-    Object syncObj;
+    private GameController controller;
+    private Object syncObj;
+    private boolean finish;
 
-    public WinnerChecker(UnitController controller, Object syncObj) {
+    public WinnerChecker(GameController controller, Object syncObj) {
         this.controller = controller;
         this.syncObj = syncObj;
     }
 
     @Override
     public void run() {
+        finish = false;
         while (true) {
-
-            if (controller.isPause()) {
+            if (controller.pause) {
                 synchronized (controller.syncObj) {
                     try {
                         syncObj.wait();
@@ -28,7 +29,7 @@ public class WinnerChecker implements Runnable {
                 }
             }
 
-            if (controller.isGameFinished()) {
+            if (finish) {
                 break;
             }
 
@@ -36,18 +37,22 @@ public class WinnerChecker implements Runnable {
                 TimeUnit.MILLISECONDS.sleep(400);
                 if (UserForpost.getInstance().getHealth() <= 0) {
                     controller.gameListaner.onForpostDestroy(true);
-                    controller.setGameFinished(true);
+                    controller.finish();
                     break;
                 }
 
                 if (GameForpost.getInstance().getHealth() <= 0) {
                     controller.gameListaner.onForpostDestroy(false);
-                    controller.setGameFinished(true);
+                    controller.finish();
                     break;
                 }
 
             } catch (InterruptedException e) {
             }
         }
+    }
+
+    public void finish() {
+        finish = true;
     }
 }

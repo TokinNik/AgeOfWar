@@ -5,10 +5,10 @@ import java.util.concurrent.TimeUnit;
 //
 public class Infatryman extends Unit {
     private static final float AFFECTED_AREA = 20f;
-    private static final int BASE_PRICE = 20;
+    public static final int BASE_PRICE = 20;
 
-    public Infatryman(int id, boolean users, StageOfEvolution stage, Object syncObj) {
-        super(id, 100, 7f, 0.3f, 5f, 20, users, stage, CharacterType.INFATRYMAN, syncObj);
+    protected Infatryman(boolean users, StageOfEvolution stage, Object syncObj) {
+        super(100, 7f, 0.3f, 5f, 20, users, stage, UnitType.INFATRYMAN, syncObj);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class Infatryman extends Unit {
             return;
         }
 
-        if ((gameObject instanceof Unit) && ( (Unit) gameObject).getType() == CharacterType.RIDER) {
+        if ((gameObject instanceof Unit) && ( (Unit) gameObject).getType() == UnitType.RIDER) {
             gameObject.setHealth(gameObject.getHealth() - ( getStrength() * 2));
         } else {
             gameObject.setHealth(gameObject.getHealth() - getStrength());
@@ -29,9 +29,5 @@ public class Infatryman extends Unit {
     @Override
     public float getAffectedArea() {
         return AFFECTED_AREA;
-    }
-
-    public static int getBasePrice() {
-        return BASE_PRICE;
     }
 }

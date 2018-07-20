@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.controller.UnitController;
+import com.controller.GameController;
 
 
 public class Forpost extends Actor
@@ -87,6 +87,6 @@ public class Forpost extends Actor
     {
         if (animCount <= 0)
             animCount = 10;
-        System.out.println(UnitController.clothestUserObjectPosition + "_+_+_+_");
+        System.out.println(GameController.clothestUserObjectPosition + "_+_+_+_");
     }
 }

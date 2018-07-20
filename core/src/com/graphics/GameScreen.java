@@ -14,10 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.controller.UnitController;
+import com.controller.GameController;
 import com.exception.NotEnoughMonyException;
 import com.model.Unit;
-import com.model.CharacterType;
+import com.model.UnitType;
 import com.model.GameForpost;
 import com.model.UserForpost;
 
@@ -49,14 +49,14 @@ public class GameScreen implements Screen, InputProcessor
         prefX = -1;
         //prefY = -1;
 
-        UnitController.start();
+        GameController.start();
     }
 
     @Override
     public void show()
     {
         Resources.state = State.GAME;
-        UnitController.setPause(false);
+        GameController.setPause(false);
         final Image bg = Resources.bgForest;
         bg.setBounds(0, 0, Resources.GAME_WIDTH, Resources.GAME_HEIGHT);
         stage.addActor(bg);
@@ -177,9 +177,9 @@ public class GameScreen implements Screen, InputProcessor
             Gdx.gl.glClearColor(0, 0.2f, 0.1f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            if (UnitController.isGameWin())
+            if (GameController.isGameWin())
                 gui.setGameEndMenu(true);
-            if (UnitController.isUserWin())
+            if (GameController.isUserWin())
                 gui.setGameEndMenu(false);
 
 
@@ -241,7 +241,7 @@ public class GameScreen implements Screen, InputProcessor
         System.out.println("Disposed:  Game Screen");
     }
 
-    static void setUnit(CharacterType type) throws NotEnoughMonyException
+    static void setUnit(UnitType type) throws NotEnoughMonyException
     {
         System.out.println("Set Unit type " + type);
 
@@ -259,7 +259,7 @@ public class GameScreen implements Screen, InputProcessor
             shieldG.setActive(true);
     }
 
-    public static void setCompUnit(CharacterType type, Unit character) throws NotEnoughMonyException
+    public static void setCompUnit(UnitType type, Unit character) throws NotEnoughMonyException
     {
         System.out.println("Set Unit type " + type);
 
