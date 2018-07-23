@@ -27,6 +27,8 @@ public class Start extends Game
 		standartFontWhite = generator.generateFont(parameter);
 		generator.dispose();
 
+		Resources.OPTIONS.putInteger("Start Money", 100);
+
 		Resources.game = this;
 		this.setScreen(new MainMenu());
 	}

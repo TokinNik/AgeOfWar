@@ -1,5 +1,7 @@
 package com.model;
 
+import com.controller.UnitType;
+
 public class Incredible extends Unit {
     private static final float AFFECTED_AREA = 50;
     public static final int BASE_PRICE = 1000;

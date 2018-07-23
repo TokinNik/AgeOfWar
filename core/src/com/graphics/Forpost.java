@@ -87,6 +87,5 @@ public class Forpost extends Actor
     {
         if (animCount <= 0)
             animCount = 10;
-        System.out.println(GameController.clothestUserObjectPosition + "_+_+_+_");
     }
 }

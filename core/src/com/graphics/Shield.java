@@ -9,11 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.controller.GameController;
 import com.model.Gate;
+import com.model.StageOfEvolution;
 
 class Shield extends Actor
 {
     private Animation animation;
-    private int direction;
+    private boolean direction;
     private int animCount;
     private float currentHP;
     private float stateTime;
@@ -23,12 +24,12 @@ class Shield extends Actor
     private Gate gate;
 
 
-    Shield (int dir)
+    Shield (boolean dir, StageOfEvolution stageOfEvolution)
     {
-        if (dir == 1)
+        if (dir)
         {
-            gate = new Gate(true, GameController.getUserEvolveStage());
-            GameController.setUserGate(gate);
+            gate = new Gate(true, stageOfEvolution);
+            //TODO сделай врата в логике или поставь сюда, если есть
             animation = Resources.shieldDamageAnimationL;
             shieldImage = Resources.shieldU;
             shieldImage.setBounds(0,0,631,533);
@@ -37,7 +38,7 @@ class Shield extends Actor
             setVisible(false);
             this.active = false;
         }
-        if (dir == -1)
+        else
         {
             animation = Resources.shieldDamageAnimationR;
             shieldImage = Resources.shieldG;
@@ -74,12 +75,12 @@ class Shield extends Actor
     @Override
     public void act(float delta)
     {
-        if (direction == 1 && currentHP > gate.getHealth())
+        if (direction  && currentHP > gate.getHealth())
         {
             currentHP = gate.getHealth();
             takeDamage();
         }
-        if (direction == 1 && currentHP < gate.getHealth())
+        if (direction  && currentHP < gate.getHealth())
             currentHP = gate.getMaxHealth();
         super.act(delta);
     }
@@ -88,7 +89,6 @@ class Shield extends Actor
     {
         if (animCount <= 0)
             animCount = 10;
-        System.out.println(GameController.clothestUserObjectPosition + "_+_+_+_ " + gate.getHealth());
     }
 
     public void setActive(boolean active)

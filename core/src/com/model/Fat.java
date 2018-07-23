@@ -1,5 +1,7 @@
 package com.model;
 
+import com.controller.UnitType;
+
 import java.util.concurrent.TimeUnit;
 
 public class Fat extends Unit {

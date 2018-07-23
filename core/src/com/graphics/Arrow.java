@@ -13,15 +13,15 @@ class Arrow extends Actor
 
 
 
-    Arrow (int dir, float x1, float y1, float x2, float y2)
+    Arrow (boolean dir, float x1, float y1, float x2, float y2)
     {
-        if (dir == 1)
+        if (dir)
         {
             sprite.setTexture(Resources.arrow);
             setBounds(x1, y1,100,10);
             sprite.setBounds(x1,y1,getWidth(),getHeight());
         }
-        if (dir == -1)
+        else
         {
             sprite.setTexture(Resources.arrowL);
             setBounds(x1, y1,100,10);

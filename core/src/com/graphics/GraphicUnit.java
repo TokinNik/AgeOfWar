@@ -6,34 +6,36 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.controller.GameController;
+import com.controller.UnitType;
 import com.exception.NotEnoughMonyException;
 import com.model.UnitState;
-import com.model.UnitType;
 
-public class Unit extends Actor
+public class GraphicUnit extends Actor
 {
     private Animation animation;
-    private UnitType type;
-    private int direction;
+    private boolean direction;
     private float stateTime;
     private long atackTime;
     private TextureRegion currentFrame;
     private Image hBar;
     private Label levelL;
-    private com.model.Unit unit;
+    private UnitType unitType;
+    private UnitState unitState;
+    private int unitId;
+    private float health;
+    private int maxHealth;
 
 
-    Unit (UnitType type) throws NotEnoughMonyException
+    GraphicUnit(UnitType type, int id, boolean dir) throws NotEnoughMonyException
     {
-        unit = GameController.createNewUnit(type);
-        this.direction = 1;
+        this.unitType = type;
+        this.unitId = id;
+        this.direction = dir;
         atackTime = TimeUtils.millis();
-        setBounds(unit.getPosition() * 2f, 50, 240, 288);
+        setBounds(dir?0:2000 , 50, 240, 288);
 
         switch (type)
         {
@@ -56,45 +58,11 @@ public class Unit extends Actor
                 animation = Resources.testAnimationR;
         }
 
-        levelL = new Label( unit.getStage().toString() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
+        levelL = new Label( unitState + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
         levelL.setPosition(getX() - 5, getY() + getHeight() + 20);
 
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
-        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * unit.getHealth()/ unit.getMaxHealth(), 10);
-    }
-
-    Unit(UnitType type, com.model.Unit c) throws  NotEnoughMonyException
-    {
-        this.unit = c;
-        this.direction = -1;
-        setBounds(unit.getPosition() * 2f, 50, 240, 288);
-
-        switch (type)
-        {
-            case INFATRYMAN:
-                animation = Resources.blueAnimationL;
-                break;
-            case ARCHER:
-                animation = Resources.yellowAnimationL;
-                break;
-            case FAT:
-                animation = Resources.greenAnimationL;
-                break;
-            case RIDER:
-                animation = Resources.purpleAnimationL;
-                break;
-            case INCREDIBLE:
-                animation = Resources.redAnimationL;
-                break;
-            default:
-                animation = Resources.testAnimationL;
-        }
-
-        levelL = new Label( unit.getStage() + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
-        levelL.setPosition(getX(), getY() + getHeight() + 35);
-
-        hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
-        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * unit.getHealth()/ unit.getMaxHealth(), 10);
+        hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * health/ maxHealth, 10);
     }
 
     @Override
@@ -103,16 +71,16 @@ public class Unit extends Actor
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
 
-        addAction(Actions.moveTo( unit.getPosition() * 2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
+        //addAction(Actions.moveTo( unit.getPosition() * 2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
 
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 
-        if (unit.getHealth() > 0)
-            hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * unit.getHealth() / unit.getMaxHealth(), 10);
+        if (health > 0)
+            hBar.setBounds(getX(), getY() + getHeight() + 20, getWidth() * health / maxHealth, 10);
 
-        if (unit.getHealth() <= unit.getMaxHealth() * 0.6f)
+        if (health <= maxHealth * 0.6f)
             hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_yellow"));
-        if (unit.getHealth() <= unit.getMaxHealth() * 0.3f)
+        if (health <= maxHealth * 0.3f)
             hBar.setDrawable(Resources.guiSkin.getDrawable("hBar_red"));
 
         batch.draw(currentFrame, getX(), getY());
@@ -125,8 +93,8 @@ public class Unit extends Actor
     @Override
     public void act(float delta)
     {
-        if(unit.getType() == UnitType.ARCHER && unit.getState() == UnitState.FIGHT && TimeUtils.timeSinceMillis(atackTime) > 800)
-            if (direction == 1)
+        if(unitType == UnitType.ARCHER && unitState == UnitState.FIGHT && TimeUtils.timeSinceMillis(atackTime) > 800)
+            if (direction)
             {
                 if (Math.random() > 0.5)
                     GameScreen.setArrow(direction, getX() + (getWidth() / 2), (getY() + getHeight()) * 0.8f,
@@ -149,9 +117,36 @@ public class Unit extends Actor
         super.act(delta);
     }
 
-    UnitType getType() {return type;}
+    public void setPos(float x)
+    {
+        setX(x);
+    }
 
-    int getDirection() {return direction;}
+    UnitType getType() {return unitType;}
 
-    public com.model.Unit getUnit(){return unit;}
+    boolean getDirection() {return direction;}
+
+    public UnitState getUnitState() {
+        return unitState;
+    }
+
+    public void setUnitState(UnitState unitState) {
+        this.unitState = unitState;
+    }
+
+    public float getHealth() {
+        return health;
+    }
+
+    public void setHealth(float health) {
+        this.health = health;
+    }
+
+    public int getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(int unitId) {
+        this.unitId = unitId;
+    }
 }

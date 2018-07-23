@@ -1,6 +1,7 @@
 package com.model;
 
 import com.GameEvent;
+import com.controller.UnitType;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;

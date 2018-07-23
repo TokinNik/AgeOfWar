@@ -18,9 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.controller.GameController;
+import com.controller.UnitType;
 import com.exception.LimitOfEvolutionException;
 import com.exception.NotEnoughMonyException;
-import com.model.UnitType;
 import com.model.StageOfEvolution;
 
 
@@ -43,11 +43,14 @@ public class GameGUI extends Stage implements InputProcessor
     private Button evolveB;
     private Button shieldB;
     private Music bgMusic;
+    private GameController gameController;
 
-    GameGUI ()
+    GameGUI (final GameController gameController)
     {
         super(new FitViewport(Resources.WORLD_WIDTH, Resources.WORLD_HEIGHT));
 
+        this.gameController = gameController;
+        
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal(Resources.game1MusicPath));
         bgMusic.setLooping(true);
         bgMusic.setVolume(Resources.OPTIONS.getFloat("Music Volume"));
@@ -62,19 +65,19 @@ public class GameGUI extends Stage implements InputProcessor
         bgBot.setBounds(0,0, Resources.WORLD_WIDTH, 50);
         addActor(bgBot);
 
-        moneyL = new Label("| Money: " + GameController.getTotalMoney() + " |", Resources.simpleLSWhite);
+        moneyL = new Label("| Money: " + Resources.OPTIONS.getInteger("Start Money") + " |", Resources.simpleLSWhite);
         moneyL.setPosition(25, 28);
         addActor(moneyL);
 
-        expL = new Label("| Experience: " + GameController.getTotalScore() + " |", Resources.simpleLSWhite);
+        expL = new Label("| Experience: 0 |", Resources.simpleLSWhite);
         expL.setPosition(25, 8);
         addActor(expL);
 
-        unitsL = new Label("| Units: " + GameController.getUserArmyCount() + " |", Resources.simpleLSWhite);
+        unitsL = new Label("| Units: 0 |", Resources.simpleLSWhite);
         unitsL.setPosition((moneyL.getWidth() > expL.getWidth()) ? moneyL.getX() + moneyL.getWidth() : expL.getX() + expL.getWidth() + 5, 28);
         addActor(unitsL);
 
-        enemyL = new Label("| Enemy: " + GameController.getGameArmyCount() + " |", Resources.simpleLSWhite);
+        enemyL = new Label("| Enemy: 0 |", Resources.simpleLSWhite);
         enemyL.setPosition(unitsL.getX(), 8);
         addActor(enemyL);
 
@@ -91,7 +94,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_1L = new Label("Archer", Resources.simpleLSBlack);
         unitName_1L.setPosition( 0, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_1L);
-        unitCost_1L = new Label("Cost: " + GameController.getUnitPrice(UnitType.ARCHER), Resources.simpleLSBlack);
+        unitCost_1L = new Label("Cost: " + gameController.getUnitPrice(UnitType.ARCHER), Resources.simpleLSBlack);
         unitCost_1L.setPosition( 0, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_1L);
 
@@ -106,7 +109,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.ARCHER);
+                        GameScreen.setUnit(UnitType.ARCHER, true);
                         updateLabels();
                         System.out.println("UNIT 1");
                     } catch (NotEnoughMonyException e)
@@ -120,7 +123,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_2L = new Label("Warrior", Resources.simpleLSBlack);
         unitName_2L.setPosition( 110, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_2L);
-        unitCost_2L = new Label("Cost: " + GameController.getUnitPrice(UnitType.INFATRYMAN), Resources.simpleLSBlack);
+        unitCost_2L = new Label("Cost: " + gameController.getUnitPrice(UnitType.INFATRYMAN), Resources.simpleLSBlack);
         unitCost_2L.setPosition( 110, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_2L);
 
@@ -135,7 +138,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.INFATRYMAN);
+                        GameScreen.setUnit(UnitType.INFATRYMAN, true);
                         updateLabels();
                         System.out.println("UNIT 2");
                     } catch (NotEnoughMonyException e) {
@@ -148,7 +151,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_3L = new Label("Fat", Resources.simpleLSBlack);
         unitName_3L.setPosition( 220, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_3L);
-        unitCost_3L = new Label("Cost: " + GameController.getUnitPrice(UnitType.FAT), Resources.simpleLSBlack);
+        unitCost_3L = new Label("Cost: " + gameController.getUnitPrice(UnitType.FAT), Resources.simpleLSBlack);
         unitCost_3L.setPosition( 220, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_3L);
 
@@ -163,7 +166,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.FAT);
+                        GameScreen.setUnit(UnitType.FAT,true);
                         updateLabels();
                         System.out.println("UNIT 3");
                     } catch (NotEnoughMonyException e)
@@ -177,7 +180,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_4L = new Label("Rider", Resources.simpleLSBlack);
         unitName_4L.setPosition( 330, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_4L);
-        unitCost_4L = new Label("Cost: " + GameController.getUnitPrice(UnitType.RIDER), Resources.simpleLSBlack);
+        unitCost_4L = new Label("Cost: " + gameController.getUnitPrice(UnitType.RIDER), Resources.simpleLSBlack);
         unitCost_4L.setPosition( 330, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_4L);
 
@@ -192,7 +195,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.RIDER);
+                        GameScreen.setUnit(UnitType.RIDER, true);
                         updateLabels();
                         System.out.println("UNIT 4");
                     } catch (NotEnoughMonyException e)
@@ -206,7 +209,7 @@ public class GameGUI extends Stage implements InputProcessor
         Label unitName_5L = new Label("Incredible", Resources.simpleLSBlack);
         unitName_5L.setPosition( 440, Resources.WORLD_HEIGHT - 120);
         unitsG.addActor(unitName_5L);
-        unitCost_5L = new Label("Cost: " + GameController.getUnitPrice(UnitType.INCREDIBLE), Resources.simpleLSBlack);
+        unitCost_5L = new Label("Cost: " + gameController.getUnitPrice(UnitType.INCREDIBLE), Resources.simpleLSBlack);
         unitCost_5L.setPosition( 440, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_5L);
 
@@ -221,7 +224,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.INCREDIBLE);
+                        GameScreen.setUnit(UnitType.INCREDIBLE,true);
                         updateLabels();
                         System.out.println("UNIT 5");
                     } catch (NotEnoughMonyException e)
@@ -276,8 +279,8 @@ public class GameGUI extends Stage implements InputProcessor
             {
                 if (Resources.state == State.GAME)
                     try {
-                        GameController.evolve();
-                        GameController.addScore(-200);
+                        gameController.evolve(true);
+                        //gameController.addScore(-200);
                         updateCost();
                         evolveB.setVisible(false);
                     } catch (LimitOfEvolutionException e) {
@@ -317,26 +320,34 @@ public class GameGUI extends Stage implements InputProcessor
 
     private void updateCost()
     {
-        unitCost_1L.setText("Cost: " + GameController.getUnitPrice(UnitType.ARCHER));
-        unitCost_2L.setText("Cost: " + GameController.getUnitPrice(UnitType.INFATRYMAN));
-        unitCost_3L.setText("Cost: " + GameController.getUnitPrice(UnitType.FAT));
-        unitCost_4L.setText("Cost: " + GameController.getUnitPrice(UnitType.RIDER));
-        unitCost_5L.setText("Cost: " + GameController.getUnitPrice(UnitType.INCREDIBLE));
+        unitCost_1L.setText("Cost: " + gameController.getUnitPrice(UnitType.ARCHER));
+        unitCost_2L.setText("Cost: " + gameController.getUnitPrice(UnitType.INFATRYMAN));
+        unitCost_3L.setText("Cost: " + gameController.getUnitPrice(UnitType.FAT));
+        unitCost_4L.setText("Cost: " + gameController.getUnitPrice(UnitType.RIDER));
+        unitCost_5L.setText("Cost: " + gameController.getUnitPrice(UnitType.INCREDIBLE));
+    }
+
+    void updateMoney(int value)
+    {
+        moneyL.setText("| Money: " + value + " |");
+    }
+
+    void updateScore(int value)
+    {
+        expL.setText("| Experience: " + value + " |");
     }
 
     void updateLabels()
     {
-        moneyL.setText("| Money: " + GameController.getTotalMoney() + " |");
-        expL.setText("| Experience: " + GameController.getTotalScore() + " |");
         unitsL.setPosition((moneyL.getPrefWidth() > expL.getPrefWidth()) ? moneyL.getX() + moneyL.getPrefWidth() : expL.getX() + expL.getPrefWidth() + 5, 28);
-        unitsL.setText("| Units: " + GameController.getUserArmyCount() + " |");
+        //unitsL.setText("| Units: " + gameController.getUserArmyCount() + " |");
         enemyL.setPosition(unitsL.getX(), 8);
-        enemyL.setText("| Enemy: " + GameController.getGameArmyCount() + " |");
+        //enemyL.setText("| Enemy: " + gameController.getGameArmyCount() + " |");
 
-        if (GameController.getTotalScore() >= 200 && !evolveB.isVisible() && GameController.getUserEvolveStage() != StageOfEvolution.FOURTH)
-            evolveB.setVisible(true);
-        if (GameController.getTotalScore() < 200 && evolveB.isVisible())
-            evolveB.setVisible(false);
+        //if (gameController.getTotalScore() >= 200 && !evolveB.isVisible() && gameController.getUserEvolveStage() != StageOfEvolution.FOURTH)
+            //evolveB.setVisible(true);
+        //if (gameController.getTotalScore() < 200 && evolveB.isVisible())
+            //evolveB.setVisible(false);
 
         yourBaseL.setPosition(unitsL.getX() + unitsL.getPrefWidth() + 5, 28);
         enemyBaseL.setPosition(yourBaseL.getX(), 8);
@@ -377,7 +388,7 @@ public class GameGUI extends Stage implements InputProcessor
     void setWindowMenu()
     {
         Resources.state = State.PAUSE;
-        GameController.setPause(true);
+        gameController.pause();
 
         final Group window = new Group();
 
@@ -397,7 +408,7 @@ public class GameGUI extends Stage implements InputProcessor
                 bgMusic.stop();
                 bgMusic.dispose();
                 GameScreen.exit();
-                GameController.restart();
+                gameController.restart();
                 Resources.game.setScreen(new LoadScreen(ScreenType.MainMenu));
                 dispose();
             }
@@ -425,8 +436,7 @@ public class GameGUI extends Stage implements InputProcessor
                 window.addAction(Actions.removeActor());
 
                 Resources.state = State.GAME;
-                GameController.setPause(false);
-                GameController.resume();
+                gameController.resume();
             }
         });
         resetB.setPosition(Resources.WORLD_WIDTH_2 - 125, Resources.WORLD_HEIGHT_2);
@@ -438,8 +448,8 @@ public class GameGUI extends Stage implements InputProcessor
                 window.addAction(Actions.removeActor());
 
                 GameScreen.clear();
-                GameController.restart();
-                GameController.start();
+                gameController.restart();
+                gameController.start();
                 Resources.state = State.GAME;
                 updateCost();
             }
@@ -457,7 +467,7 @@ public class GameGUI extends Stage implements InputProcessor
     void setGameEndMenu(boolean win)
     {
         Resources.state = State.PAUSE;
-        GameController.setPause(true);
+        gameController.pause();
 
         final Group window = new Group();
 
@@ -498,7 +508,7 @@ public class GameGUI extends Stage implements InputProcessor
                 bgMusic.stop();
                 bgMusic.dispose();
                 GameScreen.exit();
-                GameController.restart();
+                gameController.restart();
                 Resources.game.setScreen(new LoadScreen(ScreenType.MainMenu));
                 dispose();
             }
@@ -517,8 +527,8 @@ public class GameGUI extends Stage implements InputProcessor
                     Resources.currentLvL = 3;
 
                 GameScreen.clear();
-                GameController.restart();
-                GameController.start();
+                gameController.restart();
+                gameController.start();
                 Resources.state = State.GAME;
                 updateCost();
             }
@@ -536,8 +546,8 @@ public class GameGUI extends Stage implements InputProcessor
                 window.addAction(Actions.removeActor());
 
                 GameScreen.clear();
-                GameController.restart();
-                GameController.start();
+                gameController.restart();
+                gameController.start();
                 Resources.state = State.GAME;
                 updateCost();
             }
@@ -619,7 +629,7 @@ public class GameGUI extends Stage implements InputProcessor
     void setWindowExit()
     {
         Resources.state = State.PAUSE;
-        GameController.setPause(true);
+        gameController.pause();
 
         final Group window = new Group();
 
@@ -650,8 +660,7 @@ public class GameGUI extends Stage implements InputProcessor
                 window.addAction(Actions.removeActor());
 
                 Resources.state = State.GAME;
-                GameController.setPause(false);
-                GameController.resume();
+                gameController.resume();
             }
         });
 

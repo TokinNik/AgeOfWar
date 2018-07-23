@@ -14,49 +14,55 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.controller.GameChangeListaner;
 import com.controller.GameController;
+import com.controller.UnitType;
 import com.exception.NotEnoughMonyException;
+import com.model.StageOfEvolution;
 import com.model.Unit;
-import com.model.UnitType;
+import com.model.UnitState;
 import com.model.GameForpost;
 import com.model.UserForpost;
 
 
-public class GameScreen implements Screen, InputProcessor
+public class GameScreen implements Screen, InputProcessor, GameChangeListaner
 {
     private static OrthographicCamera camera;
     private static Stage stage;
     private static GameGUI gui;
-    private static Array<com.graphics.Unit> units;
+    private static Array<GraphicUnit> units;
     private static float prefX;
     //private static float prefY;
     private static UserForpost userForpost;
     private static GameForpost gameForpost;
     private static Shield shieldU;
     private static Shield shieldG;
+    public static GameController gameController;
 
     GameScreen ()
     {
         camera = new OrthographicCamera(Resources.WORLD_WIDTH, Resources.WORLD_HEIGHT);
         camera.setToOrtho(false);
 
+        gameController = new GameController(this);
+        gameController.start();
+
         stage = new Stage(new ScreenViewport(camera));
         //stage.setDebugAll(true);
         userForpost = UserForpost.getInstance();
         gameForpost = GameForpost.getInstance();
-        gui = new GameGUI();
-        units = new Array<com.graphics.Unit>();
+        gui = new GameGUI(gameController);
+        units = new Array<GraphicUnit>();
         prefX = -1;
         //prefY = -1;
 
-        GameController.start();
     }
 
     @Override
     public void show()
     {
         Resources.state = State.GAME;
-        GameController.setPause(false);
+        //gameController.start();
         final Image bg = Resources.bgForest;
         bg.setBounds(0, 0, Resources.GAME_WIDTH, Resources.GAME_HEIGHT);
         stage.addActor(bg);
@@ -67,8 +73,8 @@ public class GameScreen implements Screen, InputProcessor
         stage.addActor(userF);
         stage.addActor(gameF);
 
-        shieldU = new Shield(1);
-        shieldG = new Shield(-1);
+        shieldU = new Shield(true, StageOfEvolution.FIRST);
+        shieldG = new Shield(false, StageOfEvolution.FIRST);
 
         stage.addActor(shieldG);
         stage.addActor(shieldU);
@@ -177,23 +183,13 @@ public class GameScreen implements Screen, InputProcessor
             Gdx.gl.glClearColor(0, 0.2f, 0.1f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            if (GameController.isGameWin())
-                gui.setGameEndMenu(true);
-            if (GameController.isUserWin())
-                gui.setGameEndMenu(false);
-
-
             gui.updateBaseHealth();
             gui.updateLabels();
 
-            int i = 0;
-            for (com.graphics.Unit u: units)
+            for(int i = 0; i < units.size - 1; ++i)
             {
-
-                if (!u.getUnit().isAlive())
+                if (units.get(i).getUnitState() == UnitState.DIE)
                     delUnit(i);
-
-                i++;
             }
             stage.act(delta);
             stage.draw();
@@ -241,13 +237,13 @@ public class GameScreen implements Screen, InputProcessor
         System.out.println("Disposed:  Game Screen");
     }
 
-    static void setUnit(UnitType type) throws NotEnoughMonyException
+    static void setUnit(UnitType type, boolean users) throws NotEnoughMonyException
     {
-        System.out.println("Set Unit type " + type);
+        System.out.println("Set GraphicUnit type " + type);
 
-        com.graphics.Unit unit = new com.graphics.Unit(type);
-        units.add(unit);
-        stage.addActor(unit);
+        GraphicUnit graphicUnit = new GraphicUnit(type, users ? gameController.createNewUnit(type, users) : 0, users);
+        units.add(graphicUnit);
+        stage.addActor(graphicUnit);
     }
 
     static void setShield(Boolean user)
@@ -259,16 +255,7 @@ public class GameScreen implements Screen, InputProcessor
             shieldG.setActive(true);
     }
 
-    public static void setCompUnit(UnitType type, Unit character) throws NotEnoughMonyException
-    {
-        System.out.println("Set Unit type " + type);
-
-        com.graphics.Unit unit = new com.graphics.Unit(type, character);
-        units.add(unit);
-        stage.addActor(unit);
-    }
-
-    static void setArrow(int dir, float x1, float y1, float x2, float y2)
+    static void setArrow(boolean dir, float x1, float y1, float x2, float y2)
     {
         //System.out.println("Set Arrow " + x1 + " " + y1 + " " + x2 + " " + y2);
 
@@ -279,16 +266,16 @@ public class GameScreen implements Screen, InputProcessor
     private void delUnit(int num)
     {
         units.get(num).remove();
-        System.out.println("Delete Unit type " + units.get(num).getType() + " direction " + units.get(num).getDirection());
+        System.out.println("Delete GraphicUnit type " + units.get(num).getType() + " direction " + units.get(num).getDirection());
         units.removeIndex(num);
     }
 
     static void clear()
     {
-        for (com.graphics.Unit u: units)
+        for (GraphicUnit u: units)
         {
             u.remove();
-            System.out.println("Delete Unit type " + u.getType() + " direction " + u.getDirection());
+            System.out.println("Delete GraphicUnit type " + u.getType() + " direction " + u.getDirection());
         }
         units.clear();
         shieldG.setActive(false);
@@ -301,13 +288,21 @@ public class GameScreen implements Screen, InputProcessor
 
     static void exit()
     {
-        for (com.graphics.Unit u: units)
+        for (GraphicUnit u: units)
         {
             u.remove();
-            System.out.println("Delete Unit type " + u.getType() + " direction " + u.getDirection());
+            System.out.println("Delete GraphicUnit type " + u.getType() + " direction " + u.getDirection());
         }
         units.clear();
         //stage.clear();
+    }
+
+    private GraphicUnit findUnitToId(int id)
+    {
+        for (GraphicUnit u: units)
+            if(u.getUnitId() == id)
+                return u;
+        return null;
     }
 
     static UserForpost getUserForpost() {
@@ -408,5 +403,71 @@ public class GameScreen implements Screen, InputProcessor
             camera.position.y = camera.viewportHeight/2;
         }
         return false;
+    }
+
+    @Override
+    public void onUnitStateChange(boolean users, int unitID, UnitState newState)
+    {
+        try
+        {
+            findUnitToId(unitID).setUnitState(newState);
+        }catch (NullPointerException c)
+        {
+            System.out.println("There is no such unit for ID " + unitID);
+        }
+    }
+
+    @Override
+    public void onCoordinateChange(boolean users, int unitID, float newCoordinate)
+    {
+        try
+        {
+            findUnitToId(unitID).setPos(newCoordinate);
+        }catch (NullPointerException c)
+        {
+            System.out.println("There is no such unit for ID " + unitID);
+        }
+    }
+
+    @Override
+    public void onHealthChange(boolean users, int unitID, float health)
+    {
+        try
+        {
+            findUnitToId(unitID).setHealth(health);
+        }catch (NullPointerException c)
+        {
+            System.out.println("There is no such unit for ID " + unitID);
+        }
+    }
+
+    @Override
+    public void onEnemyUnitCreate(UnitType type, int id) throws NotEnoughMonyException {
+        setUnit(type, false);
+        units.get(units.size-1).setUnitId(id);
+    }
+
+    @Override
+    public void onForpostDestroy(boolean userWin)
+    {
+        gui.setGameEndMenu(userWin);
+    }
+
+    @Override
+    public void onEnemyEvolveStageChange(StageOfEvolution newStage)
+    {
+
+    }
+
+    @Override
+    public void onManyCountChange(int value)
+    {
+        gui.updateMoney(value);
+    }
+
+    @Override
+    public void onScoreChange(int value)
+    {
+        gui.updateScore(value);
     }
 }

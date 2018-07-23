@@ -1,5 +1,7 @@
 package com.model;
 
+import com.controller.UnitType;
+
 //
 public class Rider extends Unit {
     public static final float AFFECTED_AREA = 200;

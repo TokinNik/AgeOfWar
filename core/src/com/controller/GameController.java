@@ -71,7 +71,7 @@ public class GameController {
         NPCControllerThread.start();
     }
 
-    private synchronized void pause() {
+    public synchronized void pause() {
         this.pause = true;
         for (Unit unit: enemyArmy.army) {
             unit.changeGameSate(GameEvent.PAUSED);
@@ -81,7 +81,7 @@ public class GameController {
         }
     }
 
-    private synchronized void resume() {
+    public synchronized void resume() {
         pause = false;
 
         synchronized (syncObj) {
@@ -114,14 +114,14 @@ public class GameController {
         }
     }
 
-    protected void addScore(int totalScore) {
-        this.totalScore += totalScore;
+    protected void addScore(int delta) {
+        this.totalScore += delta;
         gameListaner.onScoreChange(totalScore);
     }
 
     protected void addMoney(int delta) {
         totalMoney += delta;
-        gameListaner.onMonyCountChange(totalMoney);
+        gameListaner.onManyCountChange(totalMoney);
     }
 
     public int getUnitPrice(UnitType type) {
