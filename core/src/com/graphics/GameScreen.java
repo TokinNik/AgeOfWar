@@ -237,11 +237,11 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
         System.out.println("Disposed:  Game Screen");
     }
 
-    static void setUnit(UnitType type, boolean users) throws NotEnoughMonyException
+    static void setUnit(UnitType type, boolean users, int id) throws NotEnoughMonyException
     {
-        System.out.println("Set GraphicUnit type " + type);
+        System.out.println("Set GraphicUnit type " + type + " ID " + id);
 
-        GraphicUnit graphicUnit = new GraphicUnit(type, users ? gameController.createNewUnit(type, users) : 0, users);
+        GraphicUnit graphicUnit = new GraphicUnit(type, users ? gameController.createNewUnit(type, true) : id, users);
         units.add(graphicUnit);
         stage.addActor(graphicUnit);
     }
@@ -299,9 +299,11 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
 
     private GraphicUnit findUnitToId(int id)
     {
-        for (GraphicUnit u: units)
-            if(u.getUnitId() == id)
-                return u;
+        for (int i = 0; i <= units.size-1; i++)
+        {
+            if(units.get(i).getUnitId() == id)
+                return units.get(i);
+        }
         return null;
     }
 
@@ -443,8 +445,7 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
 
     @Override
     public void onEnemyUnitCreate(UnitType type, int id) throws NotEnoughMonyException {
-        setUnit(type, false);
-        units.get(units.size-1).setUnitId(id);
+        setUnit(type, false, id);
     }
 
     @Override

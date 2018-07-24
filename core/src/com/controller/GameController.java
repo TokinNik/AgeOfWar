@@ -13,7 +13,7 @@ public class GameController {
     protected GameChangeListaner gameListaner;
     protected boolean pause = false;
     private int totalScore = 0;
-    private int  totalMoney = 100;
+    private int totalMoney = 100;
     protected VulnerableObject clothestUserObject = UserForpost.getInstance();
     protected VulnerableObject clothestGameObject = GameForpost.getInstance();
     public final Object syncObj = new Object();
@@ -73,12 +73,15 @@ public class GameController {
 
     public synchronized void pause() {
         this.pause = true;
+        System.out.println("==================1");
         for (Unit unit: enemyArmy.army) {
             unit.changeGameSate(GameEvent.PAUSED);
         }
+        System.out.println("==================2");
         for (Unit unit: userArmy.army) {
             unit.changeGameSate(GameEvent.PAUSED);
         }
+        System.out.println("==================3");
     }
 
     public synchronized void resume() {

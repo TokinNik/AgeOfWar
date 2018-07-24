@@ -109,7 +109,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.ARCHER, true);
+                        GameScreen.setUnit(UnitType.ARCHER, true, 0);
                         updateLabels();
                         System.out.println("UNIT 1");
                     } catch (NotEnoughMonyException e)
@@ -138,7 +138,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.INFATRYMAN, true);
+                        GameScreen.setUnit(UnitType.INFATRYMAN, true, 0);
                         updateLabels();
                         System.out.println("UNIT 2");
                     } catch (NotEnoughMonyException e) {
@@ -166,7 +166,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.FAT,true);
+                        GameScreen.setUnit(UnitType.FAT,true, 0);
                         updateLabels();
                         System.out.println("UNIT 3");
                     } catch (NotEnoughMonyException e)
@@ -195,7 +195,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.RIDER, true);
+                        GameScreen.setUnit(UnitType.RIDER, true, 0);
                         updateLabels();
                         System.out.println("UNIT 4");
                     } catch (NotEnoughMonyException e)
@@ -224,7 +224,7 @@ public class GameGUI extends Stage implements InputProcessor
                 if (Resources.state == State.GAME)
                     try
                     {
-                        GameScreen.setUnit(UnitType.INCREDIBLE,true);
+                        GameScreen.setUnit(UnitType.INCREDIBLE,true, 0);
                         updateLabels();
                         System.out.println("UNIT 5");
                     } catch (NotEnoughMonyException e)
@@ -340,10 +340,11 @@ public class GameGUI extends Stage implements InputProcessor
     void updateLabels()
     {
         unitsL.setPosition((moneyL.getPrefWidth() > expL.getPrefWidth()) ? moneyL.getX() + moneyL.getPrefWidth() : expL.getX() + expL.getPrefWidth() + 5, 28);
+        //TODO удалить всё это
         //unitsL.setText("| Units: " + gameController.getUserArmyCount() + " |");
         enemyL.setPosition(unitsL.getX(), 8);
         //enemyL.setText("| Enemy: " + gameController.getGameArmyCount() + " |");
-
+        //todo переместить в updateScore()
         //if (gameController.getTotalScore() >= 200 && !evolveB.isVisible() && gameController.getUserEvolveStage() != StageOfEvolution.FOURTH)
             //evolveB.setVisible(true);
         //if (gameController.getTotalScore() < 200 && evolveB.isVisible())
@@ -388,7 +389,9 @@ public class GameGUI extends Stage implements InputProcessor
     void setWindowMenu()
     {
         Resources.state = State.PAUSE;
+        System.out.println("------------------1");
         gameController.pause();
+        System.out.println("------------------2");
 
         final Group window = new Group();
 
