@@ -61,9 +61,8 @@ public class Resources
     public static Image fortG = new Image(new Texture("units/caveR.png"));
     public static Image shieldU = new Image(new Texture("units/shieldL.png"));
     public static Image shieldG = new Image(new Texture("units/shieldR.png"));
-    public static Texture arrowL = new Texture("units/example/arrowL_black.png");
-    public static Texture arrowR = new Texture("units/example/arrowR_black.png");
-    public static Texture arrow = new Texture("units/example/arrowT.jpg");
+    public static Image arrowL = new Image(new Texture("units/example/arrowL_black.png"));
+    public static Image arrowR = new Image( new Texture("units/example/arrowR_black.png"));
     public static Animation<TextureRegion> loadAnimation = setAnim("gui/load_anim.png", 5, 1, 0.5f);
     public static String menuMusicPath = "music/main_menu.mp3";
     public static String game1MusicPath = "music/in_game_1.mp3";

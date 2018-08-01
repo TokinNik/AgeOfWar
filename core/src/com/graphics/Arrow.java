@@ -1,13 +1,13 @@
 package com.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 class Arrow extends Actor
 {
-    private Sprite sprite = new Sprite();
+    private Image arrowImage;
     private float x;
     private float y;
 
@@ -17,32 +17,31 @@ class Arrow extends Actor
     {
         if (dir)
         {
-            sprite.setTexture(Resources.arrow);
+            arrowImage = Resources.arrowR;
             setBounds(x1, y1,100,10);
-            sprite.setBounds(x1,y1,getWidth(),getHeight());
+            arrowImage.setBounds(x1,y1,getWidth(),getHeight());
         }
         else
         {
-            sprite.setTexture(Resources.arrowL);
+            arrowImage = Resources.arrowL;
             setBounds(x1, y1,100,10);
-            sprite.setBounds(x1, y1, getWidth(), getHeight());
+            arrowImage.setBounds(x1, y1, getWidth(), getHeight());
         }
         x = x2;
         y = y2;
         addAction(Actions.moveTo(x2, y2, 0.2f));
-        setDebug(true);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
-        sprite.draw(batch);
+        arrowImage.draw(batch, parentAlpha);
     }
 
     @Override
     public void act(float delta)
     {
-        sprite.setPosition(getX(), getY());
+        arrowImage.setPosition(getX(), getY());
         if (getX() == x && getY() == y)
             addAction(Actions.removeActor());
         super.act(delta);

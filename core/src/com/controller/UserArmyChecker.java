@@ -118,14 +118,17 @@ public class UserArmyChecker implements Runnable {
     public StageOfEvolution evolve() throws LimitOfEvolutionException {
         switch (evolveStage) {
             case FIRST: {
+                evolveStage = StageOfEvolution.SECOND;
                 return StageOfEvolution.SECOND;
             }
 
             case SECOND: {
+                evolveStage = StageOfEvolution.THIRD;
                 return StageOfEvolution.THIRD;
             }
 
             case THIRD: {
+                evolveStage = StageOfEvolution.FOURTH;
                 return StageOfEvolution.FOURTH;
             }
         }

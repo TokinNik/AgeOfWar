@@ -31,8 +31,6 @@ public class GameGUI extends Stage implements InputProcessor
     private final Image hBarU;
     private final Image hBarG;
     private Label moneyL;
-    private Label unitsL;
-    private Label enemyL;
     private Label expL;
     private Label yourBaseL;
     private Label enemyBaseL;
@@ -75,16 +73,8 @@ public class GameGUI extends Stage implements InputProcessor
         expL.setPosition(25, 8);
         addActor(expL);
 
-        unitsL = new Label("| Units: 0 |", Resources.simpleLSWhite);
-        unitsL.setPosition((moneyL.getWidth() > expL.getWidth()) ? moneyL.getX() + moneyL.getWidth() : expL.getX() + expL.getWidth() + 5, 28);
-        addActor(unitsL);
-
-        enemyL = new Label("| Enemy: 0 |", Resources.simpleLSWhite);
-        enemyL.setPosition(unitsL.getX(), 8);
-        addActor(enemyL);
-
         yourBaseL = new Label("| Your Base Health: " + UserForpost.USER_FORPOST_BASE_HEALTH + " / " + UserForpost.USER_FORPOST_BASE_HEALTH + " |", Resources.simpleLSWhite);
-        yourBaseL.setPosition(unitsL.getX() + unitsL.getWidth() + 5, 28);
+        yourBaseL.setPosition((moneyL.getWidth() > expL.getWidth()) ? moneyL.getX() + moneyL.getWidth() : expL.getX() + expL.getWidth() + 5, 28);
         addActor(yourBaseL);
 
         enemyBaseL = new Label("| Enemy Base Health: " + GameForpost.NPC_FORPOST_BASE_HEALTH + " / " + UserForpost.USER_FORPOST_BASE_HEALTH + " |", Resources.simpleLSWhite);
@@ -100,7 +90,7 @@ public class GameGUI extends Stage implements InputProcessor
         unitCost_1L.setPosition( 0, Resources.WORLD_HEIGHT - 135);
         unitsG.addActor(unitCost_1L);
 
-        Button setUnit_1B = new Button(bs);
+        final Button setUnit_1B = new Button(bs);
         setUnit_1B.setPosition(0, Resources.WORLD_HEIGHT - 100);
         setUnit_1B.setSize(100, 100);
         setUnit_1B.addListener(new ClickListener()
@@ -281,10 +271,13 @@ public class GameGUI extends Stage implements InputProcessor
             {
                 if (Resources.state == State.GAME)
                     try {
-                        gameController.evolve(true);
-                        //gameController.addScore(-200);
+                    StageOfEvolution soe = gameController.evolve(true);
+                        if(soe == StageOfEvolution.FOURTH)
+                            evolveB.remove();
+                        else
+                            evolveB.setVisible(false);
+                        GameScreen.setStageOfEvolution(soe);
                         updateCost();
-                        evolveB.setVisible(false);
                     } catch (LimitOfEvolutionException e) {
                         e.printStackTrace();
                     }
@@ -337,31 +330,22 @@ public class GameGUI extends Stage implements InputProcessor
     void updateScore(int value)
     {
         expL.setText("| Experience: " + value + " |");
+        if (value >= 50 && !evolveB.isVisible())
+            evolveB.setVisible(true);
     }
 
     void updateLabels()
     {
-        unitsL.setPosition((moneyL.getPrefWidth() > expL.getPrefWidth()) ? moneyL.getX() + moneyL.getPrefWidth() : expL.getX() + expL.getPrefWidth() + 5, 28);
-        //TODO удалить всё это
-        //unitsL.setText("| Units: " + gameController.getUserArmyCount() + " |");
-        enemyL.setPosition(unitsL.getX(), 8);
-        //enemyL.setText("| Enemy: " + gameController.getGameArmyCount() + " |");
-        //todo переместить в updateScore()
-        //if (gameController.getTotalScore() >= 200 && !evolveB.isVisible() && gameController.getUserEvolveStage() != StageOfEvolution.FOURTH)
-            //evolveB.setVisible(true);
-        //if (gameController.getTotalScore() < 200 && evolveB.isVisible())
-            //evolveB.setVisible(false);
-
-        yourBaseL.setPosition(unitsL.getX() + unitsL.getPrefWidth() + 5, 28);
+        yourBaseL.setPosition((moneyL.getWidth() > expL.getWidth()) ? moneyL.getX() + moneyL.getWidth() : expL.getX() + expL.getWidth() + 5, 28);
         enemyBaseL.setPosition(yourBaseL.getX(), 8);
         if (GameScreen.getUserForpost().getHealth() > 0)
             yourBaseL.setText("| Your Base Health: " + ((int) GameScreen.getUserForpost().getHealth()) + " / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         else
-            yourBaseL.setText("| Your Base Health: 0 |");
+            yourBaseL.setText("| Your Base Health: 0 / " + GameScreen.getUserForpost().getMaxHealth() + " |");
         if (GameScreen.getGameForpost().getHealth() > 0)
             enemyBaseL.setText("| Enemy Base Health: " + ((int) GameScreen.getGameForpost().getHealth()) + " / " + GameScreen.getGameForpost().getMaxHealth() + " |");
         else
-            enemyBaseL.setText("| Enemy Base Health: 0 |");
+            enemyBaseL.setText("| Enemy Base Health: 0  / " + GameScreen.getUserForpost().getMaxHealth() + " |");
     }
 
     void updateBaseHealth()

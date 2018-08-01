@@ -7,6 +7,7 @@ public abstract class VulnerableObject extends GameObject {
     public VulnerableObject(float health, boolean users, float position, StageOfEvolution stage) {
         super(users, position, stage);
         this.health = health;
+        this.maxHealth = health;
     }
 
     public abstract int getId();

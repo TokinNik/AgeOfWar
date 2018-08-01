@@ -61,6 +61,7 @@ public class EnemyArmyChecker implements Runnable {
                     temp.changeState(UnitState.DIE);
                     controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.DIE);
                     controller.addMoney((int)Math.round(temp.getPrice() * evolveState.getCoefficient() * 1.2));
+                    controller.addScore(50);
                     iterator.remove();
                 }
                 else

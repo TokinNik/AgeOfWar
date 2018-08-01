@@ -106,11 +106,11 @@ public class GameController {
         start();
     }
 
-    public void evolve(boolean users) throws LimitOfEvolutionException {
+    public StageOfEvolution evolve(boolean users) throws LimitOfEvolutionException {
         if (users) {
-            userArmy.evolve();
+            return userArmy.evolve();
         } else {
-            enemyArmy.evolve();
+            return enemyArmy.evolve();
         }
     }
 

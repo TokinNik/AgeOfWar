@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.controller.UnitType;
 import com.exception.NotEnoughMonyException;
+import com.model.StageOfEvolution;
 import com.model.UnitState;
 
 public class GraphicUnit extends Actor
@@ -31,11 +32,12 @@ public class GraphicUnit extends Actor
     private float x;
 
 
-    GraphicUnit(UnitType type, int id, boolean dir) throws NotEnoughMonyException
+    GraphicUnit(UnitType type, int id, boolean dir, StageOfEvolution stageOfEvolution) throws NotEnoughMonyException
     {
         this.unitType = type;
         this.unitId = id;
         this.direction = dir;
+        this.unitState = UnitState.WALK;
         atackTime = TimeUtils.millis();
 
         setBounds(dir?0:2000 , 50, 240, 288);
@@ -61,7 +63,7 @@ public class GraphicUnit extends Actor
                 animation = direction ? Resources.testAnimationR : Resources.testAnimationL;
         }
 
-        levelL = new Label( unitState + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
+        levelL = new Label( stageOfEvolution + " " + unitType, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
         levelL.setPosition(getX() - 5, getY() + getHeight() + 20);
 
         hBar = new Image(Resources.guiSkin.getDrawable("hBar_green"));
@@ -135,6 +137,31 @@ public class GraphicUnit extends Actor
 
     public void setUnitState(UnitState unitState) {
         this.unitState = unitState;
+        switch (unitType)
+        {
+            case INFATRYMAN:
+                animation = (unitState == UnitState.WALK) ? (direction ? Resources.blueAnimationR : Resources.blueAnimationL)
+                        :(direction ? Resources.testAnimationR : Resources.testAnimationL);
+                break;
+            case ARCHER:
+                animation = (unitState == UnitState.WALK) ? (direction ? Resources.yellowAnimationR : Resources.yellowAnimationL)
+                        :(direction ? Resources.testAnimationR : Resources.testAnimationL);
+                break;
+            case FAT:
+                animation = (unitState == UnitState.WALK) ? (direction ? Resources.greenAnimationR : Resources.greenAnimationL)
+                        :(direction ? Resources.testAnimationR : Resources.testAnimationL);
+                break;
+            case RIDER:
+                animation = (unitState == UnitState.WALK) ? (direction ? Resources.purpleAnimationR : Resources.purpleAnimationL)
+                        :(direction ? Resources.testAnimationR : Resources.testAnimationL);
+                break;
+            case INCREDIBLE:
+                animation = (unitState == UnitState.WALK) ? (direction ? Resources.redAnimationR : Resources.redAnimationL)
+                        :(direction ? Resources.testAnimationR : Resources.testAnimationL);
+                break;
+            default:
+                animation = direction ? Resources.testAnimationR : Resources.testAnimationL;
+        }
     }
 
     public float getHealth() {

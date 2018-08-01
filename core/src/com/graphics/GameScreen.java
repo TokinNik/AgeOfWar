@@ -38,6 +38,7 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
     private static Shield shieldU;
     private static Shield shieldG;
     public static GameController gameController;
+    private static StageOfEvolution stageOfEvolution;
 
     GameScreen ()
     {
@@ -46,6 +47,7 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
 
         gameController = new GameController(this);
         gameController.start();
+        stageOfEvolution = StageOfEvolution.FIRST;
 
         stage = new Stage(new ScreenViewport(camera));
         //stage.setDebugAll(true);
@@ -240,7 +242,7 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
     static void setUnit(UnitType type, boolean users, int id) throws NotEnoughMonyException
     {
 
-        GraphicUnit graphicUnit = new GraphicUnit(type, users ? gameController.createNewUnit(type, true) : id, users);
+        GraphicUnit graphicUnit = new GraphicUnit(type, users ? gameController.createNewUnit(type, true) : id, users, stageOfEvolution);
         System.out.println("Set GraphicUnit type " + type + " ID " + (users ? graphicUnit.getUnitId() : id) + " direction " + users);
         units.add(graphicUnit);
         stage.addActor(graphicUnit);
@@ -322,6 +324,10 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
 
     static GameForpost getGameForpost() {
         return gameForpost;
+    }
+
+    public static void setStageOfEvolution(StageOfEvolution stageOfEvolution) {
+        GameScreen.stageOfEvolution = stageOfEvolution;
     }
 
     @Override
