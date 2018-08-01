@@ -53,32 +53,44 @@ public class UserArmyChecker implements Runnable {
 
             Iterator<Unit> iterator = army.iterator();
 
-            while (iterator.hasNext()) {
+            while (iterator.hasNext())
+            {
                 Unit temp = iterator.next();
 
-                if (temp.getHealth() < 0) {
-                    iterator.remove();
+                if (temp.getHealth() <= 0)
+                {
                     temp.changeState(UnitState.DIE);
                     controller.gameListaner.onUnitStateChange(true, temp.getId(), UnitState.DIE);
-                } else {
-                    if (temp.getPosition() > furthestObject.getPosition()) {
+                    iterator.remove();
+                }
+                else
+                    {
+                    if (temp.getPosition() > furthestObject.getPosition())
+                    {
                         furthestObject = temp;
                     }
 
                     VulnerableObject vo = controller.clothestGameObject;
-                    if (temp.getPosition() + temp.getAffectedArea() > vo.getPosition()) {
+                    if (temp.getPosition() + temp.getAffectedArea() > vo.getPosition())
+                    {
 
                         temp.setClothestEnemy(vo);
-                        if (temp.getState() == UnitState.WALK) {
+                        if (temp.getState() == UnitState.WALK)
+                        {
                             temp.changeState(UnitState.FIGHT);
                             controller.gameListaner.onUnitStateChange(true, temp.getId(), UnitState.FIGHT);
                             controller.gameListaner.onHealthChange(false, vo.getId(), vo.getHealth());
                         }
-                    } else {
-                        if (temp.getState() == UnitState.FIGHT) {
+                    }
+                    else
+                        {
+                        if (temp.getState() == UnitState.FIGHT)
+                        {
                             temp.changeState(UnitState.WALK);
                             controller.gameListaner.onUnitStateChange(true, temp.getId(), UnitState.WALK);
-                        } else {
+                        }
+                        else
+                            {
                             controller.gameListaner.onCoordinateChange(true, temp.getId(), temp.getPosition());
                         }
                     }

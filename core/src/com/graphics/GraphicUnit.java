@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -27,6 +28,7 @@ public class GraphicUnit extends Actor
     private int unitId;
     private float health;
     private int maxHealth;
+    private float x;
 
 
     GraphicUnit(UnitType type, int id, boolean dir) throws NotEnoughMonyException
@@ -35,27 +37,28 @@ public class GraphicUnit extends Actor
         this.unitId = id;
         this.direction = dir;
         atackTime = TimeUtils.millis();
+
         setBounds(dir?0:2000 , 50, 240, 288);
 
         switch (type)
         {
             case INFATRYMAN:
-                animation = Resources.blueAnimationR;
+                animation = direction ? Resources.blueAnimationR : Resources.blueAnimationL;
                 break;
             case ARCHER:
-                animation = Resources.yellowAnimationR;
+                animation = direction? Resources.yellowAnimationR : Resources.yellowAnimationL;
                 break;
             case FAT:
-                animation = Resources.greenAnimationR;
+                animation = direction ? Resources.greenAnimationR : Resources.greenAnimationL;
                 break;
             case RIDER:
-                animation = Resources.purpleAnimationR;
+                animation = direction ? Resources.purpleAnimationR : Resources.purpleAnimationL;
                 break;
             case INCREDIBLE:
-                animation = Resources.redAnimationR;
+                animation = direction ? Resources.redAnimationR : Resources.redAnimationL;
                 break;
             default:
-                animation = Resources.testAnimationR;
+                animation = direction ? Resources.testAnimationR : Resources.testAnimationL;
         }
 
         levelL = new Label( unitState + " " + type, new Label.LabelStyle(Resources.game.standartFontWhite, Color.WHITE));
@@ -71,7 +74,7 @@ public class GraphicUnit extends Actor
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = (TextureRegion) animation.getKeyFrame(stateTime, true);
 
-        //addAction(Actions.moveTo( unit.getPosition() * 2f, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
+        addAction(Actions.moveTo( x, 50, 1 / (Gdx.graphics.getFramesPerSecond() + 1)));
 
         levelL.setPosition(getX(), getY() + getHeight() + 35);
 
@@ -119,7 +122,7 @@ public class GraphicUnit extends Actor
 
     public void setPos(float x)
     {
-        setX(x);
+        this.x = x;
     }
 
     UnitType getType() {return unitType;}

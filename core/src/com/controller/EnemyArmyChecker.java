@@ -52,33 +52,44 @@ public class EnemyArmyChecker implements Runnable {
             VulnerableObject furthestObject = GameForpost.getInstance();
 
             Iterator<Unit> iterator = army.iterator();
-            while (iterator.hasNext()) {
+            while (iterator.hasNext())
+            {
                 Unit temp = iterator.next();
 
-                if (temp.getHealth() <= 0) {
+                if (temp.getHealth() <= 0)
+                {
                     temp.changeState(UnitState.DIE);
                     controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.DIE);
                     controller.addMoney((int)Math.round(temp.getPrice() * evolveState.getCoefficient() * 1.2));
                     iterator.remove();
-                } else {
-                    if (temp.getPosition() < furthestObject.getPosition()) {
+                }
+                else
+                {
+                    if (temp.getPosition() < furthestObject.getPosition())
+                    {
                         furthestObject = temp;
                     }
 
                     VulnerableObject vo = controller.clothestUserObject;
-                    if (temp.getPosition() - temp.getAffectedArea() < vo.getPosition()) {
-
+                    if (temp.getPosition() - temp.getAffectedArea() < vo.getPosition())
+                    {
                         temp.setClothestEnemy(vo);
-                        if (temp.getState() == UnitState.WALK) {
+                        if (temp.getState() == UnitState.WALK)
+                        {
                             temp.changeState(UnitState.FIGHT);
                             controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.FIGHT);
                             controller.gameListaner.onHealthChange(true, vo.getId(), vo.getHealth());
                         }
-                    } else {
-                        if (temp.getState() == UnitState.FIGHT) {
+                    }
+                    else
+                    {
+                        if (temp.getState() == UnitState.FIGHT)
+                        {
                             temp.changeState(UnitState.WALK);
                             controller.gameListaner.onUnitStateChange(false, temp.getId(), UnitState.WALK);
-                        } else {
+                        }
+                        else
+                        {
                             controller.gameListaner.onCoordinateChange(false, temp.getId(), temp.getPosition());
                         }
                     }

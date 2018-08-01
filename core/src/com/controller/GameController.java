@@ -73,15 +73,12 @@ public class GameController {
 
     public synchronized void pause() {
         this.pause = true;
-        System.out.println("==================1");
         for (Unit unit: enemyArmy.army) {
             unit.changeGameSate(GameEvent.PAUSED);
         }
-        System.out.println("==================2");
         for (Unit unit: userArmy.army) {
             unit.changeGameSate(GameEvent.PAUSED);
         }
-        System.out.println("==================3");
     }
 
     public synchronized void resume() {

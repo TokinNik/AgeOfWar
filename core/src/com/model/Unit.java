@@ -39,7 +39,6 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
     @Override
     public void run() {
         while (true) {
-            synchronized (this) {
                 if (unitStateChanged) {
                     switch (state) {
                         case WALK: {
@@ -89,17 +88,16 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
                         }
                     }
                 }
-            }
         }
     }
 
-    public synchronized void changeState(UnitState newState) {
+    public  void changeState(UnitState newState) {
         state = newState;
         unitStateChanged = true;
         nothingChanged = false;
     }
 
-    public synchronized void changeGameSate(GameEvent newEvent) {
+    public  void changeGameSate(GameEvent newEvent) {
         gameState = newEvent;
         unitStateChanged = false;
         nothingChanged = false;

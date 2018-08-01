@@ -36,13 +36,13 @@ public class WinnerChecker implements Runnable {
             try {
                 TimeUnit.MILLISECONDS.sleep(400);
                 if (UserForpost.getInstance().getHealth() <= 0) {
-                    controller.gameListaner.onForpostDestroy(true);
+                    controller.gameListaner.onForpostDestroy(false);
                     controller.finish();
                     break;
                 }
 
                 if (GameForpost.getInstance().getHealth() <= 0) {
-                    controller.gameListaner.onForpostDestroy(false);
+                    controller.gameListaner.onForpostDestroy(true);
                     controller.finish();
                     break;
                 }

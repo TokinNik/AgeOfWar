@@ -10,12 +10,12 @@ public class DesktopLauncher {
 
 		//config.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
 		//config.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
-		config.width = 1280;
-		config.height = 720;
+		//config.width = 1280;
+		//config.height = 720;
 		//config.width = 1024;
 		//config.height = 768;
-		//config.width = 960;
-		//config.height = 540;
+		config.width = 960;
+		config.height = 540;
 		//config.width = 480;
 		//config.height = 320;
 

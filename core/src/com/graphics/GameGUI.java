@@ -21,7 +21,9 @@ import com.controller.GameController;
 import com.controller.UnitType;
 import com.exception.LimitOfEvolutionException;
 import com.exception.NotEnoughMonyException;
+import com.model.GameForpost;
 import com.model.StageOfEvolution;
+import com.model.UserForpost;
 
 
 public class GameGUI extends Stage implements InputProcessor
@@ -81,11 +83,11 @@ public class GameGUI extends Stage implements InputProcessor
         enemyL.setPosition(unitsL.getX(), 8);
         addActor(enemyL);
 
-        yourBaseL = new Label("| Your Base Health: " + GameScreen.getUserForpost().getHealth() + " / " + GameScreen.getUserForpost().getMaxHealth() + " |", Resources.simpleLSWhite);
+        yourBaseL = new Label("| Your Base Health: " + UserForpost.USER_FORPOST_BASE_HEALTH + " / " + UserForpost.USER_FORPOST_BASE_HEALTH + " |", Resources.simpleLSWhite);
         yourBaseL.setPosition(unitsL.getX() + unitsL.getWidth() + 5, 28);
         addActor(yourBaseL);
 
-        enemyBaseL = new Label("| Enemy Base Health: " + GameScreen.getGameForpost().getHealth() + " / " + GameScreen.getGameForpost().getMaxHealth() + " |", Resources.simpleLSWhite);
+        enemyBaseL = new Label("| Enemy Base Health: " + GameForpost.NPC_FORPOST_BASE_HEALTH + " / " + UserForpost.USER_FORPOST_BASE_HEALTH + " |", Resources.simpleLSWhite);
         enemyBaseL.setPosition(yourBaseL.getX(), 8);
         addActor(enemyBaseL);
 
@@ -389,9 +391,7 @@ public class GameGUI extends Stage implements InputProcessor
     void setWindowMenu()
     {
         Resources.state = State.PAUSE;
-        System.out.println("------------------1");
         gameController.pause();
-        System.out.println("------------------2");
 
         final Group window = new Group();
 

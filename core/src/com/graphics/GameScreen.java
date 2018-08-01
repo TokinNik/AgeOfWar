@@ -239,9 +239,9 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
 
     static void setUnit(UnitType type, boolean users, int id) throws NotEnoughMonyException
     {
-        System.out.println("Set GraphicUnit type " + type + " ID " + id);
 
         GraphicUnit graphicUnit = new GraphicUnit(type, users ? gameController.createNewUnit(type, true) : id, users);
+        System.out.println("Set GraphicUnit type " + type + " ID " + (users ? graphicUnit.getUnitId() : id) + " direction " + users);
         units.add(graphicUnit);
         stage.addActor(graphicUnit);
     }
@@ -265,9 +265,16 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
 
     private void delUnit(int num)
     {
-        units.get(num).remove();
-        System.out.println("Delete GraphicUnit type " + units.get(num).getType() + " direction " + units.get(num).getDirection());
-        units.removeIndex(num);
+        System.out.println("(1)Delete GraphicUnit type "+ units.get(num).getType()
+                 + " ID " + units.get(num).getUnitId() + " direction " + units.get(num).getDirection());
+        units.removeValue(units.get(num), true);
+    }
+
+    private void delUnit(GraphicUnit unit)
+    {
+        System.out.println("(2)Delete GraphicUnit type "+ unit.getType()
+                 + " ID " + unit.getUnitId() + " direction " + unit.getDirection());
+        units.removeValue(unit, true);
     }
 
     static void clear()
@@ -302,7 +309,9 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
         for (int i = 0; i <= units.size-1; i++)
         {
             if(units.get(i).getUnitId() == id)
+            {
                 return units.get(i);
+            }
         }
         return null;
     }
@@ -410,36 +419,42 @@ public class GameScreen implements Screen, InputProcessor, GameChangeListaner
     @Override
     public void onUnitStateChange(boolean users, int unitID, UnitState newState)
     {
+        System.out.println("(onUnitStateChange) dir " + users + " id " + unitID + " new state " + newState);
         try
         {
-            findUnitToId(unitID).setUnitState(newState);
+            if (newState == UnitState.DIE)
+                delUnit(findUnitToId(unitID));
+            else
+                findUnitToId(unitID).setUnitState(newState);
         }catch (NullPointerException c)
         {
-            System.out.println("There is no such unit for ID " + unitID);
+            System.out.println("(!onUnitStateChange) There is no such unit for ID " + unitID + " dir " + users + " new state" + newState);
         }
     }
 
     @Override
     public void onCoordinateChange(boolean users, int unitID, float newCoordinate)
     {
+        //System.out.println("(onCoordinateChange) dir " + users + " id " + unitID + " new coordinate " + newCoordinate);
         try
         {
-            findUnitToId(unitID).setPos(newCoordinate);
+            findUnitToId(unitID).setPos(newCoordinate * 2f);
         }catch (NullPointerException c)
         {
-            System.out.println("There is no such unit for ID " + unitID);
+            System.out.println("(!onCoordinateChange) There is no such unit for ID " + unitID + " dir " + users + " new coordinate" + newCoordinate);
         }
     }
 
     @Override
     public void onHealthChange(boolean users, int unitID, float health)
     {
+        System.out.println("(onHealthChange) dir " + users + " id " + unitID + " health " + health);
         try
         {
             findUnitToId(unitID).setHealth(health);
         }catch (NullPointerException c)
         {
-            System.out.println("There is no such unit for ID " + unitID);
+            System.out.println("(!onHealthChange) There is no such unit for ID " + unitID + " dir " + users + " health " + health);
         }
     }
 
