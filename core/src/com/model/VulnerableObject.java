@@ -16,15 +16,15 @@ public abstract class VulnerableObject extends GameObject {
         return health;
     }
 
-    public void setHealth(float health) {
-        this.health = health;
+    public void decreaseHealth(float delta) {
+        this.health -= delta;
     }
 
     public float getMaxHealth() {
         return maxHealth;
     }
 
-    public void setMaxHealth(float maxHealth) {
-        this.maxHealth = maxHealth;
+    public void setHealth(float health) {
+        this.health = health;
     }
 }

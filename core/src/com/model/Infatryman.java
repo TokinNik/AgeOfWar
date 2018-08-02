@@ -1,7 +1,5 @@
 package com.model;
 
-import com.controller.UnitType;
-
 import java.util.concurrent.TimeUnit;
 
 //
@@ -22,9 +20,9 @@ public class Infatryman extends Unit {
         }
 
         if ((gameObject instanceof Unit) && ( (Unit) gameObject).getType() == UnitType.RIDER) {
-            gameObject.setHealth(gameObject.getHealth() - ( getStrength() * 2));
+            gameObject.decreaseHealth(strength * 2);
         } else {
-            gameObject.setHealth(gameObject.getHealth() - getStrength());
+            gameObject.decreaseHealth(strength);
         }
     }
 

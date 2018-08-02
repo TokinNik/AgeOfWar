@@ -1,7 +1,5 @@
 package com.model;
 
-import com.controller.UnitType;
-
 public class Incredible extends Unit {
     private static final float AFFECTED_AREA = 50;
     public static final int BASE_PRICE = 1000;
@@ -13,7 +11,7 @@ public class Incredible extends Unit {
 
     @Override
     public void fight(VulnerableObject gameObject) {
-        gameObject.setHealth(gameObject.getHealth() - getStrength());
+        gameObject.decreaseHealth(strength);
     }
 
     @Override

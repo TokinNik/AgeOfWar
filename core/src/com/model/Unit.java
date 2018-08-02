@@ -1,7 +1,6 @@
 package com.model;
 
 import com.GameEvent;
-import com.controller.UnitType;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,7 +11,7 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
     private int id;
     private float speed;
     private float armor;
-    private float strength;
+    protected float strength;
     private int direction;
     private int price;
     private UnitState state = UnitState.WALK;
@@ -91,13 +90,13 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
         }
     }
 
-    public  void changeState(UnitState newState) {
+    public void changeState(UnitState newState) {
         state = newState;
         unitStateChanged = true;
         nothingChanged = false;
     }
 
-    public  void changeGameSate(GameEvent newEvent) {
+    public void changeGameSate(GameEvent newEvent) {
         gameState = newEvent;
         unitStateChanged = false;
         nothingChanged = false;
@@ -124,20 +123,12 @@ public abstract class Unit extends VulnerableObject implements Runnable, Movable
     @Override
     public int getId() { return id; }
 
-    public float getSpeed() {
-        return speed;
-    }
-
     public float getArmor() {
         return armor;
     }
 
     public void setArmor(float armor) {
         this.armor = armor;
-    }
-
-    public float getStrength() {
-        return strength;
     }
 
     public UnitType getType() {

@@ -1,7 +1,5 @@
 package com.model;
 
-import com.controller.UnitType;
-
 public class UnitFactory {
     public static Unit createNewUnit(UnitType type, boolean users, StageOfEvolution stage, Object syncObj) {
 

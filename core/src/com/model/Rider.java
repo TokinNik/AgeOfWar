@@ -1,7 +1,5 @@
 package com.model;
 
-import com.controller.UnitType;
-
 //
 public class Rider extends Unit {
     public static final float AFFECTED_AREA = 200;
@@ -19,7 +17,7 @@ public class Rider extends Unit {
             return;
         }*/
 
-        gameObject.setHealth(gameObject.getHealth() - getStrength());
+        gameObject.decreaseHealth(strength);
     }
 
     @Override

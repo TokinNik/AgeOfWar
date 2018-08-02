@@ -1,7 +1,5 @@
 package com.model;
 
-import com.controller.UnitType;
-
 import java.util.concurrent.TimeUnit;
 
 public class Fat extends Unit {
@@ -21,7 +19,7 @@ public class Fat extends Unit {
             return;
         }
 
-        gameObject.setHealth(gameObject.getHealth() - getStrength());
+        gameObject.decreaseHealth(strength);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.model;
 
-import com.controller.UnitType;
-
 import java.util.concurrent.TimeUnit;
 
 //
@@ -23,9 +21,9 @@ public class Archer extends Unit {
 
         if ((gameObject instanceof Unit) && ( ( ((Unit) gameObject).getType() == UnitType.FAT) ||
                 ((Unit) gameObject).getType() == UnitType.INCREDIBLE ) ) {
-            gameObject.setHealth(gameObject.getHealth() - ( getStrength() * 2));
+            gameObject.decreaseHealth(strength * 2);
         } else {
-            gameObject.setHealth(gameObject.getHealth() - getStrength());
+            gameObject.decreaseHealth(strength);
         }
     }
 
